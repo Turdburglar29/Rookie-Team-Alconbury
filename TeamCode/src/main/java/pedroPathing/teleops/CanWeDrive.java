@@ -7,6 +7,7 @@ import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.localization.Pose;
 import com.pedropathing.util.Constants;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -16,7 +17,9 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import pedroPathing.subsystems.MecanumDrive;
 
 
-@Config       //if you want config
+@Disabled
+@Config
+//if you want config
 @TeleOp       //if this is a teleop
 public class CanWeDrive extends OpMode {
     // Declare OpMode members.

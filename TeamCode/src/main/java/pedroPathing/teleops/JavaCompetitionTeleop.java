@@ -5,6 +5,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.hardware.rev.RevSPARKMini;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -16,7 +17,7 @@ import pedroPathing.subsystems.HorizontalArm;
 import pedroPathing.subsystems.MecanumDrive;
 import pedroPathing.subsystems.Odometry;
 import pedroPathing.subsystems.SuperSystem;
-
+@Disabled
 /** @noinspection unused*/
 @TeleOp
 @Config

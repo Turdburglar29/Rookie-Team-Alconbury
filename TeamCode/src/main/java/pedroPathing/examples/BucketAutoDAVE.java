@@ -10,13 +10,13 @@ import com.pedropathing.pathgen.Point;
 import com.pedropathing.util.Constants;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import  com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import pedroPathing.constants.FConstants;
 import pedroPathing.constants.LConstants;
+
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 
 /**
  * This is an example auto that showcases movement and control of two servos autonomously.
@@ -27,14 +27,9 @@ import pedroPathing.constants.LConstants;
  * @author Baron Henderson - 20077 The Indubitables
  * @version 2.0, 11/28/2024
  */
-@Disabled
-@Autonomous(name = "Example Auto Blue", group = "Examples")
-public class ExampleBucketAuto extends OpMode {
 
-
-    private Follower follower;
-    private Timer pathTimer, actionTimer, opmodeTimer;
-
+@Autonomous(name = "BucketAutoDave", group = "Examples")
+public class BucketAutoDAVE extends OpMode {
 
     private DcMotor RightLift;
     private DcMotor LeftLift;
@@ -44,6 +39,10 @@ public class ExampleBucketAuto extends OpMode {
     private Servo BucketR;
     private Servo intakepitchLeft;
     private Servo SpecimenClaw;
+    private Servo ClawPitch;
+    private Follower follower;
+    private Timer pathTimer, actionTimer, opmodeTimer;
+
     /** This is the variable where we store the state of our auto.
      * It is used by the pathUpdate method. */
     private int pathState;
@@ -156,6 +155,7 @@ public class ExampleBucketAuto extends OpMode {
     public void autonomousPathUpdate() {
         switch (pathState) {
             case 0:
+                SpecimenClaw.setPosition(1);
                 follower.followPath(scorePreload);
                 setPathState(1);
                 break;

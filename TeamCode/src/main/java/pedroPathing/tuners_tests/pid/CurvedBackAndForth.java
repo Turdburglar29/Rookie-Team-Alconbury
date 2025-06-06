@@ -1,10 +1,11 @@
-package pedroPathing.tuners_tests.pid;
+/*package pedroPathing.tuners_tests.pid;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.pedropathing.util.Constants;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -15,7 +16,7 @@ import com.pedropathing.pathgen.Point;
 
 import pedroPathing.constants.FConstants;
 import pedroPathing.constants.LConstants;
-
+@Disabled
 /**
  * This is the CurvedBackAndForth autonomous OpMode. It runs the robot in a specified distance
  * forward and to the left. On reaching the end of the forward Path, the robot runs the backward
@@ -28,7 +29,7 @@ import pedroPathing.constants.LConstants;
  * @author Aaron Yang - 10158 Scott's Bots
  * @author Harrison Womack - 10158 Scott's Bots
  * @version 1.0, 3/13/2024
- */
+
 @Config
 @Autonomous (name = "Curved Back And Forth", group = "PIDF Testing")
 public class CurvedBackAndForth extends OpMode {
@@ -46,7 +47,7 @@ public class CurvedBackAndForth extends OpMode {
     /**
      * This initializes the Follower and creates the forward and backward Paths. Additionally, this
      * initializes the FTC Dashboard telemetry.
-     */
+     *//*
     @Override
     public void init() {
         Constants.setConstants(FConstants.class, LConstants.class);
@@ -70,7 +71,7 @@ public class CurvedBackAndForth extends OpMode {
     /**
      * This runs the OpMode, updating the Follower as well as printing out the debug statements to
      * the Telemetry, as well as the FTC Dashboard.
-     */
+     *//*
     @Override
     public void loop() {
         follower.update();
@@ -88,3 +89,4 @@ public class CurvedBackAndForth extends OpMode {
         follower.telemetryDebug(telemetryA);
     }
 }
+*/
