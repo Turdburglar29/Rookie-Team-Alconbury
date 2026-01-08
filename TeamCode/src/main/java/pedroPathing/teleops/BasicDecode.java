@@ -3,6 +3,7 @@ package pedroPathing.teleops;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.localization.Pose;
 import com.pedropathing.util.Constants;
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -14,7 +15,6 @@ import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
 import org.firstinspires.ftc.robotcore.external.JavaUtil;
 
 import pedroPathing.constants.FConstants;
@@ -24,10 +24,10 @@ import pedroPathing.constants.LConstants;
 public class BasicDecode extends OpMode {
     private Follower follower;
 
-    private static final int bankVelocity = 1000;
-    private static final int medVelocity = 1500;
-    private static final int farVelocity = 2000;
-    private static final int maxVelocity = 2450;
+    private static final int bankVelocity = 750;
+    private static final int medVelocity = 950;
+    private static final int farVelocity = 1000;
+    private static final int maxVelocity = 2000;
     private static final int intakeVelocity = 1400;
     private final Pose startPose = new Pose(0, 0, 0);
     public static DcMotor intake;
@@ -37,8 +37,8 @@ public class BasicDecode extends OpMode {
     private Servo releasespinner;
     private Servo sort1;
     private Servo sort2;
-    private Servo leftled;
-    private Servo rightled;
+    private RevBlinkinLedDriver leftled;
+    private RevBlinkinLedDriver rightled;
     private NormalizedColorSensor test_color;
     double hue;
 
@@ -56,8 +56,7 @@ void setSafePower(DcMotor motor,double targetPower0){
     static final double DRIVE_GEAR_REDUCTION = 19.2032;     // goBilda 5202 Gear ratio reduction
     static final double WHEEL_DIAMETER_INCHES = 3.77953;     // goBilda 5202 Wheel diameter
     static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * 3.1415);
-    static final double DRIVE_SPEED = 0.4;
-    static final double TURN_SPEED = 0.5;
+
 
 
 
@@ -75,11 +74,12 @@ void setSafePower(DcMotor motor,double targetPower0){
         shooter1 = hardwareMap.get(DcMotor.class, "shooter1");
         shooter2 = hardwareMap.get(DcMotor.class, "shooter2");
         test_color = hardwareMap.get(NormalizedColorSensor.class, "test_color");
-        rightled = hardwareMap.get(Servo.class,"rightled");
-        leftled = hardwareMap.get(Servo.class,"leftled");
+        rightled = hardwareMap.get(RevBlinkinLedDriver.class,"rightled");
+        leftled = hardwareMap.get(RevBlinkinLedDriver.class,"leftled");
         shooter1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         shooter2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         intake.setDirection(DcMotorSimple.Direction.REVERSE);
+
 
     }
 
@@ -130,33 +130,42 @@ void setSafePower(DcMotor motor,double targetPower0){
         telemetry.addData("Flywheel Velocity", ((DcMotorEx) shooter2).getVelocity());
         telemetry.update();
 
+         rightled.setPattern(RevBlinkinLedDriver.BlinkinPattern.STROBE_RED);
+         leftled.setPattern(RevBlinkinLedDriver.BlinkinPattern.STROBE_RED);
+
         if (gamepad1.options) {
             shooter2.setPower(-0.5);
         } else if (gamepad1.circle) {
             ((DcMotorEx) shooter2).setVelocity(bankVelocity);
-            if (((DcMotorEx) shooter1).getVelocity() >= bankVelocity - 5) {
-                intake.setPower(1);
+            if (((DcMotorEx) shooter2).getVelocity() >= bankVelocity - 5) {
+                rightled.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
+                leftled.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
+                intake.setPower(-1);
             } else {
                 intake.setPower(0);
             }
         } else if (gamepad1.cross) {
             ((DcMotorEx) shooter2).setVelocity(medVelocity );
-            if (((DcMotorEx) shooter1).getVelocity() >= medVelocity - 5) {
-                intake.setPower(1);
+            if (((DcMotorEx) shooter2).getVelocity() >= medVelocity - 5) {
+                rightled.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
+                leftled.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
+               intake.setPower(-1);
             } else {
                 intake.setPower(0);
             }
         } else if (gamepad1.triangle) {
                 ((DcMotorEx) shooter2).setVelocity(farVelocity);
-                if (((DcMotorEx) shooter1).getVelocity() >= farVelocity - 5) {
-                    intake.setPower(1);
+                if (((DcMotorEx) shooter2).getVelocity() >= farVelocity - 5) {
+                    intake.setPower(-1);
+                    rightled.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
+                    leftled.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
                 } else {
                     intake.setPower(0);
                 }
         } else if (gamepad1.square) {
             ((DcMotorEx) shooter2).setVelocity(bankVelocity);
-            if (((DcMotorEx) shooter1).getVelocity() >= maxVelocity - 16) {
-                intake.setPower(1);
+            if (((DcMotorEx) shooter2).getVelocity() >= maxVelocity - 16) {
+               intake.setPower(-1);
             } else {
                 intake.setPower(0);
             }
@@ -176,12 +185,18 @@ void setSafePower(DcMotor motor,double targetPower0){
             //----------------------------------------------------------------------------
             if (gamepad1.left_bumper) {// outtakes balls
                 intake.setPower(-1);
+                rightled.setPattern(RevBlinkinLedDriver.BlinkinPattern.HOT_PINK);
+                leftled.setPattern(RevBlinkinLedDriver.BlinkinPattern.HOT_PINK);
             } else {
                 intake.setPower(0);
             }
-            if (hue < 350){
-                telemetry.addData("Color", "Purple");
-
+            if (gamepad1.dpad_left) {
+                rightled.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
+                leftled.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
+            }else {
+                rightled.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
+                leftled.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
+                }
 
             }
             if (gamepad2.dpad_right) {
@@ -195,4 +210,3 @@ void setSafePower(DcMotor motor,double targetPower0){
         }
         /** We do not use this because everything automatically should disable **/
     }
-}

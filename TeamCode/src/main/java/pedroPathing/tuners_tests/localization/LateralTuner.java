@@ -12,8 +12,8 @@ import com.pedropathing.localization.PoseUpdater;
 import com.pedropathing.util.DashboardPoseTracker;
 import com.pedropathing.util.Drawing;
 
-import pedroPathing.constants.FConstants;
-import pedroPathing.constants.LConstants;
+import pedroPathing.constants.FConstants30630;
+import pedroPathing.constants.LConstants30630;
 
 /**
  * This is the LateralTuner OpMode. This tracks the strafe movement of the robot and displays the
@@ -29,7 +29,7 @@ import pedroPathing.constants.LConstants;
  * @version 1.0, 5/6/2024
  */
 @Config
-@Autonomous(name = "Lateral Localizer Tuner", group = ".Localization")
+@Autonomous(name = "Lateral Localizer Tuner", group = "Localization")
 public class LateralTuner extends OpMode {
     private PoseUpdater poseUpdater;
     private DashboardPoseTracker dashboardPoseTracker;
@@ -43,7 +43,7 @@ public class LateralTuner extends OpMode {
      */
     @Override
     public void init() {
-        Constants.setConstants(FConstants.class, LConstants.class);
+        Constants.setConstants(FConstants30630.class, LConstants30630.class);
         poseUpdater = new PoseUpdater(hardwareMap);
 
         dashboardPoseTracker = new DashboardPoseTracker(poseUpdater);
