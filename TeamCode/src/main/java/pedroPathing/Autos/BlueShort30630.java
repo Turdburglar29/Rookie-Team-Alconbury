@@ -10,22 +10,21 @@ import com.pedropathing.util.Timer;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
 import org.firstinspires.ftc.robotcore.external.JavaUtil;
 
 import pedroPathing.constants.FConstants;
 import pedroPathing.constants.LConstants;
 
-@Autonomous(name = "RedShort", group = "Auto")
-    public class RedShort extends OpMode {
+@Autonomous(name = "BlueShort", group = "Auto")
+    public class BlueShort30630 extends OpMode {
     private static final int bankVelocity = 500;
     private static final int medVelocity = 700;
     private static final int farVelocity = 1000;
@@ -61,33 +60,33 @@ import pedroPathing.constants.LConstants;
         double startTime;
         private int pathState;
     //Start point-----------------------------------------------------------------------------------
-        private final Pose startPose = new Pose(15, 30, Math.toRadians(180));
+        private final Pose startPose = new Pose(15, 120, Math.toRadians(180));
     //line 1 ScorePreload 1 ------------------------------------------------------------------------
-        private final Pose scorePose = new Pose(37, 50, Math.toRadians(220));
+        private final Pose scorePose = new Pose(37, 100, Math.toRadians(140));
     //Line 3 Pickup 1-------------------------------------------------------------------------------
-        private final Pose pickup1Pose = new Pose(17, 65, Math.toRadians(180));
-        private final Pose pickup1CP1 = new Pose(60, 60, Math.toRadians(180));
+        private final Pose pickup1Pose = new Pose(17, 85, Math.toRadians(180));
+        private final Pose pickup1CP1 = new Pose(60, 80, Math.toRadians(180));
     //line 4 Score 1 -------------------------------------------------------------------------------
-        private final Pose score1Pose = new Pose(37, 50, Math.toRadians(220));
+        private final Pose score1Pose = new Pose(37, 100, Math.toRadians(140));
     //line 6 Pickup  2 -----------------------------------------------------------------------------
-        private final Pose pickup2Pose = new Pose(18, 90, Math.toRadians(180));
-        private final Pose pickup2CP1 = new Pose(50, 90, Math.toRadians(180));
-        private final Pose pickup2CP2 = new Pose(30, 90, Math.toRadians(180));
+        private final Pose pickup2Pose = new Pose(17, 60, Math.toRadians(180));
+        private final Pose pickup2CP1 = new Pose(50, 60, Math.toRadians(180));
+        private final Pose pickup2CP2 = new Pose(30, 60, Math.toRadians(180));
     //line 7 Push Bar ------------------------------------------------------------------------------
-        private final Pose pushBarPose = new Pose(16.5, 80, Math.toRadians(180));
-        private final Pose pushBarCP1 = new Pose(25, 80, Math.toRadians(180));
+        private final Pose pushBarPose = new Pose(17, 70, Math.toRadians(180));
+        private final Pose pushBarCP1 = new Pose(20, 70, Math.toRadians(180));
     //line 8 Score  2 ------------------------------------------------------------------------------
-        private final Pose score2Pose = new Pose(37, 50, Math.toRadians(220));
+        private final Pose score2Pose = new Pose(37, 100, Math.toRadians(140));
         private final Pose score2CP1 = new Pose(25,70, Math.toRadians(180));
-        private final Pose score2CP2 = new Pose(30, 60, Math.toRadians(190));
+        private final Pose score2CP2 = new Pose(30, 85, Math.toRadians(160));
     //line 9 Pickup  3------------------------------------------------------------------------------
-        private final Pose pickup3Pose = new Pose(17, 115, Math.toRadians(180));
-        private final Pose pickup3CP1 = new Pose(50, 90, Math.toRadians(180));
-        private final Pose pickup3CP2 = new Pose(45, 110, Math.toRadians(180));
+        private final Pose pickup3Pose = new Pose(17, 40, Math.toRadians(180));
+        private final Pose pickup3CP1 = new Pose(50, 45, Math.toRadians(180));
+        private final Pose pickup3CP2 = new Pose(30, 45, Math.toRadians(180));
     //line 10 Score 3-------------------------------------------------------------------------------
-        private final Pose score3Pose = new Pose(37, 50, Math.toRadians(220));
-        private final Pose score3CP1 = new Pose(25, 90, Math.toRadians(180));
-        private final Pose score3CP2 = new Pose(30, 65, Math.toRadians(190));
+        private final Pose score3Pose = new Pose(37, 100, Math.toRadians(140));
+        private final Pose score3CP1 = new Pose(25, 60, Math.toRadians(180));
+        private final Pose score3CP2 = new Pose(30, 80, Math.toRadians(160));
     //line 10 Park----------------------------------------------------------------------------------
         private final Pose park = new Pose(37, 75, Math.toRadians(180));
     //  private PathChain ;-------------------------------------------------------------------------
@@ -127,7 +126,6 @@ import pedroPathing.constants.LConstants;
             switch (pathState) {
                 case 0:
 
-
                         follower.followPath(scorePreload, true);
                         setPathState(1);
                 break; // -------------------------------------------------------------------------------------------
@@ -137,26 +135,17 @@ import pedroPathing.constants.LConstants;
                         }
                 break; // -------------------------------------------------------------------------------------------
                 case 2:
-                        rightled.setPattern(RevBlinkinLedDriver.BlinkinPattern.HOT_PINK);
-                        leftled.setPattern(RevBlinkinLedDriver.BlinkinPattern.HOT_PINK);
                         follower.followPath(Pickup1, true);
                         setPathState(3);
                 break; // -------------------------------------------------------------------------------------------
                 case 3:
-                        rightled.setPattern(RevBlinkinLedDriver.BlinkinPattern.HOT_PINK);
-                        leftled.setPattern(RevBlinkinLedDriver.BlinkinPattern.HOT_PINK);
-                        intake.setPower(-1);
                         if (!follower.isBusy()) {
                             setPathState(4);
                         }
                 break; // -------------------------------------------------------------------------------------------
                 case 4:
                         follower.followPath(Score1, true);
-                        rightled.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
-                        leftled.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
-                        intake.setPower(0);
                         setPathState(5);
-
                 break; // -------------------------------------------------------------------------------------------
                 case 5:
                         if (!follower.isBusy()) {
@@ -168,10 +157,6 @@ import pedroPathing.constants.LConstants;
                         setPathState(7);
                 break; // -------------------------------------------------------------------------------------------
                 case 7:
-                        rightled.setPattern(RevBlinkinLedDriver.BlinkinPattern.HOT_PINK);
-                        leftled.setPattern(RevBlinkinLedDriver.BlinkinPattern.HOT_PINK);
-                        intake.setPower(-1);
-
                         if (!follower.isBusy()) {
                             setPathState(8);
                         }
@@ -186,9 +171,6 @@ import pedroPathing.constants.LConstants;
                         }
                 break; // -------------------------------------------------------------------------------------------
                 case 10:
-                        rightled.setPattern(RevBlinkinLedDriver.BlinkinPattern.HOT_PINK);
-                        leftled.setPattern(RevBlinkinLedDriver.BlinkinPattern.HOT_PINK);
-                        intake.setPower(0);
                         follower.followPath(Score2, true);
                         setPathState(11);
                 break; // -------------------------------------------------------------------------------------------
@@ -271,8 +253,8 @@ import pedroPathing.constants.LConstants;
             telemetry.addData("Flywheel Velocity", ((DcMotorEx) shooter2).getVelocity());
             telemetry.update();
 
-            rightled.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
-            leftled.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
+            rightled.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE);
+            leftled.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE);
         }
 
         @Override

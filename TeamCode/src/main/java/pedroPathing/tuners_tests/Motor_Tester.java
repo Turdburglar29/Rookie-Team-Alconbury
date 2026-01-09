@@ -1,4 +1,4 @@
-package pedroPathing.teleops;
+package pedroPathing.tuners_tests;
 
 import com.pedropathing.follower.Follower;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -7,15 +7,14 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
-import com.qualcomm.robotcore.hardware.Servo;
-
 import org.firstinspires.ftc.robotcore.external.JavaUtil;
 
 
-@TeleOp(name = "Only_Motor_Tester", group = "Examples")
-public class Only_Motor_Tester extends OpMode {
+@TeleOp(name = "Motor_Tester", group = "Examples")
+public class Motor_Tester extends OpMode {
     private Follower follower;
 
     private static final int bankVelocity = 1900;
@@ -23,14 +22,18 @@ public class Only_Motor_Tester extends OpMode {
     private static final int farVelocity = 2000;
     private static final int maxVelocity = 2450;
     private static final int intakeVelocity = 1400;
+    //private final Pose startPose = new Pose(0, 0, 0);
     public static DcMotor intake;
     public static DcMotor spinner1;
     private DcMotor shooter1;
     private DcMotor shooter2;
-
+    private Servo leftled;
+    private Servo rightled;
     private NormalizedColorSensor colorsensor;
     double hue;
-
+    //private Servo releasespinner;
+    //private Servo sort1;
+    //private Servo sort2;
 
     /**
      * This method is call once when init is played, it initializes the follower
@@ -46,7 +49,7 @@ public class Only_Motor_Tester extends OpMode {
         shooter1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         shooter2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         intake.setDirection(DcMotorSimple.Direction.REVERSE);
-        shooter2.setDirection(DcMotorSimple.Direction.FORWARD);
+        shooter2.setDirection(DcMotorSimple.Direction.REVERSE);
 
     }
 
@@ -141,6 +144,8 @@ public class Only_Motor_Tester extends OpMode {
                 intake.setPower(0);
             }
             if (hue < 350){
+                leftled.setPosition(350);
+                rightled.setPosition(350);
                 telemetry.addData("Color", "Purple");
 
 

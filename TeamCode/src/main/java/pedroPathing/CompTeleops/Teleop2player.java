@@ -1,4 +1,4 @@
-package pedroPathing.teleops;
+package pedroPathing.CompTeleops;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.localization.Pose;
@@ -8,14 +8,13 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import pedroPathing.constants.FConstants;
 import pedroPathing.constants.LConstants;
 
 @TeleOp(name = "FTC30630", group = "Examples")
-public class FTC30630 extends OpMode {
+public class Teleop2player extends OpMode {
     private Follower follower;
 
     private static final int bankVelocity = 1900;
@@ -28,9 +27,7 @@ public class FTC30630 extends OpMode {
     public static DcMotor spinner1;
     private DcMotor shooter1;
     private DcMotor shooter2;
-    private Servo releasespinner;
-    private Servo sort1;
-    private Servo sort2;
+
 
 
     private ElapsedTime runtime = new ElapsedTime();
@@ -38,8 +35,7 @@ public class FTC30630 extends OpMode {
     static final double DRIVE_GEAR_REDUCTION = 19.2032;     // goBilda 5202 Gear ratio reduction
     static final double WHEEL_DIAMETER_INCHES = 3.77953;     // goBilda 5202 Wheel diameter
     static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * 3.1415);
-    static final double DRIVE_SPEED = 0.4;
-    static final double TURN_SPEED = 0.5;
+
 
 
 
@@ -59,102 +55,89 @@ public class FTC30630 extends OpMode {
         shooter1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         shooter2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         intake.setDirection(DcMotorSimple.Direction.REVERSE);
-
     }
-
-    /**
-     * This method is called continuously after Init while waiting to be started.
-     **/
     @Override
-    public void init_loop() {
+    public void init_loop() {/*This method is called continuously after Init while waiting to be started.*/
     }
-
-    /**
-     * This method is called once at the start of the OpMode.
-     **/
     @Override
-    public void start() {
+    public void start() {/*This method is called once at the start of the OpMode.*/
         follower.startTeleopDrive();
     }
-
-    /**
-     * This is the main loop of the opmode and runs continuously after play
-     **/
     @Override
-    public void loop() {
+    public void loop() {/*This is the main loop of the opmode and runs continuously after play*/
         follower.setTeleOpMovementVectors(gamepad1.left_stick_y, gamepad1.left_stick_x, -gamepad1.right_stick_x, false);
         follower.update();
-
         /* Telemetry Outputs of our Follower */
         telemetry.addData("X", follower.getPose().getX());
         telemetry.addData("Y", follower.getPose().getY());
         telemetry.addData("Heading in Degrees", Math.toDegrees(follower.getPose().getHeading()));
-
         /*/Tells you Flywheel Velocity */
         telemetry.addData("Intake Velocity", ((DcMotorEx) intake).getVelocity());
         telemetry.addData("Flywheel Velocity", ((DcMotorEx) shooter1).getVelocity());
         telemetry.addData("Flywheel Velocity", ((DcMotorEx) shooter2).getVelocity());
         telemetry.update();
-
-        if (gamepad2.options) {
-            shooter1.setPower(-0.5);
-        } else if (gamepad1.circle) {
-            ((DcMotorEx) shooter1).setVelocity(bankVelocity + 1450);
+//----------------------------------------------------------------------------
+        /* short shot */
+        if (gamepad2.circle) {
+            ((DcMotorEx) shooter1).setVelocity(bankVelocity + 1450);/* sets Velocity */
             ((DcMotorEx) shooter2).setVelocity(bankVelocity - 1300);
-            if (((DcMotorEx) shooter1).getVelocity() >= bankVelocity - 5) {
-                intake.setPower(1);
+            if (((DcMotorEx) shooter1).getVelocity() >= bankVelocity - 5) {/* checks Velocity */
+                intake.setPower(1);/* Pushes ball to shot */
             } else {
                 intake.setPower(0);
-            }
-        } else if (gamepad2.cross) {
+}//----------------------------------------------------------------------------
+        } /* mid shot */
+        else if (gamepad2.cross) {
             ((DcMotorEx) shooter1).setVelocity(medVelocity);
             ((DcMotorEx) shooter2).setVelocity(medVelocity - 640);
             if (((DcMotorEx) shooter1).getVelocity() >= medVelocity - 5) {
                 intake.setPower(1);
             } else {
                 intake.setPower(0);
-            }
-        } else if (gamepad2.triangle) {
+}//----------------------------------------------------------------------------
+        } /* long shot */
+        else if (gamepad2.triangle) {
                 ((DcMotorEx) shooter1).setVelocity(farVelocity);
                 ((DcMotorEx) shooter2).setVelocity(farVelocity - 500);
                 if (((DcMotorEx) shooter1).getVelocity() >= farVelocity - 5) {
                     intake.setPower(1);
                 } else {
                     intake.setPower(0);
-                }
-        } else if (gamepad2.square) {
+}//----------------------------------------------------------------------------
+        } /* ? */
+        else if (gamepad2.square) {
             ((DcMotorEx) shooter1).setVelocity(maxVelocity);
             ((DcMotorEx) shooter2).setVelocity(bankVelocity);
             if (((DcMotorEx) shooter1).getVelocity() >= maxVelocity - 16) {
                 intake.setPower(1);
             } else {
                 intake.setPower(0);
-            }
-        } else if (gamepad2.right_bumper) {
+}//----------------------------------------------------------------------------
+        }/* intake */
+        else if (gamepad2.right_bumper) {
             ((DcMotorEx) intake).setVelocity(intakeVelocity -2400);
            if (((DcMotorEx) intake).getVelocity() >= intakeVelocity - 2000) {
             } else {
                 intake.setPower(0);
             }
-        } else {
+        } else {/* powers down all motors */
             ((DcMotorEx) shooter1).setVelocity(0);
             ((DcMotorEx) shooter2).setVelocity(0);
             shooter1.setPower(0);
             shooter2.setPower(0);
             intake.setPower(0);
 //----------------------------------------------------------------------------
+            if (gamepad2.right_bumper) {// intakes balls
+                intake.setPower(1);}
+            else {
+                intake.setPower(0);}
 //----------------------------------------------------------------------------
-            if (gamepad2.dpad_right) {// intakes balls
-                intake.setPower(1);
-            } else {
-                intake.setPower(0);
-            }
-            //----------------------------------------------------------------------------
             if (gamepad2.left_bumper) {// outtakes balls
                 intake.setPower(1);
             } else {
                 intake.setPower(0);
             }
+//----------------------------------------------------------------------------
             if (gamepad2.dpad_left) {
             }
             if (gamepad2.dpad_right) {
@@ -166,7 +149,6 @@ public class FTC30630 extends OpMode {
             if (gamepad2.start) {
             }
         }
-        /** We do not use this because everything automatically should disable **/
     }
 }
 
