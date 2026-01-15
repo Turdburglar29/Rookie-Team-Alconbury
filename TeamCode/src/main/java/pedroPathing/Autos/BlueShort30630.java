@@ -25,14 +25,14 @@ import pedroPathing.constants.LConstants;
 
 @Autonomous(name = "BlueShort", group = "Auto")
     public class BlueShort30630 extends OpMode {
-    private static final int bankVelocity = 500;
-    private static final int medVelocity = 700;
-    private static final int farVelocity = 1000;
+    private static final int bankVelocity = 2400;
+    private static final int medVelocity = 2200;
+    private static final int farVelocity = 2400;
     private static final int intakeVelocity = 1400;
     public static DcMotor intake;
-    public static DcMotor spinner1;
     private DcMotor shooter1;
     private DcMotor shooter2;
+    private DcMotor ballstopper;
     private Servo releasespinner;
     private Servo sort1;
     private Servo sort2;
@@ -277,14 +277,15 @@ import pedroPathing.constants.LConstants;
 
             telemetry.update();
             intake = hardwareMap.get(DcMotor.class, "intake");
-            spinner1 = hardwareMap.get(DcMotor.class, "spinner1");
             shooter1 = hardwareMap.get(DcMotor.class, "shooter1");
             shooter2 = hardwareMap.get(DcMotor.class, "shooter2");
+            ballstopper = hardwareMap.get(DcMotor.class, "ballstopper");
             test_color = hardwareMap.get(NormalizedColorSensor.class, "test_color");
             rightled = hardwareMap.get(RevBlinkinLedDriver.class,"rightled");
             leftled = hardwareMap.get(RevBlinkinLedDriver.class,"leftled");
             shooter1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             shooter2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            ballstopper.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             intake.setDirection(DcMotorSimple.Direction.REVERSE);
         }
 

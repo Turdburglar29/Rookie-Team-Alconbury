@@ -23,18 +23,19 @@ import org.firstinspires.ftc.robotcore.external.JavaUtil;
 import pedroPathing.constants.FConstants30630;
 import pedroPathing.constants.LConstants30630;
 
-@Autonomous(name = "RedShort30630", group = "Auto")
+@Autonomous(name = "BlueLong30630", group = "Auto")
     public class BlueLong30630 extends OpMode {
     private ElapsedTime shotTimer = new ElapsedTime();
     private ElapsedTime slowDownTimer = new ElapsedTime();
-    private static final int bankVelocity = 1900;
-    private static final int medVelocity = 1950;
+    private static final int bankVelocity = 2400;
+    private static final int medVelocity = 2200;
     private static final int farVelocity = 2400;
     private static final int intakeVelocity = 1400;
     public static DcMotor intake;
     public static DcMotor spinner1;
     private DcMotor shooter1;
     private DcMotor shooter2;
+    private DcMotor ballstopper;
     private RevBlinkinLedDriver leftled;
     private RevBlinkinLedDriver rightled;
     private NormalizedColorSensor test_color;
@@ -343,14 +344,15 @@ import pedroPathing.constants.LConstants30630;
 
             telemetry.update();
             intake = hardwareMap.get(DcMotor.class, "intake");
-            spinner1 = hardwareMap.get(DcMotor.class, "spinner1");
             shooter1 = hardwareMap.get(DcMotor.class, "shooter1");
             shooter2 = hardwareMap.get(DcMotor.class, "shooter2");
+            ballstopper = hardwareMap.get(DcMotor.class, "ballstopper");
             test_color = hardwareMap.get(NormalizedColorSensor.class, "test_color");
             rightled = hardwareMap.get(RevBlinkinLedDriver.class,"rightled");
             leftled = hardwareMap.get(RevBlinkinLedDriver.class,"leftled");
             shooter1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             shooter2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            ballstopper.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             intake.setDirection(DcMotorSimple.Direction.REVERSE);
         }
 

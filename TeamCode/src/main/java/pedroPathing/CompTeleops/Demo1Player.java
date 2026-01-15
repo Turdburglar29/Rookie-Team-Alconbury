@@ -13,20 +13,21 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import pedroPathing.constants.FConstants;
 import pedroPathing.constants.LConstants;
 
-@TeleOp(name = "FTC30630", group = "Examples")
+@TeleOp(name = "Demo1player", group = "Examples")
 public class Demo1Player extends OpMode {
     private Follower follower;
 
-    private static final int bankVelocity = 1900;
-    private static final int medVelocity = 1900;
-    private static final int farVelocity = 2000;
+    private static final int bankVelocity = 2400;
+    private static final int medVelocity = 2200;
+    private static final int farVelocity = 2400;
     private static final int maxVelocity = 2450;
     private static final int intakeVelocity = 1400;
     private final Pose startPose = new Pose(0, 0, 0);
+
     public static DcMotor intake;
-    public static DcMotor spinner1;
     private DcMotor shooter1;
     private DcMotor shooter2;
+    private DcMotor ballstopper;
 
 
 
@@ -49,11 +50,12 @@ public class Demo1Player extends OpMode {
         follower.setStartingPose(startPose);
         telemetry.update();
         intake = hardwareMap.get(DcMotor.class, "intake");
-        spinner1 = hardwareMap.get(DcMotor.class, "spinner1");
         shooter1 = hardwareMap.get(DcMotor.class, "shooter1");
         shooter2 = hardwareMap.get(DcMotor.class, "shooter2");
+        ballstopper = hardwareMap.get(DcMotor.class, "ballstopper");
         shooter1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         shooter2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        ballstopper.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         intake.setDirection(DcMotorSimple.Direction.REVERSE);
     }
     @Override
@@ -72,51 +74,49 @@ public class Demo1Player extends OpMode {
         telemetry.addData("Y", follower.getPose().getY());
         telemetry.addData("Heading in Degrees", Math.toDegrees(follower.getPose().getHeading()));
         /*/Tells you Flywheel Velocity */
-        telemetry.addData("Intake Velocity", ((DcMotorEx) intake).getVelocity());
+
+
         telemetry.addData("Flywheel Velocity", ((DcMotorEx) shooter1).getVelocity());
         telemetry.addData("Flywheel Velocity", ((DcMotorEx) shooter2).getVelocity());
         telemetry.update();
 //----------------------------------------------------------------------------
         /* short shot */
         if (gamepad1.circle) {
-            ((DcMotorEx) shooter1).setVelocity(bankVelocity + 1450);/* sets Velocity */
-            ((DcMotorEx) shooter2).setVelocity(bankVelocity - 1300);
-            if (((DcMotorEx) shooter1).getVelocity() >= bankVelocity - 5) {/* checks Velocity */
+            ((DcMotorEx) shooter1).setVelocity(bankVelocity);/* sets Velocity */
+            ((DcMotorEx) shooter2).setVelocity(bankVelocity - 1200);
+            if ((((DcMotorEx) shooter1).getVelocity() >= bankVelocity - 250) && (((DcMotorEx) shooter2).getVelocity() >= bankVelocity - 1240)) {/* checks Velocity */
                 intake.setPower(1);/* Pushes ball to shot */
+                ballstopper.setPower(1);
             } else {
                 intake.setPower(0);
-}//----------------------------------------------------------------------------
+                ballstopper.setPower(0);
+            }//----------------------------------------------------------------------------
         } /* mid shot */
         else if (gamepad1.cross) {
             ((DcMotorEx) shooter1).setVelocity(medVelocity);
             ((DcMotorEx) shooter2).setVelocity(medVelocity - 640);
-            if (((DcMotorEx) shooter1).getVelocity() >= medVelocity - 5) {
+            if ((((DcMotorEx) shooter1).getVelocity() >= medVelocity - 250) && (((DcMotorEx) shooter2).getVelocity() >= medVelocity - 680)) {
                 intake.setPower(1);
+                ballstopper.setPower(1);
             } else {
                 intake.setPower(0);
-}//----------------------------------------------------------------------------
+                ballstopper.setPower(0);
+            }//----------------------------------------------------------------------------
         } /* long shot */
         else if (gamepad1.triangle) {
-                ((DcMotorEx) shooter1).setVelocity(farVelocity);
-                ((DcMotorEx) shooter2).setVelocity(farVelocity - 500);
-                if (((DcMotorEx) shooter1).getVelocity() >= farVelocity - 5) {
-                    intake.setPower(1);
-                } else {
-                    intake.setPower(0);
-}//----------------------------------------------------------------------------
-        } /* ? */
-        else if (gamepad1.square) {
-            ((DcMotorEx) shooter1).setVelocity(maxVelocity);
-            ((DcMotorEx) shooter2).setVelocity(bankVelocity);
-            if (((DcMotorEx) shooter1).getVelocity() >= maxVelocity - 16) {
+            ((DcMotorEx) shooter1).setVelocity(farVelocity);
+            ((DcMotorEx) shooter2).setVelocity(farVelocity );
+            if ((((DcMotorEx) shooter1).getVelocity() >= farVelocity - 350) && (((DcMotorEx) shooter2).getVelocity() >= farVelocity - 250)) {
                 intake.setPower(1);
+                ballstopper.setPower(1);
             } else {
                 intake.setPower(0);
-}//----------------------------------------------------------------------------
+                ballstopper.setPower(0);
+            }//----------------------------------------------------------------------------
         }/* intake */
         else if (gamepad1.right_bumper) {
             ((DcMotorEx) intake).setVelocity(intakeVelocity -2400);
-           if (((DcMotorEx) intake).getVelocity() >= intakeVelocity - 2000) {
+            if (((DcMotorEx) intake).getVelocity() >= intakeVelocity - 2000) {
             } else {
                 intake.setPower(0);
             }
@@ -125,6 +125,7 @@ public class Demo1Player extends OpMode {
             ((DcMotorEx) shooter2).setVelocity(0);
             shooter1.setPower(0);
             shooter2.setPower(0);
+            ballstopper.setPower(0);
             intake.setPower(0);
 //----------------------------------------------------------------------------
             if (gamepad1.right_bumper) {// intakes balls
@@ -138,15 +139,15 @@ public class Demo1Player extends OpMode {
                 intake.setPower(0);
             }
 //----------------------------------------------------------------------------
-            if (gamepad1.dpad_left) {
+            if (gamepad2.dpad_left) {
             }
-            if (gamepad1.dpad_right) {
+            if (gamepad2.dpad_right) {
             }
-            if (gamepad1.dpad_up) {
+            if (gamepad2.dpad_up) {
             }
-            if (gamepad1.dpad_down) {
+            if (gamepad2.dpad_down) {
             }
-            if (gamepad1.start) {
+            if (gamepad2.start) {
             }
         }
     }

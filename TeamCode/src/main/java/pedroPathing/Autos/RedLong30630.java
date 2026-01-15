@@ -23,18 +23,19 @@ import org.firstinspires.ftc.robotcore.external.JavaUtil;
 import pedroPathing.constants.FConstants30630;
 import pedroPathing.constants.LConstants30630;
 
-@Autonomous(name = "RedShort30630", group = "Auto")
+@Autonomous(name = "RedLong30630", group = "Auto")
     public class RedLong30630 extends OpMode {
     private ElapsedTime shotTimer = new ElapsedTime();
     private ElapsedTime slowDownTimer = new ElapsedTime();
-    private static final int bankVelocity = 1900;
-    private static final int medVelocity = 1950;
-    private static final int farVelocity = 2400;
+    private static final int bankVelocity = 2400;
+    private static final int medVelocity = 2200;
+    private static final int farVelocity = 2160;
     private static final int intakeVelocity = 1400;
     public static DcMotor intake;
-    public static DcMotor spinner1;
+
     private DcMotor shooter1;
     private DcMotor shooter2;
+    private DcMotor ballstopper;
     private RevBlinkinLedDriver leftled;
     private RevBlinkinLedDriver rightled;
     private NormalizedColorSensor test_color;
@@ -48,14 +49,14 @@ import pedroPathing.constants.LConstants30630;
 
         private int pathState;
     //Start point-----------------------------------------------------------------------------------
-        private final Pose startPose = new Pose(20, 30, Math.toRadians(0));
+        private final Pose startPose = new Pose(65, 135, Math.toRadians(90));
     //line 1 ScorePreload 1 ------------------------------------------------------------------------
-        private final Pose scorePose = new Pose(45, 50, Math.toRadians(50));
+        private final Pose scorePose = new Pose(70, 117, Math.toRadians(67));
     //Line 3 Pickup 1-------------------------------------------------------------------------------
-        private final Pose pickup1Pose = new Pose(20, 60, Math.toRadians(0));
-        private final Pose pickup1CP1 = new Pose(70, 70, Math.toRadians(0));
+        private final Pose pickup1Pose = new Pose(20, 107, Math.toRadians(0));
+        private final Pose pickup1CP1 = new Pose(50, 112, Math.toRadians(0));
     //line 4 Score 1 -------------------------------------------------------------------------------
-        private final Pose score1Pose = new Pose(45, 50, Math.toRadians(45));
+        private final Pose score1Pose = new Pose(70, 117, Math.toRadians(67));
     //line 6 Pickup  2 -----------------------------------------------------------------------------
         private final Pose pickup2Pose = new Pose(23, 85, Math.toRadians(0));
         private final Pose pickup2CP1 = new Pose(75, 95, Math.toRadians(0));
@@ -114,16 +115,17 @@ import pedroPathing.constants.LConstants30630;
             switch (pathState) {
                 case 0:
                         follower.followPath(scorePreload, true);
-                        ((DcMotorEx) shooter1).setVelocity(medVelocity);    //starts shooter
-                        ((DcMotorEx) shooter2).setVelocity(medVelocity - 640);
+                        ((DcMotorEx) shooter1).setVelocity(farVelocity);    //starts shooter
+                        ((DcMotorEx) shooter2).setVelocity(farVelocity);
                         setPathState(1);
                         shotTimer.reset();
                 break; // --------------------------------------Shoots balls--------------------------------------------
                 case 1:
-                        if (!follower.isBusy()) {
-                            ((DcMotorEx) shooter1).setVelocity(medVelocity);    //starts shooter
-                            ((DcMotorEx) shooter2).setVelocity(medVelocity - 640);
+                        ((DcMotorEx) shooter1).setVelocity(farVelocity);    //starts shooter
+                        ((DcMotorEx) shooter2).setVelocity(farVelocity);
+                        if ((!follower.isBusy()) && (((DcMotorEx) shooter2).getVelocity() >= farVelocity - 10) && (((DcMotorEx) shooter1).getVelocity() >= farVelocity -10)) {
                             intake.setPower(1);
+                            ballstopper.setPower(1);
                                 }
                         if(shotTimer.milliseconds() > 5000) {
                             setPathState(2);
@@ -135,11 +137,12 @@ import pedroPathing.constants.LConstants30630;
                         follower.followPath(Pickup1, true);
                         shooter1.setPower(0); //turns shooter off
                         shooter2.setPower(0);
+                        ballstopper.setPower(0);
                         setPathState(3);
                         slowDownTimer.reset();
                 break; // -------------------------------------------------------------------------------------------
                 case 3:
-                        if(slowDownTimer.milliseconds() > 1300) {
+                        if(slowDownTimer.milliseconds() > 900) {
                             follower.setMaxPower(.29);
                             intake.setPower(1);
                         }
@@ -159,24 +162,26 @@ import pedroPathing.constants.LConstants30630;
                         shooter1.setPower(0); //turns shooter off
                         shooter2.setPower(0);
                         setPathState(5);
-                        ((DcMotorEx) shooter1).setVelocity(medVelocity);    //starts shooter
-                        ((DcMotorEx) shooter2).setVelocity(medVelocity - 640);
+                        ((DcMotorEx) shooter1).setVelocity(farVelocity-250);    //starts shooter
+                        ((DcMotorEx) shooter2).setVelocity(farVelocity-275);
                         shotTimer.reset();
 
 
                     break; // --------------------------------Shots Balls-------------------------------------------
                 case 5:
-                        if (!follower.isBusy()) {
-                            ((DcMotorEx) shooter1).setVelocity(medVelocity);    //starts shooter
-                            ((DcMotorEx) shooter2).setVelocity(medVelocity - 640);
+                        ((DcMotorEx) shooter1).setVelocity(farVelocity);    //starts shooter
+                        ((DcMotorEx) shooter2).setVelocity(farVelocity);
+                        if ((!follower.isBusy()) && (((DcMotorEx) shooter2).getVelocity() >= farVelocity -5) && (((DcMotorEx) shooter1).getVelocity() >= farVelocity -5)) {
+                            ballstopper.setPower(1);
                             intake.setPower(1);
                         }
                         if(shotTimer.milliseconds() > 5500) {
-                        setPathState(6);
+                        setPathState(666);
                         }
                 break; // -----------------------------------Picks up 2nd Line----------------------------------------
                 case 6:
                         follower.followPath(Pickup2, true);
+                        ballstopper.setPower(0);
                         intake.setPower(0);
                         shooter1.setPower(0); //turns shooter off
                         shooter2.setPower(0);
@@ -184,7 +189,7 @@ import pedroPathing.constants.LConstants30630;
                         slowDownTimer.reset();
                 break; // -------------------------------------------------------------------------------------------
                 case 7:
-                        if(slowDownTimer.milliseconds() > 1500) {
+                        if(slowDownTimer.milliseconds() > 1200) {
                             follower.setMaxPower(.27);
                             intake.setPower(1);
                          }
@@ -343,14 +348,15 @@ import pedroPathing.constants.LConstants30630;
 
             telemetry.update();
             intake = hardwareMap.get(DcMotor.class, "intake");
-            spinner1 = hardwareMap.get(DcMotor.class, "spinner1");
             shooter1 = hardwareMap.get(DcMotor.class, "shooter1");
             shooter2 = hardwareMap.get(DcMotor.class, "shooter2");
+            ballstopper = hardwareMap.get(DcMotor.class, "ballstopper");
             test_color = hardwareMap.get(NormalizedColorSensor.class, "test_color");
             rightled = hardwareMap.get(RevBlinkinLedDriver.class,"rightled");
             leftled = hardwareMap.get(RevBlinkinLedDriver.class,"leftled");
             shooter1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             shooter2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            ballstopper.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             intake.setDirection(DcMotorSimple.Direction.REVERSE);
         }
 
