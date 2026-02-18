@@ -7,8 +7,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import  com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import pedroPathing.constants.FConstants;
-import pedroPathing.constants.LConstants;
+import pedroPathing.constants.FConstants30630;
+import pedroPathing.constants.LConstants30630;
 
 /**
  * This is an example teleop that showcases movement and field-centric driving.
@@ -25,7 +25,7 @@ public class ExampleFieldCentricTeleop extends OpMode {
     /** This method is call once when init is played, it initializes the follower **/
     @Override
     public void init() {
-        Constants.setConstants(FConstants.class, LConstants.class);
+        Constants.setConstants(FConstants30630.class, LConstants30630.class);
         follower = new Follower(hardwareMap);
         follower.setStartingPose(startPose);
     }

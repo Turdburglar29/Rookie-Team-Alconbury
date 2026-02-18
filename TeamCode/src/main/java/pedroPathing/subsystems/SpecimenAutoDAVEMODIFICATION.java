@@ -14,8 +14,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import pedroPathing.constants.FConstants;
-import pedroPathing.constants.LConstants;
+import pedroPathing.constants.FConstants30630;
+import pedroPathing.constants.LConstants30630;
 
 @Autonomous(name = "Specimen Auto DAVEMODICICATION", group = "Examples")
     public class SpecimenAutoDAVEMODIFICATION extends OpMode {
@@ -438,7 +438,7 @@ import pedroPathing.constants.LConstants;
             opmodeTimer = new Timer();
             opmodeTimer.resetTimer();
 
-            Constants.setConstants(FConstants.class, LConstants.class);
+            Constants.setConstants(FConstants30630.class, LConstants30630.class);
             follower = new Follower(hardwareMap);
             follower.setStartingPose(startPose);
             buildPaths();

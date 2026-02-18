@@ -24,60 +24,59 @@ import pedroPathing.constants.FConstants30630;
 import pedroPathing.constants.LConstants30630;
 
 @Autonomous(name = "BlueLong30630", group = "Auto")
-    public class BlueLong30630 extends OpMode {
+public class BlueLong30630 extends OpMode {
     private ElapsedTime shotTimer = new ElapsedTime();
     private ElapsedTime slowDownTimer = new ElapsedTime();
-    private static final int bankVelocity = 2400;
-    private static final int medVelocity = 2200;
-    private static final int farVelocity = 2400;
+    private static final int bankVelocity = 1200;
+    private static final int medVelocity = 1400;
+    private static final int farVelocity = 1350;
+    private static final int maxVelocity = 1900; // 1900 is fastest
     private static final int intakeVelocity = 1400;
     public static DcMotor intake;
-    public static DcMotor spinner1;
+
     private DcMotor shooter1;
     private DcMotor shooter2;
     private DcMotor ballstopper;
-    private RevBlinkinLedDriver leftled;
-    private RevBlinkinLedDriver rightled;
-    private NormalizedColorSensor test_color;
+    private RevBlinkinLedDriver LED;
     double hue;
-        static final double COUNTS_PER_MOTOR_REV = 537.6898;   // goBilda 5202 Motor Encoder
-        static final double DRIVE_GEAR_REDUCTION = 19.2032;     // goBilda 5202 Gear ratio reduction
-        static final double WHEEL_DIAMETER_INCHES = 3.77953;     // goBilda 5202 Wheel diameter
-        static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * 3.1415);
-        private Follower follower;
-        private Timer pathTimer, actionTimer, opmodeTimer;
+    static final double COUNTS_PER_MOTOR_REV = 537.6898;   // goBilda 5202 Motor Encoder
+    static final double DRIVE_GEAR_REDUCTION = 19.2032;     // goBilda 5202 Gear ratio reduction
+    static final double WHEEL_DIAMETER_INCHES = 3.77953;     // goBilda 5202 Wheel diameter
+    static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * 3.1415);
+    private Follower follower;
+    private Timer pathTimer, actionTimer, opmodeTimer;
 
         private int pathState;
-    //Start point-----------------------------------------------------------------------------------
-        private final Pose startPose = new Pose(20, 30, Math.toRadians(0));
-    //line 1 ScorePreload 1 ------------------------------------------------------------------------
-        private final Pose scorePose = new Pose(45, 50, Math.toRadians(50));
-    //Line 3 Pickup 1-------------------------------------------------------------------------------
-        private final Pose pickup1Pose = new Pose(20, 60, Math.toRadians(0));
-        private final Pose pickup1CP1 = new Pose(70, 70, Math.toRadians(0));
-    //line 4 Score 1 -------------------------------------------------------------------------------
-        private final Pose score1Pose = new Pose(45, 50, Math.toRadians(45));
-    //line 6 Pickup  2 -----------------------------------------------------------------------------
-        private final Pose pickup2Pose = new Pose(23, 85, Math.toRadians(0));
-        private final Pose pickup2CP1 = new Pose(75, 95, Math.toRadians(0));
-        private final Pose pickup2CP2 = new Pose(30, 90, Math.toRadians(0));
-    //line 7 Push Bar ------------------------------------------------------------------------------
-        private final Pose pushBarPose = new Pose(17, 80, Math.toRadians(0));
-        private final Pose pushBarCP1 = new Pose(25, 80, Math.toRadians(0));
-    //line 8 Score  2 ------------------------------------------------------------------------------
-        private final Pose score2Pose = new Pose(45, 50, Math.toRadians(50));
-        private final Pose score2CP1 = new Pose(40,70, Math.toRadians(0));
-        private final Pose score2CP2 = new Pose(40, 60, Math.toRadians(10));
-    //line 9 Pickup  3------------------------------------------------------------------------------
+        //Start point-----------------------------------------------------------------------------------
+        private final Pose startPose = new Pose(45, 0, Math.toRadians(90));
+        //line 1 ScorePreload 1 ------------------------------------------------------------------------
+        private final Pose scorePose = new Pose(47, 10, Math.toRadians(114));
+        //Line 3 Pickup 1-------------------------------------------------------------------------------
+        private final Pose pickup1Pose = new Pose(15, 25, Math.toRadians(180));
+        private final Pose pickup1CP1 = new Pose(20, 20, Math.toRadians(180));
+        //line 4 Score 1 -------------------------------------------------------------------------------
+        private final Pose score1Pose = new Pose(47, 10, Math.toRadians(114));
+        //line 6 Pickup  2 -----------------------------------------------------------------------------
+        private final Pose pickup2Pose = new Pose(15, 20, Math.toRadians(250));
+        private final Pose pickup2CP1 = new Pose(25, 25, Math.toRadians(250));
+        private final Pose pickup2CP2 = new Pose(18, 22, Math.toRadians(250));
+        //line 7 Push Bar ------------------------------------------------------------------------------
+        private final Pose pushBarPose = new Pose(15, 4, Math.toRadians(250));
+        private final Pose pushBarCP1 = new Pose(15, 8, Math.toRadians(250));
+        //line 8 Score  2 ------------------------------------------------------------------------------
+        private final Pose score2Pose = new Pose(47, 10, Math.toRadians(114));
+        private final Pose score2CP1 = new Pose(20,8, Math.toRadians(113));
+        private final Pose score2CP2 = new Pose(30, 7, Math.toRadians(113));
+        //line 9 Pickup  3------------------------------------------------------------------------------
         private final Pose pickup3Pose = new Pose(25, 105, Math.toRadians(0));
-        private final Pose pickup3CP1 = new Pose(70, 105, Math.toRadians(0));
+        private final Pose pickup3CP1 = new Pose(45, 105, Math.toRadians(0));
         private final Pose pickup3CP2 = new Pose(45, 105, Math.toRadians(0));
-    //line 10 Score 3-------------------------------------------------------------------------------
-        private final Pose score3Pose = new Pose(45, 50, Math.toRadians(50));
-        private final Pose score3CP1 = new Pose(25, 90, Math.toRadians(0));
-        private final Pose score3CP2 = new Pose(30, 65, Math.toRadians(10));
-    //line 10 Park----------------------------------------------------------------------------------
-        private final Pose park = new Pose(37, 75, Math.toRadians(0));
+        //line 10 Score 3-------------------------------------------------------------------------------
+        private final Pose score3Pose = new Pose(65, 16, Math.toRadians(67));
+        private final Pose score3CP1 = new Pose(65, 16, Math.toRadians(67));
+        private final Pose score3CP2 = new Pose(65, 16, Math.toRadians(67));
+        //line 10 Park----------------------------------------------------------------------------------
+        private final Pose park = new Pose(25, 25, Math.toRadians(180));
     //  private PathChain ;-------------------------------------------------------------------------
         private Path scorePreload,  Pickup1,Score1,Pickup2,PushBar,Score2,Pickup3,Score3,Park;
 //--------------------------------------------------------------------------------------------------
@@ -114,160 +113,162 @@ import pedroPathing.constants.LConstants30630;
         public void autonomousPathUpdate() {
             switch (pathState) {
                 case 0:
-                        follower.followPath(scorePreload, true);
-                        ((DcMotorEx) shooter1).setVelocity(medVelocity);    //starts shooter
-                        ((DcMotorEx) shooter2).setVelocity(medVelocity - 640);
-                        setPathState(1);
-                        shotTimer.reset();
-                break; // --------------------------------------Shoots balls--------------------------------------------
+                    follower.followPath(scorePreload, true);
+                    ((DcMotorEx) shooter1).setVelocity(farVelocity);    //starts shooter
+                    ((DcMotorEx) shooter2).setVelocity(farVelocity-200);
+                    setPathState(1);
+                    shotTimer.reset();
+                    break; // --------------------------------------Shoots balls--------------------------------------------
                 case 1:
-                        if (!follower.isBusy()) {
-                            ((DcMotorEx) shooter1).setVelocity(medVelocity);    //starts shooter
-                            ((DcMotorEx) shooter2).setVelocity(medVelocity - 640);
-                            intake.setPower(1);
-                                }
-                        if(shotTimer.milliseconds() > 5000) {
-                            setPathState(2);
-                        }
-                break; // --------------------------------------Picks up 1st line ---------------------------------------
+                    ((DcMotorEx) shooter1).setVelocity(farVelocity);    //starts shooter
+                    ((DcMotorEx) shooter2).setVelocity(farVelocity-200);
+                    if ((!follower.isBusy())
+                            && (((DcMotorEx) shooter1).getVelocity() >= farVelocity - 50)
+                            && (((DcMotorEx) shooter1).getVelocity() <= farVelocity )
+                            && (((DcMotorEx) shooter2).getVelocity() >= farVelocity -250)
+                            && (((DcMotorEx) shooter2).getVelocity() <= farVelocity -200))  {
+                        intake.setPower(1);
+                        ballstopper.setPower(1);
+                    }
+                    if(shotTimer.milliseconds() > 4500) {
+                        setPathState(2);
+                    }
+                    break; // --------------------------------------Picks up 1st line ---------------------------------------
                 case 2:
-                        rightled.setPattern(RevBlinkinLedDriver.BlinkinPattern.HOT_PINK);
-                        leftled.setPattern(RevBlinkinLedDriver.BlinkinPattern.HOT_PINK);
-                        follower.followPath(Pickup1, true);
-                        shooter1.setPower(0); //turns shooter off
-                        shooter2.setPower(0);
-                        setPathState(3);
-                        slowDownTimer.reset();
-                break; // -------------------------------------------------------------------------------------------
+
+                    LED.setPattern(RevBlinkinLedDriver.BlinkinPattern.HOT_PINK);
+                    follower.followPath(Pickup1, true);
+                    shooter1.setPower(0); //turns shooter off
+                    shooter2.setPower(0);
+                    ballstopper.setPower(0);
+                    setPathState(3);
+                    slowDownTimer.reset();
+                    break; // -------------------------------------------------------------------------------------------
                 case 3:
-                        if(slowDownTimer.milliseconds() > 1300) {
-                            follower.setMaxPower(.29);
-                            intake.setPower(1);
-                        }
-                        rightled.setPattern(RevBlinkinLedDriver.BlinkinPattern.HOT_PINK);
-                        leftled.setPattern(RevBlinkinLedDriver.BlinkinPattern.HOT_PINK);
-                        intake.setPower(1); //turns intake on
-                        if (!follower.isBusy()) {
-                            setPathState(4);
-                        }
-                break; // -------------------------------------Moves to Score--------------------------------
+                    if(slowDownTimer.milliseconds() > 600) {
+                        follower.setMaxPower(.29);
+                        intake.setPower(1);
+                    }
+                    LED.setPattern(RevBlinkinLedDriver.BlinkinPattern.HOT_PINK);
+                    intake.setPower(1); //turns intake on
+                    if (!follower.isBusy()) {
+                        setPathState(4);
+                    }
+                    break; // -------------------------------------Moves to Score--------------------------------
                 case 4:
-                        follower.setMaxPower(1);
-                        follower.followPath(Score1, true);
-                        rightled.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
-                        leftled.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
-                        intake.setPower(0);
-                        shooter1.setPower(0); //turns shooter off
-                        shooter2.setPower(0);
-                        setPathState(5);
-                        ((DcMotorEx) shooter1).setVelocity(medVelocity);    //starts shooter
-                        ((DcMotorEx) shooter2).setVelocity(medVelocity - 640);
-                        shotTimer.reset();
+                    follower.setMaxPower(1);
+                    follower.followPath(Score1, true);
+                    LED.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
+                    intake.setPower(0);
+                    shooter1.setPower(0); //turns shooter off
+                    shooter2.setPower(0);
+                    setPathState(5);
+                    ((DcMotorEx) shooter1).setVelocity(farVelocity-250);    //starts shooter
+                    ((DcMotorEx) shooter2).setVelocity(farVelocity-275);
+                    shotTimer.reset();
 
 
                     break; // --------------------------------Shots Balls-------------------------------------------
                 case 5:
-                        if (!follower.isBusy()) {
-                            ((DcMotorEx) shooter1).setVelocity(medVelocity);    //starts shooter
-                            ((DcMotorEx) shooter2).setVelocity(medVelocity - 640);
-                            intake.setPower(1);
-                        }
-                        if(shotTimer.milliseconds() > 5500) {
+                    ((DcMotorEx) shooter1).setVelocity(farVelocity);    //starts shooter
+                    ((DcMotorEx) shooter2).setVelocity(farVelocity-200);
+                    if ((!follower.isBusy())
+                            && (((DcMotorEx) shooter1).getVelocity() >= farVelocity - 50)
+                            && (((DcMotorEx) shooter1).getVelocity() <= farVelocity )
+                            && (((DcMotorEx) shooter2).getVelocity() >= farVelocity -250)
+                            && (((DcMotorEx) shooter2).getVelocity() <= farVelocity -200))  {
+                        intake.setPower(1);
+                        ballstopper.setPower(1);
+                    }
+                    if(shotTimer.milliseconds() > 4500) {
                         setPathState(6);
-                        }
-                break; // -----------------------------------Picks up 2nd Line----------------------------------------
+                    }
+                    break; // -----------------------------------Picks up 2nd Line----------------------------------------
                 case 6:
-                        follower.followPath(Pickup2, true);
-                        intake.setPower(0);
-                        shooter1.setPower(0); //turns shooter off
-                        shooter2.setPower(0);
+                    follower.followPath(Pickup2, true);
+                    ballstopper.setPower(0);
+                    intake.setPower(0);
+                    shooter1.setPower(0); //turns shooter off
+                    shooter2.setPower(0);
+                    setPathState(66);
+                    slowDownTimer.reset();
+                    break; // -------------------------------------------------------------------------------------------
+                case 66:
+                    if (!follower.isBusy()){
+                        follower.followPath(PushBar, true); //pushbar is actually second part of pick up balls in corner
                         setPathState(7);
                         slowDownTimer.reset();
-                break; // -------------------------------------------------------------------------------------------
+                    }
+                    break; // -------------------------------------------------------------------------------------------
                 case 7:
-                        if(slowDownTimer.milliseconds() > 1500) {
-                            follower.setMaxPower(.27);
-                            intake.setPower(1);
-                         }
-                        rightled.setPattern(RevBlinkinLedDriver.BlinkinPattern.HOT_PINK);
-                        leftled.setPattern(RevBlinkinLedDriver.BlinkinPattern.HOT_PINK);
-                        if (!follower.isBusy()) {
-                            setPathState(8);
-                            intake.setPower(0);
-                        }
-                break; // ----------------------------------Hits Push Bar-----------------------------------
+                    if(slowDownTimer.milliseconds() > 100) {
+                        follower.setMaxPower(.4);
+                        intake.setPower(1);
+                    }
+                    LED.setPattern(RevBlinkinLedDriver.BlinkinPattern.HOT_PINK);
+                    if (!follower.isBusy()) {
+                        setPathState(8);
+                        intake.setPower(0);
+                    }
+                    break; // ----------------------------------Hits Push Bar-----------------------------------
                 case 8:
-                        follower.setMaxPower(.6);
-                       /* follower.followPath(PushBar, true);*/
-                        setPathState(9);
-                break; // -------------------------------------------------------------------------------------------
+                    follower.setMaxPower(.6);
+                    /* follower.followPath(PushBar, true);*/
+                    setPathState(9);
+                    break; // -------------------------------------------------------------------------------------------
                 case 9:
 
-                         if (!follower.isBusy()) {
-                             intake.setPower(0);
-                            setPathState(10);
-                        }
-                break; // --------------------------------Moves to Score--------------------------------------------
-                case 10:
-                        rightled.setPattern(RevBlinkinLedDriver.BlinkinPattern.HOT_PINK);
-                        leftled.setPattern(RevBlinkinLedDriver.BlinkinPattern.HOT_PINK);
-                        intake.setPower(0);
-                        follower.setMaxPower(1);
-                        follower.followPath(Score2, true);
-                        ((DcMotorEx) shooter1).setVelocity(medVelocity);    //starts shooter
-                        ((DcMotorEx) shooter2).setVelocity(medVelocity - 640);
-                        setPathState(11);
-                        shotTimer.reset();
-                break; // --------------------------------Shots Balls--------------------------------------------
-                case 11:
-                        if (!follower.isBusy()) {
-                            ((DcMotorEx) shooter1).setVelocity(medVelocity);    //starts shooter
-                            ((DcMotorEx) shooter2).setVelocity(medVelocity - 640);
-                            intake.setPower(1);
-                        }
-                        if(shotTimer.milliseconds() > 5000) {
-                            setPathState(12);
-                        }
-                        slowDownTimer.reset();
-                break; // -------------------------------Picks up 3rd Line--------------------------------------------
-                case 12:
-                        follower.followPath(Pickup3, true);
-                        intake.setPower(0);
-                        shooter1.setPower(0); //turns shooter off
-                        shooter2.setPower(0);
-                        setPathState(13);
-                        slowDownTimer.reset();
-                break; // -------------------------------------------------------------------------------------------
-                case 13:
-                    if(slowDownTimer.milliseconds() > 2000) {
-                        follower.setMaxPower(.27);
-                        intake.setPower(1);
-                    }
                     if (!follower.isBusy()) {
                         intake.setPower(0);
+                        setPathState(10);
+                    }
+                    break; // --------------------------------Moves to Score--------------------------------------------
+                case 10:
+                    LED.setPattern(RevBlinkinLedDriver.BlinkinPattern.HOT_PINK);
+                    intake.setPower(0);
+                    follower.setMaxPower(1);
+                    follower.followPath(Score2, true);
+                    ((DcMotorEx) shooter1).setVelocity(medVelocity);    //starts shooter
+                    ((DcMotorEx) shooter2).setVelocity(medVelocity - 640);
+                    setPathState(11);
+                    shotTimer.reset();
+                    break; // --------------------------------Shots Balls--------------------------------------------
+                case 11:
+                    ((DcMotorEx) shooter1).setVelocity(farVelocity);    //starts shooter
+                    ((DcMotorEx) shooter2).setVelocity(farVelocity-200);
+                    if ((!follower.isBusy())
+                            && (((DcMotorEx) shooter1).getVelocity() >= farVelocity - 50)
+                            && (((DcMotorEx) shooter1).getVelocity() <= farVelocity )
+                            && (((DcMotorEx) shooter2).getVelocity() >= farVelocity -250)
+                            && (((DcMotorEx) shooter2).getVelocity() <= farVelocity -200))  {
+                        intake.setPower(1);
+                        ballstopper.setPower(1);
+                    }
+                    if(shotTimer.milliseconds() > 4500) {
+                        setPathState(12);
+                    }
+                    slowDownTimer.reset();
+                    break; // -------------------------------Picks up 3rd Line--------------------------------------------
+                case 12:
+                    setPathState(13);
+                    break; // -------------------------------------------------------------------------------------------
+                case 13:
+                    if (!follower.isBusy()) {
                         setPathState(14);
                     }
-                break; // -------------------------------------------------------------------------------------------
+                    break; // -------------------------------------------------------------------------------------------
                 case 14:
-                    follower.setMaxPower(1);
-                    follower.followPath(Score3, true);
                     setPathState(15);
-                    shotTimer.reset();
-                break; // -------------------------------------------------------------------------------------------
+                    break; // -------------------------------------------------------------------------------------------
                 case 15:
-                    if (!follower.isBusy()) {
-                        ((DcMotorEx) shooter1).setVelocity(medVelocity);    //starts shooter
-                        ((DcMotorEx) shooter2).setVelocity(medVelocity - 640);
-                        intake.setPower(1);
-                    }
-                    if(shotTimer.milliseconds() > 5000) {
-                        setPathState(16);
-                    }
-                break; // -------------------------------------------------------------------------------------------
+                    setPathState(16);
+                    break; // -------------------------------------------------------------------------------------------
                 case 16:
                     follower.followPath(Park, true);
+                    shooter1.setPower(0); //turns shooter off
+                    shooter2.setPower(0);
                     setPathState(17);
-                break; // -------------------------------------------------------------------------------------------
+                    break; // -------------------------------------------------------------------------------------------
                 case 17:
                     if (!follower.isBusy()) {
                         stop();
@@ -281,12 +282,9 @@ import pedroPathing.constants.LConstants30630;
 
         @Override
         public void loop() {
-
             // These loop the movements of the robot
             follower.update();
             autonomousPathUpdate();
-
-
 
             // Feedback to Driver Hub
             telemetry.addData("path state", pathState);
@@ -294,44 +292,19 @@ import pedroPathing.constants.LConstants30630;
             telemetry.addData("y", follower.getPose().getY());
             telemetry.addData("heading", follower.getPose().getHeading());
 
-            telemetry.addData("Light Detected", ((OpticalDistanceSensor) test_color).getLightDetected());
-            NormalizedRGBA colors = test_color.getNormalizedColors();
-            hue = JavaUtil.colorToHue(colors.toColor());
-
-            //Determining the amount of red, green, and blue
-            telemetry.addData("Red", "%.3f", colors.red);
-            telemetry.addData("Green", "%.3f", colors.green);
-            telemetry.addData("Blue", "%.3f", colors.blue);
-
-            //Determining HSV and alpha
-            telemetry.addData("Hue", JavaUtil.colorToHue(colors.toColor()));
-            telemetry.addData("Saturation", "%.3f", JavaUtil.colorToSaturation(colors.toColor()));
-            telemetry.addData("Value", "%.3f", JavaUtil.colorToValue(colors.toColor()));
-            telemetry.addData("Alpha", "%.3f", colors.alpha);
-
-            /* Telemetry Outputs of our Follower */
-            telemetry.addData("X", follower.getPose().getX());
-            telemetry.addData("Y", follower.getPose().getY());
-            telemetry.addData("Heading in Degrees", Math.toDegrees(follower.getPose().getHeading()));
-
             /*/Tells you Flywheel Velocity */
             telemetry.addData("Intake Velocity", ((DcMotorEx) intake).getVelocity());
             telemetry.addData("Flywheel Velocity", ((DcMotorEx) shooter1).getVelocity());
             telemetry.addData("Flywheel Velocity", ((DcMotorEx) shooter2).getVelocity());
             telemetry.update();
 
-            rightled.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
-            leftled.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
+            LED.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE);
         }
 
         @Override
         public void init() {
-
-
             telemetry.addData("Status", "Resetting Encoders");
             telemetry.update();
-
-
 
             pathTimer = new Timer();
             opmodeTimer = new Timer();
@@ -347,13 +320,13 @@ import pedroPathing.constants.LConstants30630;
             shooter1 = hardwareMap.get(DcMotor.class, "shooter1");
             shooter2 = hardwareMap.get(DcMotor.class, "shooter2");
             ballstopper = hardwareMap.get(DcMotor.class, "ballstopper");
-            test_color = hardwareMap.get(NormalizedColorSensor.class, "test_color");
-            rightled = hardwareMap.get(RevBlinkinLedDriver.class,"rightled");
-            leftled = hardwareMap.get(RevBlinkinLedDriver.class,"leftled");
+            LED = hardwareMap.get(RevBlinkinLedDriver.class,"LED");
+
             shooter1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             shooter2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             ballstopper.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            intake.setDirection(DcMotorSimple.Direction.REVERSE);
+            shooter1.setDirection(DcMotorSimple.Direction.REVERSE);
+            ballstopper.setDirection(DcMotorSimple.Direction.REVERSE);
         }
 
         @Override

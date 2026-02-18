@@ -10,17 +10,17 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import pedroPathing.constants.FConstants;
-import pedroPathing.constants.LConstants;
+import pedroPathing.constants.FConstants30630;
+import pedroPathing.constants.LConstants30630;
 
 @TeleOp(name = "2playerComp", group = "Examples")
 public class Teleop2player extends OpMode {
     private Follower follower;
 
-    private static final int bankVelocity = 2400;
-    private static final int medVelocity = 2200;
-    private static final int farVelocity = 2400;
-    private static final int maxVelocity = 2450;
+    private static final int bankVelocity = 1200;
+    private static final int medVelocity = 1400;
+    private static final int farVelocity = 1375;
+    private static final int maxVelocity = 1900; // 1900 is fastest
     private static final int intakeVelocity = 1400;
     private final Pose startPose = new Pose(0, 0, 0);
 
@@ -45,7 +45,7 @@ public class Teleop2player extends OpMode {
      **/
     @Override
     public void init() {
-        Constants.setConstants(FConstants.class, LConstants.class);
+        Constants.setConstants(FConstants30630.class, LConstants30630.class);
         follower = new Follower(hardwareMap);
         follower.setStartingPose(startPose);
         telemetry.update();
@@ -56,7 +56,8 @@ public class Teleop2player extends OpMode {
         shooter1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         shooter2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         ballstopper.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        intake.setDirection(DcMotorSimple.Direction.REVERSE);
+        ballstopper.setDirection(DcMotorSimple.Direction.REVERSE);
+        shooter1.setDirection(DcMotorSimple.Direction.REVERSE);
     }
     @Override
     public void init_loop() {/*This method is called continuously after Init while waiting to be started.*/
@@ -67,7 +68,7 @@ public class Teleop2player extends OpMode {
     }
     @Override
     public void loop() {/*This is the main loop of the opmode and runs continuously after play*/
-        follower.setTeleOpMovementVectors(gamepad1.left_stick_y, gamepad1.left_stick_x, -gamepad1.right_stick_x, false);
+        follower.setTeleOpMovementVectors(-gamepad1.left_stick_y, -gamepad1.left_stick_x, gamepad1.right_stick_x, false);
         follower.update();
         /* Telemetry Outputs of our Follower */
         telemetry.addData("X", follower.getPose().getX());
@@ -81,10 +82,10 @@ public class Teleop2player extends OpMode {
         telemetry.update();
 //----------------------------------------------------------------------------
         /* short shot */
-        if (gamepad2.circle) {
+        if (gamepad2.cross) {
             ((DcMotorEx) shooter1).setVelocity(bankVelocity);/* sets Velocity */
-            ((DcMotorEx) shooter2).setVelocity(bankVelocity - 1200);
-            if ((((DcMotorEx) shooter1).getVelocity() >= bankVelocity - 250) && (((DcMotorEx) shooter2).getVelocity() >= bankVelocity - 1240)) {/* checks Velocity */
+            ((DcMotorEx) shooter2).setVelocity(bankVelocity - 600);
+            if ((((DcMotorEx) shooter1).getVelocity() >= bankVelocity - 50) && (((DcMotorEx) shooter2).getVelocity() >= bankVelocity - 640)) {/* checks Velocity */
                 intake.setPower(1);/* Pushes ball to shot */
                 ballstopper.setPower(1);
             } else {
@@ -92,10 +93,10 @@ public class Teleop2player extends OpMode {
                 ballstopper.setPower(0);
 }//----------------------------------------------------------------------------
         } /* mid shot */
-        else if (gamepad2.cross) {
+        else if (gamepad2.circle) {
             ((DcMotorEx) shooter1).setVelocity(medVelocity);
             ((DcMotorEx) shooter2).setVelocity(medVelocity - 640);
-            if ((((DcMotorEx) shooter1).getVelocity() >= medVelocity - 250) && (((DcMotorEx) shooter2).getVelocity() >= medVelocity - 680)) {
+            if ((((DcMotorEx) shooter1).getVelocity() >= medVelocity - 50) && (((DcMotorEx) shooter2).getVelocity() >= medVelocity - 680)) {
                 intake.setPower(1);
                 ballstopper.setPower(1);
             } else {
@@ -104,14 +105,14 @@ public class Teleop2player extends OpMode {
 }//----------------------------------------------------------------------------
         } /* long shot */
         else if (gamepad2.triangle) {
-                ((DcMotorEx) shooter1).setVelocity(farVelocity);
-                ((DcMotorEx) shooter2).setVelocity(farVelocity );
-            if ((((DcMotorEx) shooter1).getVelocity() >= farVelocity - 350) && (((DcMotorEx) shooter2).getVelocity() >= farVelocity - 250)) {
-                    intake.setPower(1);
-                    ballstopper.setPower(1);
-                } else {
-                    intake.setPower(0);
-                    ballstopper.setPower(0);
+            ((DcMotorEx) shooter1).setVelocity(farVelocity);
+            ((DcMotorEx) shooter2).setVelocity(farVelocity - 200);
+            if ((((DcMotorEx) shooter1).getVelocity() >= farVelocity - 50) && (((DcMotorEx) shooter2).getVelocity() >= farVelocity - 250)) {
+                intake.setPower(1);
+                ballstopper.setPower(1);
+            } else {
+                intake.setPower(0);
+                ballstopper.setPower(0);
 }//----------------------------------------------------------------------------
         }/* intake */
         else if (gamepad2.right_bumper) {
