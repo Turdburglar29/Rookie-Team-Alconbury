@@ -37,7 +37,7 @@ public class BlueLong30630 extends OpMode {
     private DcMotor shooter1;
     private DcMotor shooter2;
     private DcMotor ballstopper;
-    private RevBlinkinLedDriver LED;
+    private RevBlinkinLedDriver lights;
     double hue;
     static final double COUNTS_PER_MOTOR_REV = 537.6898;   // goBilda 5202 Motor Encoder
     static final double DRIVE_GEAR_REDUCTION = 19.2032;     // goBilda 5202 Gear ratio reduction
@@ -50,22 +50,22 @@ public class BlueLong30630 extends OpMode {
         //Start point-----------------------------------------------------------------------------------
         private final Pose startPose = new Pose(45, 0, Math.toRadians(90));
         //line 1 ScorePreload 1 ------------------------------------------------------------------------
-        private final Pose scorePose = new Pose(47, 10, Math.toRadians(114));
+        private final Pose scorePose = new Pose(49, 7, Math.toRadians(114));
         //Line 3 Pickup 1-------------------------------------------------------------------------------
         private final Pose pickup1Pose = new Pose(15, 25, Math.toRadians(180));
         private final Pose pickup1CP1 = new Pose(20, 20, Math.toRadians(180));
         //line 4 Score 1 -------------------------------------------------------------------------------
-        private final Pose score1Pose = new Pose(47, 10, Math.toRadians(114));
+        private final Pose score1Pose = new Pose(47, 7, Math.toRadians(114));
         //line 6 Pickup  2 -----------------------------------------------------------------------------
         private final Pose pickup2Pose = new Pose(15, 20, Math.toRadians(250));
         private final Pose pickup2CP1 = new Pose(25, 25, Math.toRadians(250));
         private final Pose pickup2CP2 = new Pose(18, 22, Math.toRadians(250));
         //line 7 Push Bar ------------------------------------------------------------------------------
-        private final Pose pushBarPose = new Pose(15, 4, Math.toRadians(250));
-        private final Pose pushBarCP1 = new Pose(15, 8, Math.toRadians(250));
+        private final Pose pushBarPose = new Pose(20, 10, Math.toRadians(250));
+        private final Pose pushBarCP1 = new Pose(20, 15, Math.toRadians(250));
         //line 8 Score  2 ------------------------------------------------------------------------------
-        private final Pose score2Pose = new Pose(47, 10, Math.toRadians(114));
-        private final Pose score2CP1 = new Pose(20,8, Math.toRadians(113));
+        private final Pose score2Pose = new Pose(47, 7, Math.toRadians(114));
+        private final Pose score2CP1 = new Pose(20,7, Math.toRadians(113));
         private final Pose score2CP2 = new Pose(30, 7, Math.toRadians(113));
         //line 9 Pickup  3------------------------------------------------------------------------------
         private final Pose pickup3Pose = new Pose(25, 105, Math.toRadians(0));
@@ -129,6 +129,7 @@ public class BlueLong30630 extends OpMode {
                             && (((DcMotorEx) shooter2).getVelocity() <= farVelocity -200))  {
                         intake.setPower(1);
                         ballstopper.setPower(1);
+                        lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
                     }
                     if(shotTimer.milliseconds() > 4500) {
                         setPathState(2);
@@ -136,7 +137,7 @@ public class BlueLong30630 extends OpMode {
                     break; // --------------------------------------Picks up 1st line ---------------------------------------
                 case 2:
 
-                    LED.setPattern(RevBlinkinLedDriver.BlinkinPattern.HOT_PINK);
+                    lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.HOT_PINK);
                     follower.followPath(Pickup1, true);
                     shooter1.setPower(0); //turns shooter off
                     shooter2.setPower(0);
@@ -145,11 +146,11 @@ public class BlueLong30630 extends OpMode {
                     slowDownTimer.reset();
                     break; // -------------------------------------------------------------------------------------------
                 case 3:
-                    if(slowDownTimer.milliseconds() > 600) {
+                    if(slowDownTimer.milliseconds() > 550) {
                         follower.setMaxPower(.29);
                         intake.setPower(1);
                     }
-                    LED.setPattern(RevBlinkinLedDriver.BlinkinPattern.HOT_PINK);
+                    lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.HOT_PINK);
                     intake.setPower(1); //turns intake on
                     if (!follower.isBusy()) {
                         setPathState(4);
@@ -158,7 +159,7 @@ public class BlueLong30630 extends OpMode {
                 case 4:
                     follower.setMaxPower(1);
                     follower.followPath(Score1, true);
-                    LED.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
+                    lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
                     intake.setPower(0);
                     shooter1.setPower(0); //turns shooter off
                     shooter2.setPower(0);
@@ -179,6 +180,7 @@ public class BlueLong30630 extends OpMode {
                             && (((DcMotorEx) shooter2).getVelocity() <= farVelocity -200))  {
                         intake.setPower(1);
                         ballstopper.setPower(1);
+                        lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
                     }
                     if(shotTimer.milliseconds() > 4500) {
                         setPathState(6);
@@ -205,7 +207,7 @@ public class BlueLong30630 extends OpMode {
                         follower.setMaxPower(.4);
                         intake.setPower(1);
                     }
-                    LED.setPattern(RevBlinkinLedDriver.BlinkinPattern.HOT_PINK);
+                    lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.HOT_PINK);
                     if (!follower.isBusy()) {
                         setPathState(8);
                         intake.setPower(0);
@@ -224,7 +226,7 @@ public class BlueLong30630 extends OpMode {
                     }
                     break; // --------------------------------Moves to Score--------------------------------------------
                 case 10:
-                    LED.setPattern(RevBlinkinLedDriver.BlinkinPattern.HOT_PINK);
+                    lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.HOT_PINK);
                     intake.setPower(0);
                     follower.setMaxPower(1);
                     follower.followPath(Score2, true);
@@ -243,6 +245,7 @@ public class BlueLong30630 extends OpMode {
                             && (((DcMotorEx) shooter2).getVelocity() <= farVelocity -200))  {
                         intake.setPower(1);
                         ballstopper.setPower(1);
+                        lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
                     }
                     if(shotTimer.milliseconds() > 4500) {
                         setPathState(12);
@@ -297,8 +300,7 @@ public class BlueLong30630 extends OpMode {
             telemetry.addData("Flywheel Velocity", ((DcMotorEx) shooter1).getVelocity());
             telemetry.addData("Flywheel Velocity", ((DcMotorEx) shooter2).getVelocity());
             telemetry.update();
-
-            LED.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE);
+            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE);
         }
 
         @Override
@@ -320,7 +322,7 @@ public class BlueLong30630 extends OpMode {
             shooter1 = hardwareMap.get(DcMotor.class, "shooter1");
             shooter2 = hardwareMap.get(DcMotor.class, "shooter2");
             ballstopper = hardwareMap.get(DcMotor.class, "ballstopper");
-            LED = hardwareMap.get(RevBlinkinLedDriver.class,"LED");
+            lights = hardwareMap.get(RevBlinkinLedDriver.class,"lights");
 
             shooter1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             shooter2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);

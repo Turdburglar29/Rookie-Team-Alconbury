@@ -36,8 +36,7 @@ import pedroPathing.constants.LConstants30630;
     private Servo releasespinner;
     private Servo sort1;
     private Servo sort2;
-    private RevBlinkinLedDriver leftled;
-    private RevBlinkinLedDriver rightled;
+    private RevBlinkinLedDriver lights;
     private NormalizedColorSensor test_color;
     double hue;
     void setSafePower(DcMotor motor,double targetPower0){
@@ -253,8 +252,7 @@ import pedroPathing.constants.LConstants30630;
             telemetry.addData("Flywheel Velocity", ((DcMotorEx) shooter2).getVelocity());
             telemetry.update();
 
-            rightled.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE);
-            leftled.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE);
+            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE);
         }
 
         @Override
@@ -281,8 +279,7 @@ import pedroPathing.constants.LConstants30630;
             shooter2 = hardwareMap.get(DcMotor.class, "shooter2");
             ballstopper = hardwareMap.get(DcMotor.class, "ballstopper");
             test_color = hardwareMap.get(NormalizedColorSensor.class, "test_color");
-            rightled = hardwareMap.get(RevBlinkinLedDriver.class,"rightled");
-            leftled = hardwareMap.get(RevBlinkinLedDriver.class,"leftled");
+            lights = hardwareMap.get(RevBlinkinLedDriver.class,"lights");
             shooter1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             shooter2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             ballstopper.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
