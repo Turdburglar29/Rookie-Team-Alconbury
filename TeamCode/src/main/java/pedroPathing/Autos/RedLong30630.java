@@ -19,14 +19,14 @@ import pedroPathing.constants.LConstants30630;
     public class RedLong30630 extends OpMode {
     private ElapsedTime shotTimer = new ElapsedTime();
     private ElapsedTime slowDownTimer = new ElapsedTime();
-    private static final int firstFarVelocity = 1332;
-    private static final int secondFarVelocity = 1337;
-    private static final int thirdFarVelocity = 1345;
+    private static final int firstFarVelocity = 1300;
+    private static final int secondFarVelocity = 1295;
+    private static final int thirdFarVelocity = 1300;
     public static DcMotor intake;
-    private RevBlinkinLedDriver lights;
     private DcMotor shooter1;
     private DcMotor shooter2;
     private DcMotor ballstopper;
+    private RevBlinkinLedDriver LED;
         static final double COUNTS_PER_MOTOR_REV = 537.6898;   // goBilda 5202 Motor Encoder
         static final double DRIVE_GEAR_REDUCTION = 19.2032;     // goBilda 5202 Gear ratio reduction
         static final double WHEEL_DIAMETER_INCHES = 3.77953;     // goBilda 5202 Wheel diameter
@@ -37,7 +37,7 @@ import pedroPathing.constants.LConstants30630;
     //Start point-----------------------------------------------------------------------------------
         private final Pose startPose = new Pose(70, 0, Math.toRadians(90));
     //Score 1st shot ------------------------------------------------------------------------
-        private final Pose scorePose = new Pose(69, 10, Math.toRadians(70));
+        private final Pose scorePose = new Pose(69, 10, Math.toRadians(69.25));
     // Pickup 1-------------------------------------------------------------------------------
         private final Pose pickup1Pose = new Pose(110, 32, Math.toRadians(0));
         private final Pose pickup1CP1 = new Pose(100, 34, Math.toRadians(340));
@@ -51,7 +51,7 @@ import pedroPathing.constants.LConstants30630;
         private final Pose pushBarPose = new Pose(126, 10, Math.toRadians(320));
         private final Pose pushBarCP1 = new Pose(126, 15, Math.toRadians(320));
     //Score 3rd shot------------------------------------------------------------------------------
-        private final Pose score2Pose = new Pose(69, 10, Math.toRadians(70));
+        private final Pose score2Pose = new Pose(69, 10, Math.toRadians(69.75));
         private final Pose score2CP1 = new Pose(100,10, Math.toRadians(67));
         private final Pose score2CP2 = new Pose(80, 10, Math.toRadians(69));
     //Park----------------------------------------------------------------------------------
@@ -105,7 +105,7 @@ import pedroPathing.constants.LConstants30630;
                         setPathState(3);
                 break; // -----------------------------------Slows Down to pickup-----------------------------------
                 case 3:
-                        if(slowDownTimer.milliseconds() > 900) {
+                        if(slowDownTimer.milliseconds() > 1000) {
                             follower.setMaxPower(.29);
                             intake.setPower(1);
                         }
@@ -200,7 +200,7 @@ import pedroPathing.constants.LConstants30630;
             telemetry.addData("Flywheel Velocity", ((DcMotorEx) shooter1).getVelocity());
             telemetry.addData("Flywheel Velocity", ((DcMotorEx) shooter2).getVelocity());
             telemetry.update();
-            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
+            LED.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
         }
         @Override
         public void init() {
@@ -221,7 +221,7 @@ import pedroPathing.constants.LConstants30630;
             shooter1 = hardwareMap.get(DcMotor.class, "shooter1");
             shooter2 = hardwareMap.get(DcMotor.class, "shooter2");
             ballstopper = hardwareMap.get(DcMotor.class, "ballstopper");
-            lights = hardwareMap.get(RevBlinkinLedDriver.class,"lights");
+            LED = hardwareMap.get(RevBlinkinLedDriver.class,"LED");
 
             shooter1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             shooter2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -243,11 +243,11 @@ import pedroPathing.constants.LConstants30630;
                     && (((DcMotorEx) shooter1).getVelocity() <= firstFarVelocity +20)
                     && (((DcMotorEx) shooter2).getVelocity() >= firstFarVelocity -205)
                     && (((DcMotorEx) shooter2).getVelocity() <= firstFarVelocity -190))  {
-                    lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
-                    intake.setPower(1);
-                    ballstopper.setPower(1);
+                LED.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
+                intake.setPower(1);
+                ballstopper.setPower(1);
             }else {
-                lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
+                LED.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
             }
         }
     public void ShotCheck2() {
@@ -256,11 +256,11 @@ import pedroPathing.constants.LConstants30630;
                 && (((DcMotorEx) shooter1).getVelocity() <= secondFarVelocity +13)
                 && (((DcMotorEx) shooter2).getVelocity() >= secondFarVelocity -210)
                 && (((DcMotorEx) shooter2).getVelocity() <= secondFarVelocity -187))  {
-            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
+            LED.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
             intake.setPower(1);
             ballstopper.setPower(1);
         }else {
-            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
+            LED.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
         }
     }
     public void ShotCheck3() {
@@ -269,11 +269,11 @@ import pedroPathing.constants.LConstants30630;
                 && (((DcMotorEx) shooter1).getVelocity() <= thirdFarVelocity +13)
                 && (((DcMotorEx) shooter2).getVelocity() >= thirdFarVelocity -210)
                 && (((DcMotorEx) shooter2).getVelocity() <= thirdFarVelocity -187))  {
-            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
+            LED.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
             intake.setPower(1);
             ballstopper.setPower(1);
         }else {
-            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
+            LED.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
         }
     }
         public void Shot1Power() {

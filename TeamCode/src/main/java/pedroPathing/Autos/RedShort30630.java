@@ -31,7 +31,7 @@ public class RedShort30630 extends OpMode {
     private DcMotor shooter1;
     private DcMotor shooter2;
     private DcMotor ballstopper;
-    private RevBlinkinLedDriver lights;
+    private RevBlinkinLedDriver LED;
     double hue;
     static final double COUNTS_PER_MOTOR_REV = 537.6898;   // goBilda 5202 Motor Encoder
     static final double DRIVE_GEAR_REDUCTION = 19.2032;     // goBilda 5202 Gear ratio reduction
@@ -124,7 +124,7 @@ public class RedShort30630 extends OpMode {
                         }
                 break; // --------------------------------------Picks up 1st line ---------------------------------------
                 case 2:
-                        lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
+                        LED.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
 
                         follower.followPath(Pickup1, true);
                         shooter1.setPower(0); //turns shooter off
@@ -137,7 +137,7 @@ public class RedShort30630 extends OpMode {
                             follower.setMaxPower(.29);
                             intake.setPower(1);
                         }
-                        lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
+                        LED.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
                         intake.setPower(1); //turns intake on
                         if (!follower.isBusy()) {
                             setPathState(4);
@@ -146,7 +146,7 @@ public class RedShort30630 extends OpMode {
                 case 4:
                         follower.setMaxPower(1);
                         follower.followPath(Score1, true);
-                        lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
+                        LED.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
                         intake.setPower(0);
                         ballstopper.setPower(0);
                         shooter1.setPower(0); //turns shooter off
@@ -181,7 +181,7 @@ public class RedShort30630 extends OpMode {
                             follower.setMaxPower(.27);
                             intake.setPower(1);
                          }
-                        lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
+                        LED.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
                         if (!follower.isBusy()) {
                             setPathState(8);
                             intake.setPower(0);
@@ -200,7 +200,7 @@ public class RedShort30630 extends OpMode {
                         }
                 break; // --------------------------------Moves to Score--------------------------------------------
                 case 10:
-                        lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
+                        LED.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
                         intake.setPower(0);
                         follower.setMaxPower(1);
                         follower.followPath(Score2, true);
@@ -281,7 +281,7 @@ public class RedShort30630 extends OpMode {
             telemetry.addData("Flywheel Velocity2", ((DcMotorEx) shooter2).getVelocity());
             telemetry.update();
 
-            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
+            LED.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
         }
 
         @Override
@@ -307,7 +307,7 @@ public class RedShort30630 extends OpMode {
             shooter1 = hardwareMap.get(DcMotor.class, "shooter1");
             shooter2 = hardwareMap.get(DcMotor.class, "shooter2");
             ballstopper = hardwareMap.get(DcMotor.class, "ballstopper");
-            lights = hardwareMap.get(RevBlinkinLedDriver.class,"lights");
+            LED = hardwareMap.get(RevBlinkinLedDriver.class,"LED");
             shooter1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             shooter2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             ballstopper.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
