@@ -311,8 +311,7 @@ public class RedShort30630 extends OpMode {
             shooter1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             shooter2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             ballstopper.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            intake.setDirection(DcMotorSimple.Direction.FORWARD);
-            ballstopper.setDirection(DcMotorSimple.Direction.REVERSE);
+            intake.setDirection(DcMotorSimple.Direction.REVERSE);
         }
 
         @Override
