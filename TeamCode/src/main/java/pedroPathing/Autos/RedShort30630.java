@@ -22,8 +22,9 @@ public class RedShort30630 extends OpMode {
     private ElapsedTime shotTimer = new ElapsedTime();
     private ElapsedTime slowDownTimer = new ElapsedTime();
     private static final int bankVelocity = 1200;
-    private static final int medVelocity = 1400;
-    private static final int farVelocity = 1325;
+    private static final int firstBankVelocity = 1200;
+    private static final int secondBankVelocity = 1200;
+    private static final int thirdBankVelocity = 1200;
     private static final int maxVelocity = 1900; // 1900 is fastest
     private static final int intakeVelocity = 1400;
     public static DcMotor intake;
@@ -107,152 +108,101 @@ public class RedShort30630 extends OpMode {
         }
         public void autonomousPathUpdate() {
             switch (pathState) {
-                case 0:
-                        follower.followPath(scorePreload, true);
-                        ((DcMotorEx) shooter1).setVelocity(bankVelocity);    //starts shooter
-                        ((DcMotorEx) shooter2).setVelocity(bankVelocity - 640);
-                        setPathState(1);
-                        shotTimer.reset();
-                break; // --------------------------------------Shoots balls--------------------------------------------
+                case 0:// --------------------------------------Moves to 1st Shot--------------------------------------------
+                    Shot1Power();
+                    follower.followPath(scorePreload, true);
+                    shotTimer.reset();
+                    setPathState(1);
+                    break; // --------------------------------------1st Shot--------------------------------------------
                 case 1:
-                        if ((!follower.isBusy()) && (((DcMotorEx) shooter1).getVelocity() >= bankVelocity - 10) && (((DcMotorEx) shooter2).getVelocity() >= bankVelocity -650)) {
-                            intake.setPower(1);
-                            ballstopper.setPower(1);
-                                }
-                        if(shotTimer.milliseconds() > 4000) {
-                            setPathState(2);
-                        }
-                break; // --------------------------------------Picks up 1st line ---------------------------------------
+                    Shot1Power();
+                    ShotCheck1();
+                    if(shotTimer.milliseconds() > 4600) {
+                        setPathState(2);
+                    }
+                    break; // --------------------------------------Picks up 1st line ---------------------------------------
                 case 2:
-                        lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
-
-                        follower.followPath(Pickup1, true);
-                        shooter1.setPower(0); //turns shooter off
-                        shooter2.setPower(0);
-                        setPathState(3);
-                        slowDownTimer.reset();
-                break; // -------------------------------------------------------------------------------------------
+                    follower.followPath(Pickup1, true);
+                    ShooterOff();
+                    ballstopper.setPower(0);
+                    slowDownTimer.reset();
+                    setPathState(3);
+                    break; // -----------------------------------Slows Down to pickup-----------------------------------
                 case 3:
-                        if(slowDownTimer.milliseconds() > 1300) {
-                            follower.setMaxPower(.29);
-                            intake.setPower(1);
-                        }
-                        lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
-                        intake.setPower(1); //turns intake on
-                        if (!follower.isBusy()) {
-                            setPathState(4);
-                        }
-                break; // -------------------------------------Moves to Score--------------------------------
-                case 4:
+                    if(slowDownTimer.milliseconds() > 900) {
+                        follower.setMaxPower(.29);
+                        intake.setPower(1);
+                    }
+                    intake.setPower(1); //turns intake on
+                    if (!follower.isBusy()) {
                         follower.setMaxPower(1);
+                        intake.setPower(0);
                         follower.followPath(Score1, true);
-                        lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
-                        intake.setPower(0);
-                        ballstopper.setPower(0);
-                        shooter1.setPower(0); //turns shooter off
-                        shooter2.setPower(0);
+                        setPathState(4);
+                    }
+                    break; // -------------------------------------Moves to 2nd shot--------------------------------
+                case 4:
+                    follower.setMaxPower(1);
+                    if (!follower.isBusy()) {
+                        shotTimer.reset();
                         setPathState(5);
-                        ((DcMotorEx) shooter1).setVelocity(bankVelocity);    //starts shooter
-                        ((DcMotorEx) shooter2).setVelocity(bankVelocity - 640);
-                        shotTimer.reset();
-
-
-                    break; // --------------------------------Shots Balls-------------------------------------------
+                    }
+                    break; // --------------------------------2nd Shot-------------------------------------------
                 case 5:
-                        if ((!follower.isBusy()) && (((DcMotorEx) shooter1).getVelocity() >= bankVelocity - 10) && (((DcMotorEx) shooter2).getVelocity() >= bankVelocity -650)) {
-                            intake.setPower(1);
-                            ballstopper.setPower(1);
-                        }
-                        if(shotTimer.milliseconds() > 4000) {
+                    Shot2Power();
+                    ShotCheck2();
+                    if(shotTimer.milliseconds() > 4500) {
                         setPathState(6);
-                        }
-                break; // -----------------------------------Picks up 2nd Line----------------------------------------
+                    }
+                    break; // -----------------------------------Picks up 2nd Line----------------------------------------
                 case 6:
-                        follower.followPath(Pickup2, true);
-                        intake.setPower(0);
-                        ballstopper.setPower(0);
-                        shooter1.setPower(0); //turns shooter off
-                        shooter2.setPower(0);
-                        setPathState(7);
-                        slowDownTimer.reset();
-                break; // -------------------------------------------------------------------------------------------
+                    follower.followPath(Pickup2, true);
+                    ballstopper.setPower(0);
+                    intake.setPower(0);
+                    ShooterOff();
+                    slowDownTimer.reset();
+                    setPathState(7);
+                    break; // ---------------------------------Turns and intakes corner---------------------------------------
                 case 7:
-                        if(slowDownTimer.milliseconds() > 1500) {
-                            follower.setMaxPower(.27);
-                            intake.setPower(1);
-                         }
-                        lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
-                        if (!follower.isBusy()) {
-                            setPathState(8);
-                            intake.setPower(0);
-                        }
-                break; // ----------------------------------Hits Push Bar-----------------------------------
+                    if (!follower.isBusy()){
+                        follower.followPath(PushBar, true);
+                        slowDownTimer.reset();
+                        intake.setPower(1);
+                        setPathState(8);
+                    }
+                    break; // ----------------------------Slows down for intake---------------------------------------
                 case 8:
-                        follower.setMaxPower(.6);
-                       /* follower.followPath(PushBar, true);*/
-                        setPathState(9);
-                break; // -------------------------------------------------------------------------------------------
-                case 9:
-
-                         if (!follower.isBusy()) {
-                             intake.setPower(0);
-                            setPathState(10);
-                        }
-                break; // --------------------------------Moves to Score--------------------------------------------
-                case 10:
-                        lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
-                        intake.setPower(0);
-                        follower.setMaxPower(1);
-                        follower.followPath(Score2, true);
-                        ((DcMotorEx) shooter1).setVelocity(bankVelocity);    //starts shooter
-                        ((DcMotorEx) shooter2).setVelocity(bankVelocity - 640);
-                        setPathState(11);
-                        shotTimer.reset();
-                break; // --------------------------------Shots Balls--------------------------------------------
-                case 11:
-                        if ((!follower.isBusy()) && (((DcMotorEx) shooter1).getVelocity() >= bankVelocity - 10) && (((DcMotorEx) shooter2).getVelocity() >= bankVelocity -650)) {
-                            intake.setPower(1);
-                            ballstopper.setPower(1);
-                        }
-                        if(shotTimer.milliseconds() > 4000) {
-                            setPathState(12);
-                        }
-                        slowDownTimer.reset();
-                break; // -------------------------------Picks up 3rd Line--------------------------------------------
-                case 12:
-                        follower.followPath(Pickup3, true);
-                        intake.setPower(0);
-                        shooter1.setPower(0); //turns shooter off
-                        shooter2.setPower(0);
-                        setPathState(13);
-                        slowDownTimer.reset();
-                break; // -------------------------------------------------------------------------------------------
-                case 13:
-                    if(slowDownTimer.milliseconds() > 2000) {
-                        follower.setMaxPower(.27);
+                    if(slowDownTimer.milliseconds() > 800) {
+                        follower.setMaxPower(.5);
                         intake.setPower(1);
                     }
                     if (!follower.isBusy()) {
-                        intake.setPower(0);
-                        setPathState(14);
+                        intake.setPower(1);
+                        setPathState(9);
                     }
-                break; // -------------------------------------------------------------------------------------------
-                case 14:
+                    break; // --------------------------------Moves to Score 3rd shot--------------------------------------------
+                case 9:
                     follower.setMaxPower(1);
-                    setPathState(15);
+                    follower.followPath(Score2, true);
+                    Shot3Power();
                     shotTimer.reset();
-                break; // -------------------------------------------------------------------------------------------
-                case 15:
-                    if (!follower.isBusy()) {
+                    setPathState(10);
+                    break; // --------------------------------3rd Shot-----------------------------------------------
+                case 10:
+                    intake.setPower(0);
+                    Shot3Power();
+                    ShotCheck3();
+                    if(shotTimer.milliseconds() > 8000) {
+                        intake.setPower(0);
+                        ballstopper.setPower(0);
+                        setPathState(11);
                     }
-                    if(shotTimer.milliseconds() > 5000) {
-                        setPathState(16);
-                    }
-                break; // -------------------------------------------------------------------------------------------
-                case 16:
-                    setPathState(17);
-                break; // -------------------------------------------------------------------------------------------
-                case 17:
+                    break; // -------------------------------------------------------------------------------------------
+                case 11:
+                    follower.followPath(Park, true);
+                    setPathState(12);
+                    break; // -------------------------------------------------------------------------------------------
+                case 12:
                     if (!follower.isBusy()) {
                         stop();
                     }
@@ -315,14 +265,68 @@ public class RedShort30630 extends OpMode {
             ballstopper.setDirection(DcMotorSimple.Direction.REVERSE);
         }
 
-        @Override
-        public void start() {
-            opmodeTimer.resetTimer();
-            setPathState(0);
-        }
-
-        @Override
-        public void stop() {
+    @Override
+    public void start() {
+        opmodeTimer.resetTimer();
+        setPathState(0);
+    }
+    @Override
+    public void stop() {
+    }
+    public void ShotCheck1() {
+        if ((!follower.isBusy())
+                && (((DcMotorEx) shooter1).getVelocity() >= firstBankVelocity -5)
+                && (((DcMotorEx) shooter1).getVelocity() <= firstBankVelocity +20)
+                && (((DcMotorEx) shooter2).getVelocity() >= firstBankVelocity -205)
+                && (((DcMotorEx) shooter2).getVelocity() <= firstBankVelocity -190))  {
+            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
+            intake.setPower(1);
+            ballstopper.setPower(1);
+        }else {
+            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
         }
     }
+    public void ShotCheck2() {
+        if ((!follower.isBusy())
+                && (((DcMotorEx) shooter1).getVelocity() >= secondBankVelocity -10)
+                && (((DcMotorEx) shooter1).getVelocity() <= secondBankVelocity +13)
+                && (((DcMotorEx) shooter2).getVelocity() >= secondBankVelocity -210)
+                && (((DcMotorEx) shooter2).getVelocity() <= secondBankVelocity -187))  {
+            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
+            intake.setPower(1);
+            ballstopper.setPower(1);
+        }else {
+            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
+        }
+    }
+    public void ShotCheck3() {
+        if ((!follower.isBusy())
+                && (((DcMotorEx) shooter1).getVelocity() >= thirdBankVelocity -10)
+                && (((DcMotorEx) shooter1).getVelocity() <= thirdBankVelocity +13)
+                && (((DcMotorEx) shooter2).getVelocity() >= thirdBankVelocity -210)
+                && (((DcMotorEx) shooter2).getVelocity() <= thirdBankVelocity -187))  {
+            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
+            intake.setPower(1);
+            ballstopper.setPower(1);
+        }else {
+            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
+        }
+    }
+    public void Shot1Power() {
+        ((DcMotorEx) shooter1).setVelocity(firstBankVelocity);    //starts shooter
+        ((DcMotorEx) shooter2).setVelocity(firstBankVelocity-200);
+    }
+    public void Shot2Power() {
+        ((DcMotorEx) shooter1).setVelocity(secondBankVelocity);    //starts shooter
+        ((DcMotorEx) shooter2).setVelocity(secondBankVelocity-200);
+    }
+    public void Shot3Power() {
+        ((DcMotorEx) shooter1).setVelocity(thirdBankVelocity);    //starts shooter
+        ((DcMotorEx) shooter2).setVelocity(thirdBankVelocity-200);
+    }
+    public void ShooterOff() {
+        shooter1.setPower(0); //turns shooter off
+        shooter2.setPower(0);
+    }
+}
 
