@@ -184,6 +184,7 @@ public class Demo1Player extends OpMode {
                 lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.CONFETTI);
             }
             if (gamepad2.dpad_up) {
+                gamepad1.rumble(1000);
                 lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.STROBE_WHITE);
             }
             if (gamepad2.dpad_down) {
