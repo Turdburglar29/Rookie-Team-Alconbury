@@ -13,32 +13,24 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
-import com.qualcomm.robotcore.hardware.NormalizedRGBA;
-import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import org.firstinspires.ftc.robotcore.external.JavaUtil;
-
 import pedroPathing.constants.FConstants30630;
 import pedroPathing.constants.LConstants30630;
 
 @Autonomous(name = "BlueShort", group = "Auto")
     public class BlueShort30630 extends OpMode {
-    private static final int bankVelocity = 2400;
-    private static final int medVelocity = 2200;
-    private static final int farVelocity = 2400;
-    private static final int intakeVelocity = 1400;
+    private ElapsedTime shotTimer = new ElapsedTime();
+    private ElapsedTime slowDownTimer = new ElapsedTime();
+    private static final int bankVelocity = 1200;
+    private static final int firstBankVelocity = 1200;
+    private static final int secondBankVelocity = 1200;
+    private static final int thirdBankVelocity = 1200;
     public static DcMotor intake;
     private DcMotor shooter1;
     private DcMotor shooter2;
     private DcMotor ballstopper;
-    private Servo releasespinner;
-    private Servo sort1;
-    private Servo sort2;
+
     private RevBlinkinLedDriver lights;
-    private NormalizedColorSensor test_color;
-    double hue;
     void setSafePower(DcMotor motor,double targetPower0){
         final double SLEW_RATE=0.2;
         double currentPower=motor.getPower();
@@ -48,8 +40,6 @@ import pedroPathing.constants.LConstants30630;
 
         motor.setPower(currentPower += limitedChange);
     }
-        private ElapsedTime runtime = new ElapsedTime();
-        private ElapsedTime clipTimer = new ElapsedTime();
         static final double COUNTS_PER_MOTOR_REV = 537.6898;   // goBilda 5202 Motor Encoder
         static final double DRIVE_GEAR_REDUCTION = 19.2032;     // goBilda 5202 Gear ratio reduction
         static final double WHEEL_DIAMETER_INCHES = 3.77953;     // goBilda 5202 Wheel diameter
@@ -59,21 +49,21 @@ import pedroPathing.constants.LConstants30630;
         double startTime;
         private int pathState;
     //Start point-----------------------------------------------------------------------------------
-        private final Pose startPose = new Pose(15, 120, Math.toRadians(180));
+        private final Pose startPose = new Pose(1, 63, Math.toRadians(135));
     //line 1 ScorePreload 1 ------------------------------------------------------------------------
-        private final Pose scorePose = new Pose(37, 100, Math.toRadians(140));
+        private final Pose scorePose = new Pose(17, 54, Math.toRadians(140));
     //Line 3 Pickup 1-------------------------------------------------------------------------------
-        private final Pose pickup1Pose = new Pose(17, 85, Math.toRadians(180));
-        private final Pose pickup1CP1 = new Pose(60, 80, Math.toRadians(180));
+        private final Pose pickup1Pose = new Pose(6, 27, Math.toRadians(180));
+        private final Pose pickup1CP1 = new Pose(27, 27, Math.toRadians(180));
     //line 4 Score 1 -------------------------------------------------------------------------------
-        private final Pose score1Pose = new Pose(37, 100, Math.toRadians(140));
+        private final Pose score1Pose = new Pose(17, 54, Math.toRadians(140));
     //line 6 Pickup  2 -----------------------------------------------------------------------------
-        private final Pose pickup2Pose = new Pose(17, 60, Math.toRadians(180));
-        private final Pose pickup2CP1 = new Pose(50, 60, Math.toRadians(180));
-        private final Pose pickup2CP2 = new Pose(30, 60, Math.toRadians(180));
+        private final Pose pickup2Pose = new Pose(11, 31, Math.toRadians(180));
+        private final Pose pickup2CP1 = new Pose(42, 51, Math.toRadians(180));
+        private final Pose pickup2CP2 = new Pose(36, 30, Math.toRadians(180));
     //line 7 Push Bar ------------------------------------------------------------------------------
-        private final Pose pushBarPose = new Pose(17, 70, Math.toRadians(180));
-        private final Pose pushBarCP1 = new Pose(20, 70, Math.toRadians(180));
+        private final Pose pushBarPose = new Pose(24, 33, Math.toRadians(180));
+        private final Pose pushBarCP1 = new Pose(26, 30, Math.toRadians(180));
     //line 8 Score  2 ------------------------------------------------------------------------------
         private final Pose score2Pose = new Pose(37, 100, Math.toRadians(140));
         private final Pose score2CP1 = new Pose(25,70, Math.toRadians(180));
@@ -123,84 +113,101 @@ import pedroPathing.constants.LConstants30630;
         }
         public void autonomousPathUpdate() {
             switch (pathState) {
-                case 0:
-
-                        follower.followPath(scorePreload, true);
-                        setPathState(1);
-                break; // -------------------------------------------------------------------------------------------
+                case 0:// --------------------------------------Moves to 1st Shot--------------------------------------------
+                    Shot1Power();
+                    follower.followPath(scorePreload, true);
+                    shotTimer.reset();
+                    setPathState(1);
+                    break; // --------------------------------------1st Shot--------------------------------------------
                 case 1:
-                        if (!follower.isBusy()) {
+                    Shot1Power();
+                    ShotCheck1();
+                    if(shotTimer.milliseconds() > 4600) {
                         setPathState(2);
-                        }
-                break; // -------------------------------------------------------------------------------------------
+                    }
+                    break; // --------------------------------------Picks up 1st line ---------------------------------------
                 case 2:
-                        follower.followPath(Pickup1, true);
-                        setPathState(3);
-                break; // -------------------------------------------------------------------------------------------
+                    follower.followPath(Pickup1, true);
+                    ShooterOff();
+                    ballstopper.setPower(0);
+                    slowDownTimer.reset();
+                    setPathState(3);
+                    break; // -----------------------------------Slows Down to pickup-----------------------------------
                 case 3:
-                        if (!follower.isBusy()) {
-                            setPathState(4);
-                        }
-                break; // -------------------------------------------------------------------------------------------
-                case 4:
+                    if(slowDownTimer.milliseconds() > 900) {
+                        follower.setMaxPower(.29);
+                        intake.setPower(1);
+                    }
+                    intake.setPower(1); //turns intake on
+                    if (!follower.isBusy()) {
+                        follower.setMaxPower(1);
+                        intake.setPower(0);
                         follower.followPath(Score1, true);
+                        setPathState(4);
+                    }
+                    break; // -------------------------------------Moves to 2nd shot--------------------------------
+                case 4:
+                    follower.setMaxPower(1);
+                    if (!follower.isBusy()) {
+                        shotTimer.reset();
                         setPathState(5);
-                break; // -------------------------------------------------------------------------------------------
+                    }
+                    break; // --------------------------------2nd Shot-------------------------------------------
                 case 5:
-                        if (!follower.isBusy()) {
-                            setPathState(6);
-                        }
-                break; // -------------------------------------------------------------------------------------------
+                    Shot2Power();
+                    ShotCheck2();
+                    if(shotTimer.milliseconds() > 4500) {
+                        setPathState(6);
+                    }
+                    break; // -----------------------------------Picks up 2nd Line----------------------------------------
                 case 6:
-                        follower.followPath(Pickup2, true);
-                        setPathState(7);
-                break; // -------------------------------------------------------------------------------------------
+                    follower.followPath(Pickup2, true);
+                    ballstopper.setPower(0);
+                    intake.setPower(0);
+                    ShooterOff();
+                    slowDownTimer.reset();
+                    setPathState(7);
+                    break; // ---------------------------------Turns and intakes corner---------------------------------------
                 case 7:
-                        if (!follower.isBusy()) {
-                            setPathState(8);
-                        }
-                break; // -------------------------------------------------------------------------------------------
-                case 8:
+                    if (!follower.isBusy()){
                         follower.followPath(PushBar, true);
+                        slowDownTimer.reset();
+                        intake.setPower(1);
+                        setPathState(8);
+                    }
+                    break; // ----------------------------Slows down for intake---------------------------------------
+                case 8:
+                    if(slowDownTimer.milliseconds() > 800) {
+                        follower.setMaxPower(.5);
+                        intake.setPower(1);
+                    }
+                    if (!follower.isBusy()) {
+                        intake.setPower(1);
                         setPathState(9);
-                break; // -------------------------------------------------------------------------------------------
+                    }
+                    break; // --------------------------------Moves to Score 3rd shot--------------------------------------------
                 case 9:
-                         if (!follower.isBusy()) {
-                            setPathState(10);
-                        }
-                break; // -------------------------------------------------------------------------------------------
+                    follower.setMaxPower(1);
+                    follower.followPath(Score2, true);
+                    Shot3Power();
+                    shotTimer.reset();
+                    setPathState(10);
+                    break; // --------------------------------3rd Shot-----------------------------------------------
                 case 10:
-                        follower.followPath(Score2, true);
+                    intake.setPower(0);
+                    Shot3Power();
+                    ShotCheck3();
+                    if(shotTimer.milliseconds() > 8000) {
+                        intake.setPower(0);
+                        ballstopper.setPower(0);
                         setPathState(11);
-                break; // -------------------------------------------------------------------------------------------
+                    }
+                    break; // -------------------------------------------------------------------------------------------
                 case 11:
-                        if (!follower.isBusy()) {
-                            setPathState(12);
-                        }
-                break; // -------------------------------------------------------------------------------------------
-                case 12:
-                        follower.followPath(Pickup3, true);
-                        setPathState(13);
-                break; // -------------------------------------------------------------------------------------------
-                case 13:
-                    if (!follower.isBusy()) {
-                        setPathState(14);
-                    }
-                break; // -------------------------------------------------------------------------------------------
-                case 14:
-                    follower.followPath(Score3, true);
-                    setPathState(15);
-                break; // -------------------------------------------------------------------------------------------
-                case 15:
-                    if (!follower.isBusy()) {
-                        setPathState(16);
-                    }
-                break; // -------------------------------------------------------------------------------------------
-                case 16:
                     follower.followPath(Park, true);
-                    setPathState(17);
-                break; // -------------------------------------------------------------------------------------------
-                case 17:
+                    setPathState(12);
+                    break; // -------------------------------------------------------------------------------------------
+                case 12:
                     if (!follower.isBusy()) {
                         stop();
                     }
@@ -226,20 +233,6 @@ import pedroPathing.constants.LConstants30630;
             telemetry.addData("y", follower.getPose().getY());
             telemetry.addData("heading", follower.getPose().getHeading());
 
-            telemetry.addData("Light Detected", ((OpticalDistanceSensor) test_color).getLightDetected());
-            NormalizedRGBA colors = test_color.getNormalizedColors();
-            hue = JavaUtil.colorToHue(colors.toColor());
-
-            //Determining the amount of red, green, and blue
-            telemetry.addData("Red", "%.3f", colors.red);
-            telemetry.addData("Green", "%.3f", colors.green);
-            telemetry.addData("Blue", "%.3f", colors.blue);
-
-            //Determining HSV and alpha
-            telemetry.addData("Hue", JavaUtil.colorToHue(colors.toColor()));
-            telemetry.addData("Saturation", "%.3f", JavaUtil.colorToSaturation(colors.toColor()));
-            telemetry.addData("Value", "%.3f", JavaUtil.colorToValue(colors.toColor()));
-            telemetry.addData("Alpha", "%.3f", colors.alpha);
 
             /* Telemetry Outputs of our Follower */
             telemetry.addData("X", follower.getPose().getX());
@@ -278,22 +271,76 @@ import pedroPathing.constants.LConstants30630;
             shooter1 = hardwareMap.get(DcMotor.class, "shooter1");
             shooter2 = hardwareMap.get(DcMotor.class, "shooter2");
             ballstopper = hardwareMap.get(DcMotor.class, "ballstopper");
-            test_color = hardwareMap.get(NormalizedColorSensor.class, "test_color");
             lights = hardwareMap.get(RevBlinkinLedDriver.class,"lights");
             shooter1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             shooter2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             ballstopper.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            intake.setDirection(DcMotorSimple.Direction.REVERSE);
+            shooter1.setDirection(DcMotorSimple.Direction.REVERSE);
+            ballstopper.setDirection(DcMotorSimple.Direction.REVERSE);
         }
 
-        @Override
-        public void start() {
-            opmodeTimer.resetTimer();
-            setPathState(0);
+    @Override
+    public void start() {
+        opmodeTimer.resetTimer();
+        setPathState(0);
+    }
+    @Override
+    public void stop() {
+    }
+    public void ShotCheck1() {
+        if ((!follower.isBusy())
+                && (((DcMotorEx) shooter1).getVelocity() >= firstBankVelocity -5)
+                && (((DcMotorEx) shooter1).getVelocity() <= firstBankVelocity +20)
+                && (((DcMotorEx) shooter2).getVelocity() >= firstBankVelocity -205)
+                && (((DcMotorEx) shooter2).getVelocity() <= firstBankVelocity -190))  {
+            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
+            intake.setPower(1);
+            ballstopper.setPower(1);
+        }else {
+            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
         }
-
-        @Override
-        public void stop() {
+    }
+    public void ShotCheck2() {
+        if ((!follower.isBusy())
+                && (((DcMotorEx) shooter1).getVelocity() >= secondBankVelocity -10)
+                && (((DcMotorEx) shooter1).getVelocity() <= secondBankVelocity +13)
+                && (((DcMotorEx) shooter2).getVelocity() >= secondBankVelocity -210)
+                && (((DcMotorEx) shooter2).getVelocity() <= secondBankVelocity -187))  {
+            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
+            intake.setPower(1);
+            ballstopper.setPower(1);
+        }else {
+            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
         }
+    }
+    public void ShotCheck3() {
+        if ((!follower.isBusy())
+                && (((DcMotorEx) shooter1).getVelocity() >= thirdBankVelocity -10)
+                && (((DcMotorEx) shooter1).getVelocity() <= thirdBankVelocity +13)
+                && (((DcMotorEx) shooter2).getVelocity() >= thirdBankVelocity -210)
+                && (((DcMotorEx) shooter2).getVelocity() <= thirdBankVelocity -187))  {
+            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
+            intake.setPower(1);
+            ballstopper.setPower(1);
+        }else {
+            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
+        }
+    }
+    public void Shot1Power() {
+        ((DcMotorEx) shooter1).setVelocity(firstBankVelocity);    //starts shooter
+        ((DcMotorEx) shooter2).setVelocity(firstBankVelocity-200);
+    }
+    public void Shot2Power() {
+        ((DcMotorEx) shooter1).setVelocity(secondBankVelocity);    //starts shooter
+        ((DcMotorEx) shooter2).setVelocity(secondBankVelocity-200);
+    }
+    public void Shot3Power() {
+        ((DcMotorEx) shooter1).setVelocity(thirdBankVelocity);    //starts shooter
+        ((DcMotorEx) shooter2).setVelocity(thirdBankVelocity-200);
+    }
+    public void ShooterOff() {
+        shooter1.setPower(0); //turns shooter off
+        shooter2.setPower(0);
+    }
     }
 
