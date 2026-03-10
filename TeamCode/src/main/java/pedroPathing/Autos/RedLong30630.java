@@ -26,7 +26,7 @@ import pedroPathing.constants.LConstants30630;
     private DcMotor shooter1;
     private DcMotor shooter2;
     private DcMotor ballstopper;
-    private RevBlinkinLedDriver LED;
+    private RevBlinkinLedDriver lights;
         static final double COUNTS_PER_MOTOR_REV = 537.6898;   // goBilda 5202 Motor Encoder
         static final double DRIVE_GEAR_REDUCTION = 19.2032;     // goBilda 5202 Gear ratio reduction
         static final double WHEEL_DIAMETER_INCHES = 3.77953;     // goBilda 5202 Wheel diameter
@@ -200,7 +200,7 @@ import pedroPathing.constants.LConstants30630;
             telemetry.addData("Flywheel Velocity", ((DcMotorEx) shooter1).getVelocity());
             telemetry.addData("Flywheel Velocity", ((DcMotorEx) shooter2).getVelocity());
             telemetry.update();
-            LED.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
+            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
         }
         @Override
         public void init() {
@@ -221,7 +221,7 @@ import pedroPathing.constants.LConstants30630;
             shooter1 = hardwareMap.get(DcMotor.class, "shooter1");
             shooter2 = hardwareMap.get(DcMotor.class, "shooter2");
             ballstopper = hardwareMap.get(DcMotor.class, "ballstopper");
-            LED = hardwareMap.get(RevBlinkinLedDriver.class,"LED");
+            lights = hardwareMap.get(RevBlinkinLedDriver.class,"lights");
 
             shooter1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             shooter2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -243,11 +243,11 @@ import pedroPathing.constants.LConstants30630;
                     && (((DcMotorEx) shooter1).getVelocity() <= firstFarVelocity +20)
                     && (((DcMotorEx) shooter2).getVelocity() >= firstFarVelocity -205)
                     && (((DcMotorEx) shooter2).getVelocity() <= firstFarVelocity -190))  {
-                LED.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
+                lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
                 intake.setPower(1);
                 ballstopper.setPower(1);
             }else {
-                LED.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
+                lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
             }
         }
     public void ShotCheck2() {
@@ -256,11 +256,11 @@ import pedroPathing.constants.LConstants30630;
                 && (((DcMotorEx) shooter1).getVelocity() <= secondFarVelocity +13)
                 && (((DcMotorEx) shooter2).getVelocity() >= secondFarVelocity -210)
                 && (((DcMotorEx) shooter2).getVelocity() <= secondFarVelocity -187))  {
-            LED.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
+            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
             intake.setPower(1);
             ballstopper.setPower(1);
         }else {
-            LED.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
+            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
         }
     }
     public void ShotCheck3() {
@@ -269,11 +269,11 @@ import pedroPathing.constants.LConstants30630;
                 && (((DcMotorEx) shooter1).getVelocity() <= thirdFarVelocity +13)
                 && (((DcMotorEx) shooter2).getVelocity() >= thirdFarVelocity -210)
                 && (((DcMotorEx) shooter2).getVelocity() <= thirdFarVelocity -187))  {
-            LED.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
+            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
             intake.setPower(1);
             ballstopper.setPower(1);
         }else {
-            LED.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
+            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
         }
     }
         public void Shot1Power() {
