@@ -9,6 +9,9 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
+
+import org.firstinspires.ftc.teamcode.R;
 
 import pedroPathing.constants.FConstants30630;
 import pedroPathing.constants.LConstants30630;
@@ -16,7 +19,7 @@ import pedroPathing.constants.LConstants30630;
 @TeleOp(name = "Demo1player", group = "Examples")
 public class Demo1Player extends OpMode {
     private Follower follower;
-
+    private ElapsedTime parktimer = new ElapsedTime();
     private static final int bankVelocity = 1200;
     private static final int medVelocity = 1375;
     private static final int farVelocity = 1375;
@@ -28,7 +31,7 @@ public class Demo1Player extends OpMode {
     private DcMotor shooter1;
     private DcMotor shooter2;
     private DcMotor ballstopper;
-
+    private RevBlinkinLedDriver lights;
 
 
     private ElapsedTime runtime = new ElapsedTime();
@@ -58,6 +61,7 @@ public class Demo1Player extends OpMode {
         ballstopper.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         ballstopper.setDirection(DcMotorSimple.Direction.REVERSE);
         shooter1.setDirection(DcMotorSimple.Direction.REVERSE);
+        lights = hardwareMap.get(RevBlinkinLedDriver.class, "lights");
     }
     @Override
     public void init_loop() {/*This method is called continuously after Init while waiting to be started.*/
@@ -91,9 +95,11 @@ public class Demo1Player extends OpMode {
                && (((DcMotorEx) shooter2).getVelocity() <= bankVelocity -590)) {
                 intake.setPower(1);/* Pushes ball to shot */
                 ballstopper.setPower(1);
+                lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BREATH_RED);
             } else {
                 intake.setPower(0);
                 ballstopper.setPower(0);
+                lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.CONFETTI);
             }//----------------------------------------------------------------------------
         } /* mid shot */
         else if (gamepad1.circle) {
@@ -105,9 +111,11 @@ public class Demo1Player extends OpMode {
                && (((DcMotorEx) shooter2).getVelocity() <= medVelocity -630)) {
                 intake.setPower(1);
                 ballstopper.setPower(1);
+                lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.STROBE_WHITE);
             } else {
                 intake.setPower(0);
                 ballstopper.setPower(0);
+                lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.CONFETTI);
             }//----------------------------------------------------------------------------
         } /* long shot */
         else if (gamepad1.triangle) {
@@ -119,13 +127,16 @@ public class Demo1Player extends OpMode {
                && (((DcMotorEx) shooter2).getVelocity() <= farVelocity -190)) {
                 intake.setPower(1);
                 ballstopper.setPower(1);
+                lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.STROBE_RED);
             } else {
                 intake.setPower(0);
                 ballstopper.setPower(0);
+                lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.CONFETTI);
             }//----------------------------------------------------------------------------
         }/* intake */
         else if (gamepad1.right_bumper) {
             ((DcMotorEx) intake).setVelocity(intakeVelocity -2400);
+            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.CONFETTI);
             if (((DcMotorEx) intake).getVelocity() >= intakeVelocity - 2000) {
             } else {
                 intake.setPower(0);
@@ -137,23 +148,41 @@ public class Demo1Player extends OpMode {
             shooter2.setPower(0);
             ballstopper.setPower(0);
             intake.setPower(0);
+            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.CONFETTI);
 //----------------------------------------------------------------------------
             if (gamepad1.right_bumper) {// intakes balls
-                intake.setPower(1);}
-            else {
-                intake.setPower(0);}
+                intake.setPower(1);
+                lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.CONFETTI);
+            }else{
+                intake.setPower(0);
+                lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.CONFETTI);
+            }
 //----------------------------------------------------------------------------
             if (gamepad1.left_bumper) {// outtakes balls
                 intake.setPower(1);
+                lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.CONFETTI);
             } else {
                 intake.setPower(0);
+                lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.CONFETTI);
             }
 //----------------------------------------------------------------------------
-            if (gamepad2.dpad_left) {
+            if (gamepad1.dpad_left) {
+                gamepad1.rumbleBlips(5);
+                lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.CONFETTI);
+            } else {
+                gamepad1.stopRumble();
+                lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.CONFETTI);
             }
-            if (gamepad2.dpad_right) {
+            if (gamepad1.dpad_right) {
+                gamepad1.rumble(1000);
+                lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BREATH_RED);
+            } else {
+                gamepad1.stopRumble();
+                lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.CONFETTI);
             }
             if (gamepad2.dpad_up) {
+                gamepad1.rumble(1000);
+                lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.STROBE_WHITE);
             }
             if (gamepad2.dpad_down) {
             }

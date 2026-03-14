@@ -21,10 +21,8 @@ import pedroPathing.constants.LConstants30630;
     public class BlueShort30630 extends OpMode {
     private ElapsedTime shotTimer = new ElapsedTime();
     private ElapsedTime slowDownTimer = new ElapsedTime();
-    private static final int bankVelocity = 1200;
     private static final int firstBankVelocity = 1000;
-    private static final int secondBankVelocity = 1200;
-    private static final int thirdBankVelocity = 1200;
+
     public static DcMotor intake;
     private DcMotor shooter1;
     private DcMotor shooter2;

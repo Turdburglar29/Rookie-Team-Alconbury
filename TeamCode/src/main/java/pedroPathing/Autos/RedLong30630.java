@@ -37,7 +37,7 @@ import pedroPathing.constants.LConstants30630;
     //Start point-----------------------------------------------------------------------------------
         private final Pose startPose = new Pose(70, 0, Math.toRadians(90));
     //Score 1st shot ------------------------------------------------------------------------
-        private final Pose scorePose = new Pose(69, 10, Math.toRadians(69.25));
+        private final Pose scorePose = new Pose(69, 10, Math.toRadians(70));
     // Pickup 1-------------------------------------------------------------------------------
         private final Pose pickup1Pose = new Pose(110, 32, Math.toRadians(0));
         private final Pose pickup1CP1 = new Pose(100, 34, Math.toRadians(340));
@@ -243,9 +243,9 @@ import pedroPathing.constants.LConstants30630;
                     && (((DcMotorEx) shooter1).getVelocity() <= firstFarVelocity +20)
                     && (((DcMotorEx) shooter2).getVelocity() >= firstFarVelocity -205)
                     && (((DcMotorEx) shooter2).getVelocity() <= firstFarVelocity -190))  {
-                lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
-                intake.setPower(1);
-                ballstopper.setPower(1);
+                    lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
+                    intake.setPower(1);
+                    ballstopper.setPower(1);
             }else {
                 lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
             }
