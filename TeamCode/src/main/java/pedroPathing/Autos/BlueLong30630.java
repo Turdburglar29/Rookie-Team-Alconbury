@@ -37,7 +37,7 @@ public class BlueLong30630 extends OpMode {
     private DcMotor shooter1;
     private DcMotor shooter2;
     private DcMotor ballstopper;
-    private RevBlinkinLedDriver LED;
+    private RevBlinkinLedDriver lights;
     double hue;
     static final double COUNTS_PER_MOTOR_REV = 537.6898;   // goBilda 5202 Motor Encoder
     static final double DRIVE_GEAR_REDUCTION = 19.2032;     // goBilda 5202 Gear ratio reduction
@@ -136,7 +136,7 @@ public class BlueLong30630 extends OpMode {
                     break; // --------------------------------------Picks up 1st line ---------------------------------------
                 case 2:
 
-                    LED.setPattern(RevBlinkinLedDriver.BlinkinPattern.HOT_PINK);
+                    lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.HOT_PINK);
                     follower.followPath(Pickup1, true);
                     shooter1.setPower(0); //turns shooter off
                     shooter2.setPower(0);
@@ -149,7 +149,7 @@ public class BlueLong30630 extends OpMode {
                         follower.setMaxPower(.29);
                         intake.setPower(1);
                     }
-                    LED.setPattern(RevBlinkinLedDriver.BlinkinPattern.HOT_PINK);
+                    lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.HOT_PINK);
                     intake.setPower(1); //turns intake on
                     if (!follower.isBusy()) {
                         setPathState(4);
@@ -158,7 +158,7 @@ public class BlueLong30630 extends OpMode {
                 case 4:
                     follower.setMaxPower(1);
                     follower.followPath(Score1, true);
-                    LED.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
+                    lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
                     intake.setPower(0);
                     shooter1.setPower(0); //turns shooter off
                     shooter2.setPower(0);
@@ -205,7 +205,7 @@ public class BlueLong30630 extends OpMode {
                         follower.setMaxPower(.4);
                         intake.setPower(1);
                     }
-                    LED.setPattern(RevBlinkinLedDriver.BlinkinPattern.HOT_PINK);
+                    lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.HOT_PINK);
                     if (!follower.isBusy()) {
                         setPathState(8);
                         intake.setPower(0);
@@ -224,7 +224,7 @@ public class BlueLong30630 extends OpMode {
                     }
                     break; // --------------------------------Moves to Score--------------------------------------------
                 case 10:
-                    LED.setPattern(RevBlinkinLedDriver.BlinkinPattern.HOT_PINK);
+                    lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.HOT_PINK);
                     intake.setPower(0);
                     follower.setMaxPower(1);
                     follower.followPath(Score2, true);
@@ -298,7 +298,7 @@ public class BlueLong30630 extends OpMode {
             telemetry.addData("Flywheel Velocity", ((DcMotorEx) shooter2).getVelocity());
             telemetry.update();
 
-            LED.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE);
+            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE);
         }
 
         @Override
@@ -320,7 +320,7 @@ public class BlueLong30630 extends OpMode {
             shooter1 = hardwareMap.get(DcMotor.class, "shooter1");
             shooter2 = hardwareMap.get(DcMotor.class, "shooter2");
             ballstopper = hardwareMap.get(DcMotor.class, "ballstopper");
-            LED = hardwareMap.get(RevBlinkinLedDriver.class,"LED");
+            lights = hardwareMap.get(RevBlinkinLedDriver.class,"lights");
 
             shooter1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             shooter2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
