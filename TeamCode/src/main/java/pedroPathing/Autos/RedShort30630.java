@@ -42,23 +42,23 @@ public class RedShort30630 extends OpMode {
 
         private int pathState;
     //Start point-----------------------------------------------------------------------------------
-        private final Pose startPose = new Pose(93, 95, Math.toRadians(45));
+        private final Pose startPose = new Pose(93, 95, Math.toRadians(43.5));
     //line 1 ScorePreload 1 ------------------------------------------------------------------------
-        private final Pose scorePose = new Pose(76, 87, Math.toRadians(45));
+        private final Pose scorePose = new Pose(70, 81, Math.toRadians(45));
     //Line 3 Pickup 1-------------------------------------------------------------------------------
         private final Pose pickup1Pose = new Pose(96, 60, Math.toRadians(0));
         private final Pose pickup1CP1 = new Pose(55, 60, Math.toRadians(0));
     //line 4 Score 1 -------------------------------------------------------------------------------
-        private final Pose score1Pose = new Pose(76, 87, Math.toRadians(45));
+        private final Pose score1Pose = new Pose(70, 81, Math.toRadians(45));
     //line 6 Pickup  2 -----------------------------------------------------------------------------
-        private final Pose pickup2Pose = new Pose(95, 45, Math.toRadians(0));
+        private final Pose pickup2Pose = new Pose(100, 37, Math.toRadians(0));
         private final Pose pickup2CP1 = new Pose(55, 35, Math.toRadians(0));
-        private final Pose pickup2CP2 = new Pose(60, 35, Math.toRadians(0));
+        private final Pose pickup2CP2 = new Pose(60, 37, Math.toRadians(0));
     //line 7 Push Bar ------------------------------------------------------------------------------
         private final Pose pushBarPose = new Pose(85, 52, Math.toRadians(0));
         private final Pose pushBarCP1 = new Pose(74, 52, Math.toRadians(0));
     //line 8 Score  2 ------------------------------------------------------------------------------
-        private final Pose score2Pose = new Pose(76, 87, Math.toRadians(45));
+        private final Pose score2Pose = new Pose(70, 81, Math.toRadians(45));
         private final Pose score2CP1 = new Pose(85,60, Math.toRadians(40));
         private final Pose score2CP2 = new Pose(80, 70, Math.toRadians(30));
     //line 9 Pickup  3------------------------------------------------------------------------------
@@ -92,8 +92,8 @@ public class RedShort30630 extends OpMode {
             PushBar = new Path(new BezierCurve(new Point(pickup2Pose), new Point(pushBarCP1), new Point(pushBarPose)));
             PushBar.setLinearHeadingInterpolation(pickup2Pose.getHeading(), pushBarPose.getHeading());
 //line 6 ----------------------------------------------------------------------------------------------------------------------------------
-            Score2 = new Path(new BezierCurve(new Point(pushBarPose), new Point(score2CP1), new Point(score2CP2), new Point(score2Pose)));
-            Score2.setLinearHeadingInterpolation(pushBarPose.getHeading(), score2Pose.getHeading());
+            Score2 = new Path(new BezierCurve(new Point(pickup2Pose), new Point(score2CP1), new Point(score2CP2), new Point(score2Pose)));
+            Score2.setLinearHeadingInterpolation(pickup2Pose.getHeading(), score2Pose.getHeading());
 //line 7 ----------------------------------------------------------------------------------------------------------------------------------
             Pickup3 = new Path(new BezierCurve(new Point(score2Pose), new Point(pickup3CP1), new Point(pickup3CP2), new Point(pickup3Pose)));
             Pickup3.setLinearHeadingInterpolation(score2Pose.getHeading(), pickup3Pose.getHeading());
@@ -123,16 +123,15 @@ public class RedShort30630 extends OpMode {
                 case 2:
                     follower.followPath(Pickup1, true);
                     ShooterOff();
-                    ballstopper.setPower(0);
+                    ballstopper.setPower(-.01);
                     slowDownTimer.reset();
                     setPathState(3);
                     break; // -----------------------------------Slows Down to pickup-----------------------------------
                 case 3:
-                    if(slowDownTimer.milliseconds() > 1000) {
+                    if(slowDownTimer.milliseconds() > 1050) {
                         follower.setMaxPower(.29);
-                        intake.setPower(.5);
+                        intake.setPower(.65);
                     }
-                    intake.setPower(1); //turns intake on
                     if (!follower.isBusy()) {
                         follower.setMaxPower(1);
                         intake.setPower(0);
@@ -165,8 +164,8 @@ public class RedShort30630 extends OpMode {
                     }
                     break; // ---------------------------------Turns and intakes corner---------------------------------------
                 case 7:
-                    if(slowDownTimer.milliseconds() > 1750) {
-                        follower.setMaxPower(.50);
+                    if(slowDownTimer.milliseconds() > 1500) {
+                        follower.setMaxPower(.29);
                         intake.setPower(.75);
                     }
                     if (!follower.isBusy()) {
@@ -187,6 +186,7 @@ public class RedShort30630 extends OpMode {
                     if(shotTimer.milliseconds() > 7000) {
                         intake.setPower(0);
                         ballstopper.setPower(0);
+                        ShooterOff();
                         setPathState(10);
                     }
                     break; // --------------------------------3rd Shot-----------------------------------------------
@@ -294,9 +294,9 @@ public class RedShort30630 extends OpMode {
     }
     public void ShotCheck3() {
         if ((!follower.isBusy())
-                && (((DcMotorEx) shooter1).getVelocity() >= firstBankVelocity -20)
-                && (((DcMotorEx) shooter1).getVelocity() <= firstBankVelocity +10)
-                && (((DcMotorEx) shooter2).getVelocity() >= firstBankVelocity -190)
+                && (((DcMotorEx) shooter1).getVelocity() >= firstBankVelocity -15)
+                && (((DcMotorEx) shooter1).getVelocity() <= firstBankVelocity +5)
+                && (((DcMotorEx) shooter2).getVelocity() >= firstBankVelocity -285)
                 && (((DcMotorEx) shooter2).getVelocity() <= firstBankVelocity -150)) {
             lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
             intake.setPower(1);

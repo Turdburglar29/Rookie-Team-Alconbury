@@ -49,23 +49,23 @@ import pedroPathing.constants.LConstants30630;
     //Start point-----------------------------------------------------------------------------------
         private final Pose startPose = new Pose(1, 63, Math.toRadians(135));
     //line 1 ScorePreload 1 ------------------------------------------------------------------------
-        private final Pose scorePose = new Pose(18, 49, Math.toRadians(135));
+        private final Pose scorePose = new Pose(20, 47, Math.toRadians(135));
     //Line 3 Pickup 1-------------------------------------------------------------------------------
-        private final Pose pickup1Pose = new Pose(10, 25, Math.toRadians(180));
-        private final Pose pickup1CP1 = new Pose(50, 25, Math.toRadians(180));
+        private final Pose pickup1Pose = new Pose(8, 26, Math.toRadians(180));
+        private final Pose pickup1CP1 = new Pose(50, 26, Math.toRadians(180));
     //line 4 Score 1 -------------------------------------------------------------------------------
-        private final Pose score1Pose = new Pose(18, 49, Math.toRadians(135));
+        private final Pose score1Pose = new Pose(20, 47, Math.toRadians(135));
     //line 6 Pickup  2 -----------------------------------------------------------------------------
-        private final Pose pickup2Pose = new Pose(11, 3, Math.toRadians(180));
+        private final Pose pickup2Pose = new Pose(0, 0, Math.toRadians(180));
         private final Pose pickup2CP1 = new Pose(50, 51, Math.toRadians(180));
-        private final Pose pickup2CP2 = new Pose(30, 3, Math.toRadians(180));
+        private final Pose pickup2CP2 = new Pose(35, 1, Math.toRadians(180));
     //line 7 Push Bar ------------------------------------------------------------------------------
         private final Pose pushBarPose = new Pose(24, 33, Math.toRadians(180));
         private final Pose pushBarCP1 = new Pose(26, 30, Math.toRadians(180));
     //line 8 Score  2 ------------------------------------------------------------------------------
-        private final Pose score2Pose = new Pose(18, 49, Math.toRadians(135));
-        private final Pose score2CP1 = new Pose(25,30, Math.toRadians(180));
-        private final Pose score2CP2 = new Pose(20, 44, Math.toRadians(160));
+        private final Pose score2Pose = new Pose(20, 47, Math.toRadians(135));
+        private final Pose score2CP1 = new Pose(35,1, Math.toRadians(180));
+        private final Pose score2CP2 = new Pose(20, 44, Math.toRadians(140));
     //line 9 Pickup  3------------------------------------------------------------------------------
         private final Pose pickup3Pose = new Pose(17, 40, Math.toRadians(180));
         private final Pose pickup3CP1 = new Pose(50, 45, Math.toRadians(180));
@@ -96,8 +96,8 @@ import pedroPathing.constants.LConstants30630;
             PushBar = new Path(new BezierCurve(new Point(pickup2Pose), new Point(pushBarCP1), new Point(pushBarPose)));
             PushBar.setLinearHeadingInterpolation(pickup2Pose.getHeading(), pushBarPose.getHeading());
 //line 6 ----------------------------------------------------------------------------------------------------------------------------------
-            Score2 = new Path(new BezierCurve(new Point(pushBarPose), new Point(score2CP1), new Point(score2CP2), new Point(score2Pose)));
-            Score2.setLinearHeadingInterpolation(pushBarPose.getHeading(), score2Pose.getHeading());
+            Score2 = new Path(new BezierCurve(new Point(pickup2Pose), new Point(score2CP1), new Point(score2CP2), new Point(score2Pose)));
+            Score2.setLinearHeadingInterpolation(pickup2Pose.getHeading(), score2Pose.getHeading());
 //line 7 ----------------------------------------------------------------------------------------------------------------------------------
             Pickup3 = new Path(new BezierCurve(new Point(score2Pose), new Point(pickup3CP1), new Point(pickup3CP2), new Point(pickup3Pose)));
             Pickup3.setLinearHeadingInterpolation(score2Pose.getHeading(), pickup3Pose.getHeading());
@@ -135,6 +135,7 @@ import pedroPathing.constants.LConstants30630;
                     if(slowDownTimer.milliseconds() > 1250) {
                         follower.setMaxPower(.29);
                         intake.setPower(.5);
+                        ballstopper.setPower(-.001);
                     }
                     intake.setPower(1); //turns intake on
                     if (!follower.isBusy()) {
@@ -170,6 +171,7 @@ import pedroPathing.constants.LConstants30630;
                     if(slowDownTimer.milliseconds() > 1750) {
                         follower.setMaxPower(.29);
                         intake.setPower(.75);
+                        ballstopper.setPower(-.001);
                     }
                     if (!follower.isBusy()) {
                         intake.setPower(0);
@@ -189,6 +191,7 @@ import pedroPathing.constants.LConstants30630;
                     if(shotTimer.milliseconds() > 7000) {
                         intake.setPower(0);
                         ballstopper.setPower(0);
+                        ShooterOff();
                         setPathState(10);
                     }
                     break; // --------------------------------3rd Shot-----------------------------------------------
