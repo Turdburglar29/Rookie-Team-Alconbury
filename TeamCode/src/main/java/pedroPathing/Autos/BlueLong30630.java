@@ -50,7 +50,7 @@ public class BlueLong30630 extends OpMode {
         //Start point-----------------------------------------------------------------------------------
         private final Pose startPose = new Pose(45, 0, Math.toRadians(90));
         //line 1 ScorePreload 1 ------------------------------------------------------------------------
-        private final Pose scorePose = new Pose(47, 10, Math.toRadians(114));
+        private final Pose scorePose = new Pose(47, 7, Math.toRadians(114));
         //Line 3 Pickup 1-------------------------------------------------------------------------------
         private final Pose pickup1Pose = new Pose(15, 25, Math.toRadians(180));
         private final Pose pickup1CP1 = new Pose(20, 20, Math.toRadians(180));

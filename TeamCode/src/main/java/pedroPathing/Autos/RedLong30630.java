@@ -19,9 +19,9 @@ import pedroPathing.constants.LConstants30630;
     public class RedLong30630 extends OpMode {
     private ElapsedTime shotTimer = new ElapsedTime();
     private ElapsedTime slowDownTimer = new ElapsedTime();
-    private static final int firstFarVelocity = 1300;
-    private static final int secondFarVelocity = 1295;
-    private static final int thirdFarVelocity = 1300;
+    private static final int bankVelocity = 1200;
+    private static final int medVelocity = 1400;
+    private static final int farVelocity = 1350;
     public static DcMotor intake;
     private DcMotor shooter1;
     private DcMotor shooter2;
@@ -39,8 +39,8 @@ import pedroPathing.constants.LConstants30630;
     //Score 1st shot ------------------------------------------------------------------------
         private final Pose scorePose = new Pose(69, 10, Math.toRadians(70));
     // Pickup 1-------------------------------------------------------------------------------
-        private final Pose pickup1Pose = new Pose(110, 32, Math.toRadians(0));
-        private final Pose pickup1CP1 = new Pose(100, 34, Math.toRadians(340));
+        private final Pose pickup1Pose = new Pose(115, 32, Math.toRadians(0));
+        private final Pose pickup1CP1 = new Pose(100, 32, Math.toRadians(340));
     //Score 2nd shot -------------------------------------------------------------------------------
         private final Pose score1Pose = new Pose(69, 10, Math.toRadians(70));
     //Pickup  2 -----------------------------------------------------------------------------
@@ -48,8 +48,8 @@ import pedroPathing.constants.LConstants30630;
         private final Pose pickup2CP1 = new Pose(100, 34, Math.toRadians(320));
         private final Pose pickup2CP2 = new Pose(115, 32, Math.toRadians(320));
     //Push Bar ------------------------------------------------------------------------------
-        private final Pose pushBarPose = new Pose(126, 10, Math.toRadians(320));
-        private final Pose pushBarCP1 = new Pose(126, 15, Math.toRadians(320));
+        private final Pose pushBarPose = new Pose(124, 7, Math.toRadians(320));
+        private final Pose pushBarCP1 = new Pose(124, 15, Math.toRadians(320));
     //Score 3rd shot------------------------------------------------------------------------------
         private final Pose score2Pose = new Pose(69, 10, Math.toRadians(69.75));
         private final Pose score2CP1 = new Pose(100,10, Math.toRadians(67));
@@ -171,6 +171,7 @@ import pedroPathing.constants.LConstants30630;
                         if(shotTimer.milliseconds() > 8000) {
                             intake.setPower(0);
                             ballstopper.setPower(0);
+                            ShooterOff();
                             setPathState(11);
                         }
                 break; // -------------------------------------------------------------------------------------------
@@ -239,10 +240,10 @@ import pedroPathing.constants.LConstants30630;
         }
         public void ShotCheck1() {
             if ((!follower.isBusy())
-                    && (((DcMotorEx) shooter1).getVelocity() >= firstFarVelocity -5)
-                    && (((DcMotorEx) shooter1).getVelocity() <= firstFarVelocity +20)
-                    && (((DcMotorEx) shooter2).getVelocity() >= firstFarVelocity -205)
-                    && (((DcMotorEx) shooter2).getVelocity() <= firstFarVelocity -190))  {
+                    && (((DcMotorEx) shooter1).getVelocity() >= farVelocity - 50)
+                    && (((DcMotorEx) shooter1).getVelocity() <= farVelocity )
+                    && (((DcMotorEx) shooter2).getVelocity() >= farVelocity -250)
+                    && (((DcMotorEx) shooter2).getVelocity() <= farVelocity -200))   {
                     lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
                     intake.setPower(1);
                     ballstopper.setPower(1);
@@ -252,10 +253,10 @@ import pedroPathing.constants.LConstants30630;
         }
     public void ShotCheck2() {
         if ((!follower.isBusy())
-                && (((DcMotorEx) shooter1).getVelocity() >= secondFarVelocity -10)
-                && (((DcMotorEx) shooter1).getVelocity() <= secondFarVelocity +13)
-                && (((DcMotorEx) shooter2).getVelocity() >= secondFarVelocity -210)
-                && (((DcMotorEx) shooter2).getVelocity() <= secondFarVelocity -187))  {
+                && (((DcMotorEx) shooter1).getVelocity() >= farVelocity - 50)
+                && (((DcMotorEx) shooter1).getVelocity() <= farVelocity )
+                && (((DcMotorEx) shooter2).getVelocity() >= farVelocity -250)
+                && (((DcMotorEx) shooter2).getVelocity() <= farVelocity -200))    {
             lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
             intake.setPower(1);
             ballstopper.setPower(1);
@@ -265,10 +266,10 @@ import pedroPathing.constants.LConstants30630;
     }
     public void ShotCheck3() {
         if ((!follower.isBusy())
-                && (((DcMotorEx) shooter1).getVelocity() >= thirdFarVelocity -10)
-                && (((DcMotorEx) shooter1).getVelocity() <= thirdFarVelocity +13)
-                && (((DcMotorEx) shooter2).getVelocity() >= thirdFarVelocity -210)
-                && (((DcMotorEx) shooter2).getVelocity() <= thirdFarVelocity -187))  {
+                && (((DcMotorEx) shooter1).getVelocity() >= farVelocity - 50)
+                && (((DcMotorEx) shooter1).getVelocity() <= farVelocity )
+                && (((DcMotorEx) shooter2).getVelocity() >= farVelocity -250)
+                && (((DcMotorEx) shooter2).getVelocity() <= farVelocity -200))   {
             lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
             intake.setPower(1);
             ballstopper.setPower(1);
@@ -277,16 +278,15 @@ import pedroPathing.constants.LConstants30630;
         }
     }
         public void Shot1Power() {
-            ((DcMotorEx) shooter1).setVelocity(firstFarVelocity);    //starts shooter
-            ((DcMotorEx) shooter2).setVelocity(firstFarVelocity-200);
-        }
+            ((DcMotorEx) shooter1).setVelocity(farVelocity);    //starts shooter
+            ((DcMotorEx) shooter2).setVelocity(farVelocity-200);        }
         public void Shot2Power() {
-            ((DcMotorEx) shooter1).setVelocity(secondFarVelocity);    //starts shooter
-            ((DcMotorEx) shooter2).setVelocity(secondFarVelocity-200);
+            ((DcMotorEx) shooter1).setVelocity(farVelocity);    //starts shooter
+            ((DcMotorEx) shooter2).setVelocity(farVelocity-200);
         }
         public void Shot3Power() {
-            ((DcMotorEx) shooter1).setVelocity(thirdFarVelocity);    //starts shooter
-            ((DcMotorEx) shooter2).setVelocity(thirdFarVelocity-200);
+            ((DcMotorEx) shooter1).setVelocity(farVelocity);    //starts shooter
+            ((DcMotorEx) shooter2).setVelocity(farVelocity-200);
         }
         public void ShooterOff() {
             shooter1.setPower(0); //turns shooter off
