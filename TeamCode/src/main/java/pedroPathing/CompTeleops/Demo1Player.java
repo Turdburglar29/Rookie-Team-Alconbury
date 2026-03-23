@@ -85,6 +85,8 @@ public class Demo1Player extends OpMode {
         telemetry.addData("Flywheel2 Velocity", ((DcMotorEx) shooter2).getVelocity());
         telemetry.update();
 //----------------------------------------------------------------------------
+        if (parktimer.milliseconds() >= 110000)
+            gamepad1.rumble(2000);
         /* short shot */
         if (gamepad1.cross) {
             ((DcMotorEx) shooter1).setVelocity(bankVelocity);/* sets Velocity */
@@ -180,11 +182,12 @@ public class Demo1Player extends OpMode {
                 gamepad1.stopRumble();
                 lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.CONFETTI);
             }
-            if (gamepad2.dpad_up) {
+            if (gamepad1.dpad_up) {
                 gamepad1.rumble(1000);
                 lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.STROBE_WHITE);
             }
-            if (gamepad2.dpad_down) {
+            if (gamepad1.dpad_down) {
+                lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.HOT_PINK);
             }
             if (gamepad2.back) {
             }
