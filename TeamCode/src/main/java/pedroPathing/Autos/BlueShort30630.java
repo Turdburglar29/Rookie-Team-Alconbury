@@ -47,35 +47,35 @@ import pedroPathing.constants.LConstants30630;
         double startTime;
         private int pathState;
     //Start point-----------------------------------------------------------------------------------
-        private final Pose startPose = new Pose(1, 63, Math.toRadians(135));
+        private final Pose startPose = new Pose(6, 70, Math.toRadians(135));
     //line 1 ScorePreload 1 ------------------------------------------------------------------------
-        private final Pose scorePose = new Pose(20, 47, Math.toRadians(135));
+        private final Pose scorePose = new Pose(30, 56, Math.toRadians(135));
     //Line 3 Pickup 1-------------------------------------------------------------------------------
-        private final Pose pickup1Pose = new Pose(8, 26, Math.toRadians(180));
-        private final Pose pickup1CP1 = new Pose(50, 26, Math.toRadians(180));
+        private final Pose pickup1Pose = new Pose(13, 32, Math.toRadians(180));
+        private final Pose pickup1CP1 = new Pose(55, 32, Math.toRadians(180));
     //line 4 Score 1 -------------------------------------------------------------------------------
-        private final Pose score1Pose = new Pose(20, 47, Math.toRadians(135));
+        private final Pose score1Pose = new Pose(30, 56, Math.toRadians(135));
     //line 6 Pickup  2 -----------------------------------------------------------------------------
-        private final Pose pickup2Pose = new Pose(0, 0, Math.toRadians(180));
-        private final Pose pickup2CP1 = new Pose(50, 51, Math.toRadians(180));
-        private final Pose pickup2CP2 = new Pose(35, 1, Math.toRadians(180));
+        private final Pose pickup2Pose = new Pose(0, 2, Math.toRadians(180));
+        private final Pose pickup2CP1 = new Pose(55, 20, Math.toRadians(180));
+        private final Pose pickup2CP2 = new Pose(40, 2, Math.toRadians(180));
     //line 7 Push Bar ------------------------------------------------------------------------------
-        private final Pose pushBarPose = new Pose(24, 33, Math.toRadians(180));
-        private final Pose pushBarCP1 = new Pose(26, 30, Math.toRadians(180));
+        private final Pose pushBarPose = new Pose(29, 40, Math.toRadians(180));
+        private final Pose pushBarCP1 = new Pose(31, 37, Math.toRadians(180));
     //line 8 Score  2 ------------------------------------------------------------------------------
-        private final Pose score2Pose = new Pose(20, 47, Math.toRadians(135));
-        private final Pose score2CP1 = new Pose(35,1, Math.toRadians(180));
-        private final Pose score2CP2 = new Pose(20, 44, Math.toRadians(140));
+        private final Pose score2Pose = new Pose(30, 56, Math.toRadians(135));
+        private final Pose score2CP1 = new Pose(40,8, Math.toRadians(180));
+        private final Pose score2CP2 = new Pose(25, 51, Math.toRadians(140));
     //line 9 Pickup  3------------------------------------------------------------------------------
-        private final Pose pickup3Pose = new Pose(17, 40, Math.toRadians(180));
-        private final Pose pickup3CP1 = new Pose(50, 45, Math.toRadians(180));
-        private final Pose pickup3CP2 = new Pose(30, 45, Math.toRadians(180));
+        private final Pose pickup3Pose = new Pose(17, 47, Math.toRadians(180));
+        private final Pose pickup3CP1 = new Pose(50, 52, Math.toRadians(180));
+        private final Pose pickup3CP2 = new Pose(30, 52, Math.toRadians(180));
     //line 10 Score 3-------------------------------------------------------------------------------
-        private final Pose score3Pose = new Pose(27, 51, Math.toRadians(135));
-        private final Pose score3CP1 = new Pose(35, 20, Math.toRadians(180));
-        private final Pose score3CP2 = new Pose(30, 51, Math.toRadians(160));
+        private final Pose score3Pose = new Pose(27, 53, Math.toRadians(135));
+        private final Pose score3CP1 = new Pose(35, 22, Math.toRadians(180));
+        private final Pose score3CP2 = new Pose(30, 53, Math.toRadians(160));
     //line 10 Park----------------------------------------------------------------------------------
-        private final Pose park = new Pose(20, 0, Math.toRadians(180));
+        private final Pose park = new Pose(25, 7, Math.toRadians(180));
     //  private PathChain ;-------------------------------------------------------------------------
         private Path scorePreload,  Pickup1,Score1,Pickup2,PushBar,Score2,Pickup3,Score3,Park;
 //--------------------------------------------------------------------------------------------------
@@ -134,8 +134,8 @@ import pedroPathing.constants.LConstants30630;
                 case 3:
                     if(slowDownTimer.milliseconds() > 1250) {
                         follower.setMaxPower(.29);
-                        intake.setPower(.5);
-                        ballstopper.setPower(-.001);
+                        intake.setPower(.65);
+                        ballstopper.setPower(-.1);
                     }
                     intake.setPower(1); //turns intake on
                     if (!follower.isBusy()) {
@@ -168,10 +168,10 @@ import pedroPathing.constants.LConstants30630;
                         setPathState(7);
                     break; // ---------------------------------Turns and intakes corner---------------------------------------
                 case 7:
-                    if(slowDownTimer.milliseconds() > 1750) {
+                    if(slowDownTimer.milliseconds() > 1550) {
                         follower.setMaxPower(.29);
-                        intake.setPower(.75);
-                        ballstopper.setPower(-.001);
+                        intake.setPower(.65);
+                        ballstopper.setPower(-.1);
                     }
                     if (!follower.isBusy()) {
                         intake.setPower(0);
@@ -302,7 +302,7 @@ import pedroPathing.constants.LConstants30630;
                 && (((DcMotorEx) shooter1).getVelocity() >= firstBankVelocity -15)
                 && (((DcMotorEx) shooter1).getVelocity() <= firstBankVelocity +5)
                 && (((DcMotorEx) shooter2).getVelocity() >= firstBankVelocity -285)
-                && (((DcMotorEx) shooter2).getVelocity() <= firstBankVelocity -150))  {
+                && (((DcMotorEx) shooter2).getVelocity() <= firstBankVelocity -150)) {
             lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
             intake.setPower(1);
             ballstopper.setPower(1);
