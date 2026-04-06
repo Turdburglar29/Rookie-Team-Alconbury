@@ -116,7 +116,7 @@ public class RedShort30630 extends OpMode {
                 case 1:
                     Shot1Power();
                     ShotCheck1();
-                    if(shotTimer.milliseconds() > 4600) {
+                    if(shotTimer.milliseconds() > 4000) {
                         setPathState(2);
                     }
                     break; // --------------------------------------Picks up 1st line ---------------------------------------
@@ -149,7 +149,7 @@ public class RedShort30630 extends OpMode {
                 case 5:
                     Shot2Power();
                     ShotCheck2();
-                    if(shotTimer.milliseconds() > 4500) {
+                    if(shotTimer.milliseconds() > 4000) {
                         setPathState(6);
                     }
                     break; // -----------------------------------Picks up 2nd Line----------------------------------------
@@ -164,7 +164,7 @@ public class RedShort30630 extends OpMode {
                     }
                     break; // ---------------------------------Turns and intakes corner---------------------------------------
                 case 7:
-                    if(slowDownTimer.milliseconds() > 1500) {
+                    if(slowDownTimer.milliseconds() > 1750) {
                         follower.setMaxPower(.29);
                         intake.setPower(.75);
                     }
@@ -183,7 +183,7 @@ public class RedShort30630 extends OpMode {
                 case 9:
                     Shot3Power();
                     ShotCheck3();
-                    if(shotTimer.milliseconds() > 7000) {
+                    if(shotTimer.milliseconds() > 6500) {
                         intake.setPower(0);
                         ballstopper.setPower(0);
                         ShooterOff();
