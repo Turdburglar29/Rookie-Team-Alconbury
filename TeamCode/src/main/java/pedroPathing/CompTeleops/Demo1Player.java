@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.R;
 
@@ -32,6 +33,7 @@ public class Demo1Player extends OpMode {
     private DcMotor shooter2;
     private DcMotor ballstopper;
     private RevBlinkinLedDriver lights;
+    private Servo ballholder;
 
 
     private ElapsedTime runtime = new ElapsedTime();
@@ -62,6 +64,7 @@ public class Demo1Player extends OpMode {
         ballstopper.setDirection(DcMotorSimple.Direction.REVERSE);
         shooter1.setDirection(DcMotorSimple.Direction.REVERSE);
         lights = hardwareMap.get(RevBlinkinLedDriver.class, "lights");
+        ballholder = hardwareMap.get(Servo.class, "ballholder");
     }
     @Override
     public void init_loop() {/*This method is called continuously after Init while waiting to be started.*/

@@ -17,6 +17,7 @@ import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.JavaUtil;
 
@@ -38,6 +39,8 @@ public class BlueLong30630 extends OpMode {
     private DcMotor shooter2;
     private DcMotor ballstopper;
     private RevBlinkinLedDriver lights;
+    private Servo ballholder;
+
     double hue;
     static final double COUNTS_PER_MOTOR_REV = 537.6898;   // goBilda 5202 Motor Encoder
     static final double DRIVE_GEAR_REDUCTION = 19.2032;     // goBilda 5202 Gear ratio reduction
@@ -321,6 +324,7 @@ public class BlueLong30630 extends OpMode {
             shooter2 = hardwareMap.get(DcMotor.class, "shooter2");
             ballstopper = hardwareMap.get(DcMotor.class, "ballstopper");
             lights = hardwareMap.get(RevBlinkinLedDriver.class,"lights");
+            ballholder = hardwareMap.get(Servo.class, "ballholder");
 
             shooter1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             shooter2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);

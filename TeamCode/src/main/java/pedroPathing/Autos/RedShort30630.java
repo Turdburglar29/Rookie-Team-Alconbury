@@ -13,6 +13,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import pedroPathing.constants.FConstants30630;
 import pedroPathing.constants.LConstants30630;
@@ -39,8 +40,10 @@ public class RedShort30630 extends OpMode {
     static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * 3.1415);
     private Follower follower;
     private Timer pathTimer, actionTimer, opmodeTimer;
+    private Servo ballholder;
 
-        private int pathState;
+
+    private int pathState;
     //Start point-----------------------------------------------------------------------------------
         private final Pose startPose = new Pose(93, 95, Math.toRadians(43.5));
     //line 1 ScorePreload 1 ------------------------------------------------------------------------
@@ -114,6 +117,7 @@ public class RedShort30630 extends OpMode {
                     setPathState(1);
                     break; // --------------------------------------1st Shot--------------------------------------------
                 case 1:
+                    ballholder.setPosition(0.4);
                     Shot1Power();
                     ShotCheck1();
                     if(shotTimer.milliseconds() > 4000) {
@@ -124,17 +128,20 @@ public class RedShort30630 extends OpMode {
                     follower.followPath(Pickup1, true);
                     ShooterOff();
                     ballstopper.setPower(-.01);
+                    ballholder.setPosition(0);
                     slowDownTimer.reset();
                     setPathState(3);
                     break; // -----------------------------------Slows Down to pickup-----------------------------------
                 case 3:
                     if(slowDownTimer.milliseconds() > 1050) {
+                        ballholder.setPosition(0);
                         follower.setMaxPower(.29);
                         intake.setPower(.65);
                     }
                     if (!follower.isBusy()) {
                         follower.setMaxPower(1);
                         intake.setPower(0);
+                        ballholder.setPosition(0.4);
                         follower.followPath(Score1, true);
                         setPathState(4);
                     }
@@ -147,6 +154,7 @@ public class RedShort30630 extends OpMode {
                     }
                     break; // --------------------------------2nd Shot-------------------------------------------
                 case 5:
+                    ballholder.setPosition(0.4);
                     Shot2Power();
                     ShotCheck2();
                     if(shotTimer.milliseconds() > 4000) {
@@ -160,16 +168,19 @@ public class RedShort30630 extends OpMode {
                         ShooterOff();
                         slowDownTimer.reset();
                         intake.setPower(0);
+                        ballholder.setPosition(0.4);
                         setPathState(7);
                     }
                     break; // ---------------------------------Turns and intakes corner---------------------------------------
                 case 7:
                     if(slowDownTimer.milliseconds() > 1750) {
+                        ballholder.setPosition(0);
                         follower.setMaxPower(.29);
                         intake.setPower(.75);
                     }
                     if (!follower.isBusy()) {
                         intake.setPower(0);
+                        ballholder.setPosition(0.4);
                         follower.setMaxPower(1);
                         setPathState(8);
                     }
@@ -181,6 +192,7 @@ public class RedShort30630 extends OpMode {
                     setPathState(9);
                     break; // --------------------------------Moves to Score 3rd shot--------------------------------------------
                 case 9:
+                    ballholder.setPosition(0.4);
                     Shot3Power();
                     ShotCheck3();
                     if(shotTimer.milliseconds() > 6500) {
@@ -251,6 +263,7 @@ public class RedShort30630 extends OpMode {
             shooter2 = hardwareMap.get(DcMotor.class, "shooter2");
             ballstopper = hardwareMap.get(DcMotor.class, "ballstopper");
             lights = hardwareMap.get(RevBlinkinLedDriver.class,"lights");
+            ballholder = hardwareMap.get(Servo.class, "ballholder");
             shooter1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             shooter2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             ballstopper.setMode(DcMotor.RunMode.RUN_USING_ENCODER);

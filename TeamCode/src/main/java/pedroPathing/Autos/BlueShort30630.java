@@ -16,6 +16,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import pedroPathing.constants.FConstants30630;
 import pedroPathing.constants.LConstants30630;
+import com.qualcomm.robotcore.hardware.Servo;
 
 @Autonomous(name = "BlueShort", group = "Auto")
     public class BlueShort30630 extends OpMode {
@@ -29,6 +30,8 @@ import pedroPathing.constants.LConstants30630;
     private DcMotor ballstopper;
 
     private RevBlinkinLedDriver lights;
+    private Servo ballholder;
+
     void setSafePower(DcMotor motor,double targetPower0){
         final double SLEW_RATE=0.2;
         double currentPower=motor.getPower();
@@ -118,6 +121,7 @@ import pedroPathing.constants.LConstants30630;
                     setPathState(1);
                     break; // --------------------------------------1st Shot--------------------------------------------
                 case 1:
+                    ballholder.setPosition(0.4);
                     Shot1Power();
                     ShotCheck1();
                     if(shotTimer.milliseconds() > 4000) {
@@ -128,11 +132,13 @@ import pedroPathing.constants.LConstants30630;
                     follower.followPath(Pickup1, true);
                     ShooterOff();
                     ballstopper.setPower(0);
+                    ballholder.setPosition(0.4);
                     slowDownTimer.reset();
                     setPathState(3);
                     break; // -----------------------------------Slows Down to pickup-----------------------------------
                 case 3:
                     if(slowDownTimer.milliseconds() > 1250) {
+                        ballholder.setPosition(0);
                         follower.setMaxPower(.29);
                         intake.setPower(.65);
                         ballstopper.setPower(-.1);
@@ -141,6 +147,7 @@ import pedroPathing.constants.LConstants30630;
                     if (!follower.isBusy()) {
                         follower.setMaxPower(1);
                         intake.setPower(0);
+                        ballholder.setPosition(0.4);
                         follower.followPath(Score1, true);
                         setPathState(4);
                     }
@@ -153,6 +160,7 @@ import pedroPathing.constants.LConstants30630;
                     }
                     break; // --------------------------------2nd Shot-------------------------------------------
                 case 5:
+                    ballholder.setPosition(0.4);
                     Shot2Power();
                     ShotCheck2();
                     if(shotTimer.milliseconds() > 4500) {
@@ -165,10 +173,12 @@ import pedroPathing.constants.LConstants30630;
                         ShooterOff();
                         slowDownTimer.reset();
                         intake.setPower(0);
+                        ballholder.setPosition(0.4);
                         setPathState(7);
                     break; // ---------------------------------Turns and intakes corner---------------------------------------
                 case 7:
                     if(slowDownTimer.milliseconds() > 1550) {
+                        ballholder.setPosition(0);
                         follower.setMaxPower(.29);
                         intake.setPower(.65);
                         ballstopper.setPower(-.1);
@@ -186,6 +196,7 @@ import pedroPathing.constants.LConstants30630;
                     setPathState(9);
                     break; // --------------------------------Moves to Score 3rd shot--------------------------------------------
                 case 9:
+                    ballholder.setPosition(0.4);
                     Shot3Power();
                     ShotCheck3();
                     if(shotTimer.milliseconds() > 7000) {
@@ -256,6 +267,7 @@ import pedroPathing.constants.LConstants30630;
         shooter2 = hardwareMap.get(DcMotor.class, "shooter2");
         ballstopper = hardwareMap.get(DcMotor.class, "ballstopper");
         lights = hardwareMap.get(RevBlinkinLedDriver.class,"lights");
+        ballholder = hardwareMap.get(Servo.class, "ballholder");
         shooter1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         shooter2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         ballstopper.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
