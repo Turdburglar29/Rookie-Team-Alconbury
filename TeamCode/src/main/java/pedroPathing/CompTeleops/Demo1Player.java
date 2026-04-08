@@ -99,10 +99,12 @@ public class Demo1Player extends OpMode {
                && (((DcMotorEx) shooter1).getVelocity() <= bankVelocity + 15)//high threshold
                && (((DcMotorEx) shooter2).getVelocity() <= bankVelocity -590)) {
                 intake.setPower(1);/* Pushes ball to shot */
+                ballholder.setPosition(0.4);
                 ballstopper.setPower(1);
                 lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BREATH_RED);
             } else {
                 intake.setPower(0);
+                ballholder.setPosition(0);
                 ballstopper.setPower(0);
                 lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.CONFETTI);
             }//----------------------------------------------------------------------------
@@ -115,10 +117,12 @@ public class Demo1Player extends OpMode {
                && (((DcMotorEx) shooter1).getVelocity() <= medVelocity + 15)
                && (((DcMotorEx) shooter2).getVelocity() <= medVelocity -630)) {
                 intake.setPower(1);
+                ballholder.setPosition(0.4);
                 ballstopper.setPower(1);
                 lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.STROBE_WHITE);
             } else {
                 intake.setPower(0);
+                ballholder.setPosition(0);
                 ballstopper.setPower(0);
                 lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.CONFETTI);
             }//----------------------------------------------------------------------------
@@ -135,6 +139,7 @@ public class Demo1Player extends OpMode {
                 lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.STROBE_RED);
             } else {
                 intake.setPower(0);
+                ballholder.setPosition(0);
                 ballstopper.setPower(0);
                 lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.CONFETTI);
             }//----------------------------------------------------------------------------
@@ -157,17 +162,21 @@ public class Demo1Player extends OpMode {
 //----------------------------------------------------------------------------
             if (gamepad1.right_bumper) {// intakes balls
                 intake.setPower(1);
+                ballholder.setPosition(0);
                 lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.CONFETTI);
             }else{
                 intake.setPower(0);
+                ballholder.setPosition(0.4);
                 lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.CONFETTI);
             }
 //----------------------------------------------------------------------------
             if (gamepad1.left_bumper) {// outtakes balls
                 intake.setPower(1);
+                ballholder.setPosition(0);
                 lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.CONFETTI);
             } else {
                 intake.setPower(0);
+                ballholder.setPosition(0.4);
                 lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.CONFETTI);
             }
 //----------------------------------------------------------------------------

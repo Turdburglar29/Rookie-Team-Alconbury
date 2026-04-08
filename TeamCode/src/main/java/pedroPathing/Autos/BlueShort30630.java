@@ -59,9 +59,9 @@ import com.qualcomm.robotcore.hardware.Servo;
     //line 4 Score 1 -------------------------------------------------------------------------------
         private final Pose score1Pose = new Pose(30, 56, Math.toRadians(135));
     //line 6 Pickup  2 -----------------------------------------------------------------------------
-        private final Pose pickup2Pose = new Pose(0, 2, Math.toRadians(180));
-        private final Pose pickup2CP1 = new Pose(55, 20, Math.toRadians(180));
-        private final Pose pickup2CP2 = new Pose(40, 2, Math.toRadians(180));
+        private final Pose pickup2Pose = new Pose(0, 3, Math.toRadians(180));
+        private final Pose pickup2CP1 = new Pose(50, 20, Math.toRadians(180));
+        private final Pose pickup2CP2 = new Pose(30, 3, Math.toRadians(180));
     //line 7 Push Bar ------------------------------------------------------------------------------
         private final Pose pushBarPose = new Pose(29, 40, Math.toRadians(180));
         private final Pose pushBarCP1 = new Pose(31, 37, Math.toRadians(180));
@@ -137,11 +137,10 @@ import com.qualcomm.robotcore.hardware.Servo;
                     setPathState(3);
                     break; // -----------------------------------Slows Down to pickup-----------------------------------
                 case 3:
-                    if(slowDownTimer.milliseconds() > 1250) {
+                    if(slowDownTimer.milliseconds() > 1100) {
                         ballholder.setPosition(0);
-                        follower.setMaxPower(.29);
-                        intake.setPower(.65);
-                        ballstopper.setPower(-.1);
+                        follower.setMaxPower(.35);
+                        intake.setPower(1);
                     }
                     intake.setPower(1); //turns intake on
                     if (!follower.isBusy()) {
@@ -163,7 +162,7 @@ import com.qualcomm.robotcore.hardware.Servo;
                     ballholder.setPosition(0.4);
                     Shot2Power();
                     ShotCheck2();
-                    if(shotTimer.milliseconds() > 4500) {
+                    if(shotTimer.milliseconds() > 4000) {
                         follower.followPath(Pickup2, true);
                         setPathState(6);
                     }
@@ -177,11 +176,10 @@ import com.qualcomm.robotcore.hardware.Servo;
                         setPathState(7);
                     break; // ---------------------------------Turns and intakes corner---------------------------------------
                 case 7:
-                    if(slowDownTimer.milliseconds() > 1550) {
+                    if(slowDownTimer.milliseconds() > 1600) {
                         ballholder.setPosition(0);
-                        follower.setMaxPower(.29);
-                        intake.setPower(.65);
-                        ballstopper.setPower(-.1);
+                        follower.setMaxPower(.35);
+                        intake.setPower(1);
                     }
                     if (!follower.isBusy()) {
                         intake.setPower(0);
@@ -199,7 +197,7 @@ import com.qualcomm.robotcore.hardware.Servo;
                     ballholder.setPosition(0.4);
                     Shot3Power();
                     ShotCheck3();
-                    if(shotTimer.milliseconds() > 7000) {
+                    if(shotTimer.milliseconds() > 6500) {
                         intake.setPower(0);
                         ballstopper.setPower(0);
                         ShooterOff();
