@@ -60,12 +60,12 @@ public class BlueLong30630 extends OpMode {
         //line 4 Score 1 -------------------------------------------------------------------------------
         private final Pose score1Pose = new Pose(47, 10, Math.toRadians(114));
         //line 6 Pickup  2 -----------------------------------------------------------------------------
-        private final Pose pickup2Pose = new Pose(15, 20, Math.toRadians(250));
-        private final Pose pickup2CP1 = new Pose(25, 25, Math.toRadians(250));
-        private final Pose pickup2CP2 = new Pose(18, 22, Math.toRadians(250));
+        private final Pose pickup2Pose = new Pose(10, -4, Math.toRadians(180));
+        private final Pose pickup2CP1 = new Pose(40, 3, Math.toRadians(180));
+        private final Pose pickup2CP2 = new Pose(20, -3, Math.toRadians(180));
         //line 7 Push Bar ------------------------------------------------------------------------------
-        private final Pose pushBarPose = new Pose(15, 4, Math.toRadians(250));
-        private final Pose pushBarCP1 = new Pose(15, 8, Math.toRadians(250));
+        private final Pose pushBarPose = new Pose(17, 4, Math.toRadians(180));
+        private final Pose pushBarCP1 = new Pose(15, 8, Math.toRadians(180));
         //line 8 Score  2 ------------------------------------------------------------------------------
         private final Pose score2Pose = new Pose(47, 10, Math.toRadians(114));
         private final Pose score2CP1 = new Pose(20,8, Math.toRadians(113));
@@ -100,8 +100,8 @@ public class BlueLong30630 extends OpMode {
             PushBar = new Path(new BezierCurve(new Point(pickup2Pose), new Point(pushBarCP1), new Point(pushBarPose)));
             PushBar.setLinearHeadingInterpolation(pickup2Pose.getHeading(), pushBarPose.getHeading());
 //line 6 ----------------------------------------------------------------------------------------------------------------------------------
-            Score2 = new Path(new BezierCurve(new Point(pushBarPose), new Point(score2CP1), new Point(score2CP2), new Point(score2Pose)));
-            Score2.setLinearHeadingInterpolation(pushBarPose.getHeading(), score2Pose.getHeading());
+            Score2 = new Path(new BezierCurve(new Point(pickup2Pose), new Point(score2CP1), new Point(score2CP2), new Point(score2Pose)));
+            Score2.setLinearHeadingInterpolation(pickup2Pose.getHeading(), score2Pose.getHeading());
 //line 7 ----------------------------------------------------------------------------------------------------------------------------------
             Pickup3 = new Path(new BezierCurve(new Point(score2Pose), new Point(pickup3CP1), new Point(pickup3CP2), new Point(pickup3Pose)));
             Pickup3.setLinearHeadingInterpolation(score2Pose.getHeading(), pickup3Pose.getHeading());
@@ -115,74 +115,54 @@ public class BlueLong30630 extends OpMode {
         }
         public void autonomousPathUpdate() {
             switch (pathState) {
-                case 0:
+                case 0:// --------------------------------------Moves to 1st Shot--------------------------------------------
+                    Shot1Power();
                     follower.followPath(scorePreload, true);
-                    ((DcMotorEx) shooter1).setVelocity(farVelocity);    //starts shooter
-                    ((DcMotorEx) shooter2).setVelocity(farVelocity-200);
-                    setPathState(1);
                     shotTimer.reset();
-                    break; // --------------------------------------Shoots balls--------------------------------------------
+                    setPathState(1);
+                    break; // --------------------------------------1st Shot--------------------------------------------
                 case 1:
-                    ((DcMotorEx) shooter1).setVelocity(farVelocity);    //starts shooter
-                    ((DcMotorEx) shooter2).setVelocity(farVelocity-200);
-                    if ((!follower.isBusy())
-                            && (((DcMotorEx) shooter1).getVelocity() >= farVelocity - 50)
-                            && (((DcMotorEx) shooter1).getVelocity() <= farVelocity )
-                            && (((DcMotorEx) shooter2).getVelocity() >= farVelocity -250)
-                            && (((DcMotorEx) shooter2).getVelocity() <= farVelocity -200))  {
-                        intake.setPower(1);
-                        ballstopper.setPower(1);
-                    }
-                    if(shotTimer.milliseconds() > 4500) {
+                    ballholder.setPosition(0.4);
+                    Shot1Power();
+                    ShotCheck1();
+                    if(shotTimer.milliseconds() > 4600) {
                         setPathState(2);
                     }
                     break; // --------------------------------------Picks up 1st line ---------------------------------------
                 case 2:
-
-                    lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.HOT_PINK);
                     follower.followPath(Pickup1, true);
-                    shooter1.setPower(0); //turns shooter off
-                    shooter2.setPower(0);
+                    ShooterOff();
                     ballstopper.setPower(0);
-                    setPathState(3);
+                    ballholder.setPosition(0.4);
                     slowDownTimer.reset();
-                    break; // -------------------------------------------------------------------------------------------
+                    setPathState(3);
+                    break; // -----------------------------------Slows Down to pickup-----------------------------------
                 case 3:
-                    if(slowDownTimer.milliseconds() > 600) {
+                    if(slowDownTimer.milliseconds() > 1000) {
+                        ballholder.setPosition(0);
                         follower.setMaxPower(.29);
                         intake.setPower(1);
                     }
-                    lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.HOT_PINK);
                     intake.setPower(1); //turns intake on
                     if (!follower.isBusy()) {
+                        follower.setMaxPower(1);
+                        intake.setPower(0);
+                        ballholder.setPosition(0.4);
+                        follower.followPath(Score1, true);
                         setPathState(4);
                     }
-                    break; // -------------------------------------Moves to Score--------------------------------
+                    break; // -------------------------------------Moves to 2nd shot--------------------------------
                 case 4:
                     follower.setMaxPower(1);
-                    follower.followPath(Score1, true);
-                    lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
-                    intake.setPower(0);
-                    shooter1.setPower(0); //turns shooter off
-                    shooter2.setPower(0);
-                    setPathState(5);
-                    ((DcMotorEx) shooter1).setVelocity(farVelocity-250);    //starts shooter
-                    ((DcMotorEx) shooter2).setVelocity(farVelocity-275);
-                    shotTimer.reset();
-
-
-                    break; // --------------------------------Shots Balls-------------------------------------------
-                case 5:
-                    ((DcMotorEx) shooter1).setVelocity(farVelocity);    //starts shooter
-                    ((DcMotorEx) shooter2).setVelocity(farVelocity-200);
-                    if ((!follower.isBusy())
-                            && (((DcMotorEx) shooter1).getVelocity() >= farVelocity - 50)
-                            && (((DcMotorEx) shooter1).getVelocity() <= farVelocity )
-                            && (((DcMotorEx) shooter2).getVelocity() >= farVelocity -250)
-                            && (((DcMotorEx) shooter2).getVelocity() <= farVelocity -200))  {
-                        intake.setPower(1);
-                        ballstopper.setPower(1);
+                    if (!follower.isBusy()) {
+                        shotTimer.reset();
+                        setPathState(5);
                     }
+                    break; // --------------------------------2nd Shot-------------------------------------------
+                case 5:
+                    ballholder.setPosition(0.4);
+                    Shot2Power();
+                    ShotCheck2();
                     if(shotTimer.milliseconds() > 4500) {
                         setPathState(6);
                     }
@@ -191,88 +171,55 @@ public class BlueLong30630 extends OpMode {
                     follower.followPath(Pickup2, true);
                     ballstopper.setPower(0);
                     intake.setPower(0);
-                    shooter1.setPower(0); //turns shooter off
-                    shooter2.setPower(0);
-                    setPathState(66);
+                    ballholder.setPosition(0.4);
+                    ShooterOff();
                     slowDownTimer.reset();
-                    break; // -------------------------------------------------------------------------------------------
-                case 66:
-                    if (!follower.isBusy()){
-                        follower.followPath(PushBar, true); //pushbar is actually second part of pick up balls in corner
-                        setPathState(7);
-                        slowDownTimer.reset();
-                    }
-                    break; // -------------------------------------------------------------------------------------------
+                    setPathState(8);
+                    break; // ---------------------------------Turns and intakes corner---------------------------------------
                 case 7:
-                    if(slowDownTimer.milliseconds() > 100) {
-                        follower.setMaxPower(.4);
+                    if (!follower.isBusy()){
+                        follower.followPath(PushBar, true);
+                        slowDownTimer.reset();
+                        intake.setPower(1);
+                        setPathState(8);
+                    }
+                    break; // ----------------------------Slows down for intake---------------------------------------
+                case 8:
+                    if(slowDownTimer.milliseconds() > 800) {
+                        ballholder.setPosition(0);
+                        follower.setMaxPower(.5);
                         intake.setPower(1);
                     }
-                    lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.HOT_PINK);
                     if (!follower.isBusy()) {
-                        setPathState(8);
                         intake.setPower(0);
+                        ballholder.setPosition(0.4);
+                        setPathState(9);
                     }
-                    break; // ----------------------------------Hits Push Bar-----------------------------------
-                case 8:
-                    follower.setMaxPower(.6);
-                    /* follower.followPath(PushBar, true);*/
-                    setPathState(9);
-                    break; // -------------------------------------------------------------------------------------------
+                    break; // --------------------------------Moves to Score 3rd shot--------------------------------------------
                 case 9:
-
-                    if (!follower.isBusy()) {
-                        intake.setPower(0);
-                        setPathState(10);
-                    }
-                    break; // --------------------------------Moves to Score--------------------------------------------
-                case 10:
-                    lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.HOT_PINK);
-                    intake.setPower(0);
                     follower.setMaxPower(1);
                     follower.followPath(Score2, true);
-                    ((DcMotorEx) shooter1).setVelocity(medVelocity);    //starts shooter
-                    ((DcMotorEx) shooter2).setVelocity(medVelocity - 640);
-                    setPathState(11);
+                    Shot3Power();
                     shotTimer.reset();
-                    break; // --------------------------------Shots Balls--------------------------------------------
+                    setPathState(10);
+                    break; // --------------------------------3rd Shot-----------------------------------------------
+                case 10:
+                    intake.setPower(0);
+                    ballholder.setPosition(0.4);
+                    Shot3Power();
+                    ShotCheck3();
+                    if(shotTimer.milliseconds() > 8000) {
+                        intake.setPower(0);
+                        ballstopper.setPower(0);
+                        ShooterOff();
+                        setPathState(11);
+                    }
+                    break; // -------------------------------------------------------------------------------------------
                 case 11:
-                    ((DcMotorEx) shooter1).setVelocity(farVelocity);    //starts shooter
-                    ((DcMotorEx) shooter2).setVelocity(farVelocity-200);
-                    if ((!follower.isBusy())
-                            && (((DcMotorEx) shooter1).getVelocity() >= farVelocity - 50)
-                            && (((DcMotorEx) shooter1).getVelocity() <= farVelocity )
-                            && (((DcMotorEx) shooter2).getVelocity() >= farVelocity -250)
-                            && (((DcMotorEx) shooter2).getVelocity() <= farVelocity -200))  {
-                        intake.setPower(1);
-                        ballstopper.setPower(1);
-                    }
-                    if(shotTimer.milliseconds() > 4500) {
-                        setPathState(12);
-                    }
-                    slowDownTimer.reset();
-                    break; // -------------------------------Picks up 3rd Line--------------------------------------------
-                case 12:
-                    setPathState(13);
-                    break; // -------------------------------------------------------------------------------------------
-                case 13:
-                    if (!follower.isBusy()) {
-                        setPathState(14);
-                    }
-                    break; // -------------------------------------------------------------------------------------------
-                case 14:
-                    setPathState(15);
-                    break; // -------------------------------------------------------------------------------------------
-                case 15:
-                    setPathState(16);
-                    break; // -------------------------------------------------------------------------------------------
-                case 16:
                     follower.followPath(Park, true);
-                    shooter1.setPower(0); //turns shooter off
-                    shooter2.setPower(0);
-                    setPathState(17);
+                    setPathState(12);
                     break; // -------------------------------------------------------------------------------------------
-                case 17:
+                case 12:
                     if (!follower.isBusy()) {
                         stop();
                     }
@@ -342,5 +289,58 @@ public class BlueLong30630 extends OpMode {
         @Override
         public void stop() {
         }
+    public void ShotCheck1() {
+        if ((!follower.isBusy())
+                && (((DcMotorEx) shooter1).getVelocity() >= farVelocity - 50)
+                && (((DcMotorEx) shooter1).getVelocity() <= farVelocity )
+                && (((DcMotorEx) shooter2).getVelocity() >= farVelocity -250)
+                && (((DcMotorEx) shooter2).getVelocity() <= farVelocity -200))   {
+            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
+            intake.setPower(1);
+            ballstopper.setPower(1);
+        }else {
+            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
+        }
     }
-
+    public void ShotCheck2() {
+        if ((!follower.isBusy())
+                && (((DcMotorEx) shooter1).getVelocity() >= farVelocity - 50)
+                && (((DcMotorEx) shooter1).getVelocity() <= farVelocity )
+                && (((DcMotorEx) shooter2).getVelocity() >= farVelocity -250)
+                && (((DcMotorEx) shooter2).getVelocity() <= farVelocity -200))    {
+            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
+            intake.setPower(1);
+            ballstopper.setPower(1);
+        }else {
+            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
+        }
+    }
+    public void ShotCheck3() {
+        if ((!follower.isBusy())
+                && (((DcMotorEx) shooter1).getVelocity() >= farVelocity - 50)
+                && (((DcMotorEx) shooter1).getVelocity() <= farVelocity )
+                && (((DcMotorEx) shooter2).getVelocity() >= farVelocity -250)
+                && (((DcMotorEx) shooter2).getVelocity() <= farVelocity -200))   {
+            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
+            intake.setPower(1);
+            ballstopper.setPower(1);
+        }else {
+            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
+        }
+    }
+    public void Shot1Power() {
+        ((DcMotorEx) shooter1).setVelocity(farVelocity);    //starts shooter
+        ((DcMotorEx) shooter2).setVelocity(farVelocity-200);        }
+    public void Shot2Power() {
+        ((DcMotorEx) shooter1).setVelocity(farVelocity);    //starts shooter
+        ((DcMotorEx) shooter2).setVelocity(farVelocity-200);
+    }
+    public void Shot3Power() {
+        ((DcMotorEx) shooter1).setVelocity(farVelocity);    //starts shooter
+        ((DcMotorEx) shooter2).setVelocity(farVelocity-200);
+    }
+    public void ShooterOff() {
+        shooter1.setPower(0); //turns shooter off
+        shooter2.setPower(0);
+    }
+}

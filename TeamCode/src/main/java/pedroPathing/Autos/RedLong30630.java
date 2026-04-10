@@ -47,12 +47,12 @@ import com.qualcomm.robotcore.hardware.Servo;
     //Score 2nd shot -------------------------------------------------------------------------------
         private final Pose score1Pose = new Pose(69, 10, Math.toRadians(70));
     //Pickup  2 -----------------------------------------------------------------------------
-        private final Pose pickup2Pose = new Pose(120, 30, Math.toRadians(320));
-        private final Pose pickup2CP1 = new Pose(100, 34, Math.toRadians(320));
-        private final Pose pickup2CP2 = new Pose(115, 32, Math.toRadians(320));
+        private final Pose pickup2Pose = new Pose(124, 7, Math.toRadians(0));
+        private final Pose pickup2CP1 = new Pose(65, 8, Math.toRadians(0));
+        private final Pose pickup2CP2 = new Pose(115, 8, Math.toRadians(0));
     //Push Bar ------------------------------------------------------------------------------
         private final Pose pushBarPose = new Pose(124, 7, Math.toRadians(320));
-        private final Pose pushBarCP1 = new Pose(124, 15, Math.toRadians(320));
+        private final Pose pushBarCP1 = new Pose(124, 8, Math.toRadians(320));
     //Score 3rd shot------------------------------------------------------------------------------
         private final Pose score2Pose = new Pose(69, 10, Math.toRadians(69.75));
         private final Pose score2CP1 = new Pose(100,10, Math.toRadians(67));

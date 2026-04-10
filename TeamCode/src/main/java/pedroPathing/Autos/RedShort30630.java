@@ -55,8 +55,8 @@ public class RedShort30630 extends OpMode {
         private final Pose score1Pose = new Pose(70, 81, Math.toRadians(45));
     //line 6 Pickup  2 -----------------------------------------------------------------------------
         private final Pose pickup2Pose = new Pose(100, 37, Math.toRadians(0));
-        private final Pose pickup2CP1 = new Pose(55, 35, Math.toRadians(0));
-        private final Pose pickup2CP2 = new Pose(60, 37, Math.toRadians(0));
+        private final Pose pickup2CP1 = new Pose(70, 35, Math.toRadians(0));
+        private final Pose pickup2CP2 = new Pose(80, 37, Math.toRadians(0));
     //line 7 Push Bar ------------------------------------------------------------------------------
         private final Pose pushBarPose = new Pose(85, 52, Math.toRadians(0));
         private final Pose pushBarCP1 = new Pose(74, 52, Math.toRadians(0));
