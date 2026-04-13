@@ -15,6 +15,8 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.teamcode.R;
+
 import pedroPathing.constants.FConstants30630;
 import pedroPathing.constants.LConstants30630;
 
@@ -112,20 +114,24 @@ public class RedShort30630 extends OpMode {
             switch (pathState) {
                 case 0:// --------------------------------------Moves to 1st Shot--------------------------------------------
                     Shot1Power();
+                    lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BREATH_RED);
                     follower.followPath(scorePreload, true);
                     shotTimer.reset();
                     setPathState(1);
                     break; // --------------------------------------1st Shot--------------------------------------------
                 case 1:
                     ballholder.setPosition(0.4);
+                    lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.HOT_PINK);
                     Shot1Power();
                     ShotCheck1();
                     if(shotTimer.milliseconds() > 4000) {
+                        lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
                         setPathState(2);
                     }
                     break; // --------------------------------------Picks up 1st line ---------------------------------------
                 case 2:
                     follower.followPath(Pickup1, true);
+                    lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
                     ShooterOff();
                     ballstopper.setPower(-.01);
                     ballholder.setPosition(0);
@@ -137,9 +143,11 @@ public class RedShort30630 extends OpMode {
                         ballholder.setPosition(0);
                         follower.setMaxPower(.29);
                         intake.setPower(.65);
+                        lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
                     }
                     if (!follower.isBusy()) {
                         follower.setMaxPower(1);
+                        lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.HOT_PINK);
                         intake.setPower(0);
                         ballholder.setPosition(0.4);
                         follower.followPath(Score1, true);
@@ -150,20 +158,24 @@ public class RedShort30630 extends OpMode {
                     follower.setMaxPower(1);
                     if (!follower.isBusy()) {
                         shotTimer.reset();
+                        lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BREATH_RED);
                         setPathState(5);
                     }
                     break; // --------------------------------2nd Shot-------------------------------------------
                 case 5:
                     ballholder.setPosition(0.4);
+                    lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BREATH_RED);
                     Shot2Power();
                     ShotCheck2();
                     if(shotTimer.milliseconds() > 4000) {
+                        lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
                         setPathState(6);
                     }
                     break; // -----------------------------------Picks up 2nd Line----------------------------------------
                 case 6:
                     if (!follower.isBusy()) {
                         follower.followPath(Pickup2, true);
+                        lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
                         ballstopper.setPower(0);
                         ShooterOff();
                         slowDownTimer.reset();
@@ -174,12 +186,14 @@ public class RedShort30630 extends OpMode {
                     break; // ---------------------------------Turns and intakes corner---------------------------------------
                 case 7:
                     if(slowDownTimer.milliseconds() > 1750) {
+                        lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.HOT_PINK);
                         ballholder.setPosition(0);
                         follower.setMaxPower(.29);
                         intake.setPower(.75);
                     }
                     if (!follower.isBusy()) {
                         intake.setPower(0);
+                        lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
                         ballholder.setPosition(0.4);
                         follower.setMaxPower(1);
                         setPathState(8);
@@ -187,15 +201,18 @@ public class RedShort30630 extends OpMode {
                     break; // ----------------------------Slows down for intake---------------------------------------
                 case 8:
                     follower.followPath(Score2, true);
+                    lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BREATH_RED);
                     Shot3Power();
                     shotTimer.reset();
                     setPathState(9);
                     break; // --------------------------------Moves to Score 3rd shot--------------------------------------------
                 case 9:
                     ballholder.setPosition(0.4);
+                    lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
                     Shot3Power();
                     ShotCheck3();
                     if(shotTimer.milliseconds() > 6500) {
+                        lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.HOT_PINK);
                         intake.setPower(0);
                         ballstopper.setPower(0);
                         ShooterOff();
@@ -204,6 +221,7 @@ public class RedShort30630 extends OpMode {
                     break; // --------------------------------3rd Shot-----------------------------------------------
                 case 10:
                     follower.followPath(Park, true);
+                    lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.CONFETTI);
                     setPathState(11);
                     break; // -------------------------------------------------------------------------------------------
                 case 11:
