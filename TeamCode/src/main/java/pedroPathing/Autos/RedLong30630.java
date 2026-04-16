@@ -47,9 +47,9 @@ import com.qualcomm.robotcore.hardware.Servo;
     //Score 2nd shot -------------------------------------------------------------------------------
         private final Pose score1Pose = new Pose(69, 10, Math.toRadians(70));
     //Pickup  2 -----------------------------------------------------------------------------
-        private final Pose pickup2Pose = new Pose(124, 7, Math.toRadians(0));
-        private final Pose pickup2CP1 = new Pose(65, 8, Math.toRadians(0));
-        private final Pose pickup2CP2 = new Pose(115, 8, Math.toRadians(0));
+        private final Pose pickup2Pose = new Pose(124, 5, Math.toRadians(0));
+        private final Pose pickup2CP1 = new Pose(75, 7, Math.toRadians(0));
+        private final Pose pickup2CP2 = new Pose(105, 6, Math.toRadians(0));
     //Push Bar ------------------------------------------------------------------------------
         private final Pose pushBarPose = new Pose(124, 7, Math.toRadians(320));
         private final Pose pushBarCP1 = new Pose(124, 8, Math.toRadians(320));
@@ -79,8 +79,8 @@ import com.qualcomm.robotcore.hardware.Servo;
             PushBar = new Path(new BezierCurve(new Point(pickup2Pose), new Point(pushBarCP1), new Point(pushBarPose)));
             PushBar.setLinearHeadingInterpolation(pickup2Pose.getHeading(), pushBarPose.getHeading());
 //line 6 ----------------------------------------------------------------------------------------------------------------------------------
-            Score2 = new Path(new BezierCurve(new Point(pushBarPose), new Point(score2CP1), new Point(score2CP2), new Point(score2Pose)));
-            Score2.setLinearHeadingInterpolation(pushBarPose.getHeading(), score2Pose.getHeading());
+            Score2 = new Path(new BezierCurve(new Point(pickup2Pose), new Point(score2CP1), new Point(score2CP2), new Point(score2Pose)));
+            Score2.setLinearHeadingInterpolation(pickup2Pose.getHeading(), score2Pose.getHeading());
 //line 7 ----------------------------------------------------------------------------------------------------------------------------------
             Park = new Path(new BezierCurve(new Point(score2Pose), new Point(park)));
             Park.setLinearHeadingInterpolation(score2Pose.getHeading(), park.getHeading());
@@ -110,7 +110,7 @@ import com.qualcomm.robotcore.hardware.Servo;
                         setPathState(3);
                 break; // -----------------------------------Slows Down to pickup-----------------------------------
                 case 3:
-                        if(slowDownTimer.milliseconds() > 1000) {
+                        if(slowDownTimer.milliseconds() > 950) {
                             ballholder.setPosition(0);
                             follower.setMaxPower(.29);
                             intake.setPower(1);
@@ -146,14 +146,14 @@ import com.qualcomm.robotcore.hardware.Servo;
                         ballholder.setPosition(0.4);
                         ShooterOff();
                         slowDownTimer.reset();
-                        setPathState(7);
+                        setPathState(8);
                 break; // ---------------------------------Turns and intakes corner---------------------------------------
-                case 7:
+                case 799:
                     if (!follower.isBusy()){
                         follower.followPath(PushBar, true);
                         slowDownTimer.reset();
                         intake.setPower(1);
-                        setPathState(8);
+                        setPathState(888);
                     }
                     break; // ----------------------------Slows down for intake---------------------------------------
                 case 8:

@@ -293,8 +293,8 @@ public class BlueLong30630 extends OpMode {
         if ((!follower.isBusy())
                 && (((DcMotorEx) shooter1).getVelocity() >= farVelocity - 50)
                 && (((DcMotorEx) shooter1).getVelocity() <= farVelocity )
-                && (((DcMotorEx) shooter2).getVelocity() >= farVelocity -250)
-                && (((DcMotorEx) shooter2).getVelocity() <= farVelocity -200))   {
+                && (((DcMotorEx) shooter2).getVelocity() >= farVelocity - 250)
+                && (((DcMotorEx) shooter2).getVelocity() <= farVelocity - 200))   {
             lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
             intake.setPower(1);
             ballstopper.setPower(1);
