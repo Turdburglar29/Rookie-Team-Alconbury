@@ -3,14 +3,14 @@ package pedroPathing.CompTeleops;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.localization.Pose;
 import com.pedropathing.util.Constants;
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,10 +18,10 @@ import org.slf4j.LoggerFactory;
 import pedroPathing.constants.FConstants30630;
 import pedroPathing.constants.LConstants30630;
 
-@TeleOp(name = "Demo1player", group = "Examples")
-public class Demo1Player extends OpMode {
+@TeleOp(name = "REDONEPAYER", group = "Examples")
+public class REDONEPLAYER extends OpMode {
 
-    private static final Logger log = LoggerFactory.getLogger(Demo1Player.class);
+    private static final Logger log = LoggerFactory.getLogger(REDONEPLAYER.class);
     private Follower follower;
     private final ElapsedTime parktimer = new ElapsedTime();
 
