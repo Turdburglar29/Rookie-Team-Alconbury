@@ -18,18 +18,18 @@ import org.slf4j.LoggerFactory;
 import pedroPathing.constants.FConstants30630;
 import pedroPathing.constants.LConstants30630;
 
-@TeleOp(name = "REDONEPAYER", group = "Examples")
-public class REDONEPLAYER extends OpMode {
+@TeleOp(name = "Red-SHORT-T", group = "Examples")
+public class RedSHORT extends OpMode {
 
-    private static final Logger log = LoggerFactory.getLogger(REDONEPLAYER.class);
+    private static final Logger log = LoggerFactory.getLogger(RedSHORT.class);
     private Follower follower;
     private final ElapsedTime parktimer = new ElapsedTime();
 
-    private static final double GOAL_X_Blue =0;
-    private static final double GOAL_Y_Blue = 145;
+    private static final double GOAL_X_RED =160;
+    private static final double GOAL_Y_RED = 160;
 
     // Robot starts facing 270° (upfield)
-    private final Pose startPose = new Pose(57, 80, Math.toRadians(0));
+    private final Pose startPose = new Pose(27, 80, Math.toRadians(0));
 
     public static DcMotor intake;
     private DcMotor shooter1;
@@ -43,7 +43,7 @@ public class REDONEPLAYER extends OpMode {
     // =====================================================
     // 🔥 NEW: Heading offset system
     // =====================================================
-    private double headingOffsetDeg = -90;   // field alignment correction
+    private double headingOffsetDeg = -180;   // field alignment correction
     private boolean lastLeft = false;
     private boolean lastRight = false;
 
@@ -64,7 +64,7 @@ public class REDONEPLAYER extends OpMode {
         shooter2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         ballstopper.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        shooter1.setDirection(DcMotorSimple.Direction.REVERSE);
+        shooter1.setDirection(DcMotorSimple.Direction.FORWARD);
         ballstopper.setDirection(DcMotorSimple.Direction.REVERSE);
 
         telemetry.update();
@@ -109,8 +109,9 @@ public class REDONEPLAYER extends OpMode {
             // Apply heading offset to robot heading
             double robotHeading = pose.getHeading() + headingOffsetRad;
 
-            double deltaX = GOAL_X_Blue - robotX;
-            double deltaY = GOAL_Y_Blue - robotY;
+            double deltaX = GOAL_X_RED - robotX;
+
+            double deltaY = GOAL_Y_RED - robotY;
 
             double targetAngle = -Math.atan2(deltaY, deltaX);
 
@@ -126,7 +127,7 @@ public class REDONEPLAYER extends OpMode {
             if (targetAngle < 0) targetAngle += 2 * Math.PI;
             if (targetAngle >= 2 * Math.PI) targetAngle -= 2 * Math.PI;
 
-            double headingError = targetAngle - robotHeading;
+            double headingError = (targetAngle + -.43) - robotHeading;
 
             headingError = Math.atan2(Math.sin(headingError), Math.cos(headingError));
 

@@ -16,13 +16,13 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import pedroPathing.constants.FConstants30630;
 import pedroPathing.constants.LConstants30630;
 import com.qualcomm.robotcore.hardware.Servo;
-@Autonomous(name = "RedLong30630", group = "Auto")
+@Autonomous(name = "Red-LONG", group = "Auto")
     public class RedLong30630 extends OpMode {
     private ElapsedTime shotTimer = new ElapsedTime();
     private ElapsedTime slowDownTimer = new ElapsedTime();
     private static final int bankVelocity = 1200;
     private static final int medVelocity = 1400;
-    private static final int farVelocity = 1350;
+    private static final int farVelocity = 1400;
     public static DcMotor intake;
     private DcMotor shooter1;
     private DcMotor shooter2;
@@ -110,9 +110,9 @@ import com.qualcomm.robotcore.hardware.Servo;
                         setPathState(3);
                 break; // -----------------------------------Slows Down to pickup-----------------------------------
                 case 3:
-                        if(slowDownTimer.milliseconds() > 950) {
+                        if(slowDownTimer.milliseconds() > 1000) {
                             ballholder.setPosition(0);
-                            follower.setMaxPower(.29);
+                            follower.setMaxPower(.5);
                             intake.setPower(1);
                         }
                         intake.setPower(1); //turns intake on
@@ -157,9 +157,9 @@ import com.qualcomm.robotcore.hardware.Servo;
                     }
                     break; // ----------------------------Slows down for intake---------------------------------------
                 case 8:
-                        if(slowDownTimer.milliseconds() > 800) {
+                        if(slowDownTimer.milliseconds() > 900) {
                             ballholder.setPosition(0);
-                            follower.setMaxPower(.5);
+                            follower.setMaxPower(.75);
                             intake.setPower(1);
                          }
                         if (!follower.isBusy()) {
@@ -240,7 +240,7 @@ import com.qualcomm.robotcore.hardware.Servo;
             shooter1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             shooter2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             ballstopper.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            shooter1.setDirection(DcMotorSimple.Direction.REVERSE);
+            shooter1.setDirection(DcMotorSimple.Direction.FORWARD);
             ballstopper.setDirection(DcMotorSimple.Direction.REVERSE);
         }
         @Override
@@ -253,23 +253,19 @@ import com.qualcomm.robotcore.hardware.Servo;
         }
         public void ShotCheck1() {
             if ((!follower.isBusy())
-                    && (((DcMotorEx) shooter1).getVelocity() >= farVelocity - 50)
-                    && (((DcMotorEx) shooter1).getVelocity() <= farVelocity )
-                    && (((DcMotorEx) shooter2).getVelocity() >= farVelocity -250)
-                    && (((DcMotorEx) shooter2).getVelocity() <= farVelocity -200))   {
-                    lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
-                    intake.setPower(1);
-                    ballstopper.setPower(1);
+                    && (((DcMotorEx) shooter1).getVelocity() >= farVelocity - 20)
+                    && (((DcMotorEx) shooter2).getVelocity() >= farVelocity - 160))   {
+                lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
+                intake.setPower(1);
+                ballstopper.setPower(1);
             }else {
                 lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
             }
         }
     public void ShotCheck2() {
         if ((!follower.isBusy())
-                && (((DcMotorEx) shooter1).getVelocity() >= farVelocity - 50)
-                && (((DcMotorEx) shooter1).getVelocity() <= farVelocity )
-                && (((DcMotorEx) shooter2).getVelocity() >= farVelocity -250)
-                && (((DcMotorEx) shooter2).getVelocity() <= farVelocity -200))    {
+                && (((DcMotorEx) shooter1).getVelocity() >= farVelocity - 20)
+                && (((DcMotorEx) shooter2).getVelocity() >= farVelocity - 160))   {
             lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
             intake.setPower(1);
             ballstopper.setPower(1);
@@ -279,10 +275,8 @@ import com.qualcomm.robotcore.hardware.Servo;
     }
     public void ShotCheck3() {
         if ((!follower.isBusy())
-                && (((DcMotorEx) shooter1).getVelocity() >= farVelocity - 50)
-                && (((DcMotorEx) shooter1).getVelocity() <= farVelocity )
-                && (((DcMotorEx) shooter2).getVelocity() >= farVelocity -250)
-                && (((DcMotorEx) shooter2).getVelocity() <= farVelocity -200))   {
+                && (((DcMotorEx) shooter1).getVelocity() >= farVelocity - 20)
+                && (((DcMotorEx) shooter2).getVelocity() >= farVelocity - 160))   {
             lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
             intake.setPower(1);
             ballstopper.setPower(1);
@@ -292,14 +286,14 @@ import com.qualcomm.robotcore.hardware.Servo;
     }
         public void Shot1Power() {
             ((DcMotorEx) shooter1).setVelocity(farVelocity);    //starts shooter
-            ((DcMotorEx) shooter2).setVelocity(farVelocity-200);        }
+            ((DcMotorEx) shooter2).setVelocity(farVelocity-150);        }
         public void Shot2Power() {
             ((DcMotorEx) shooter1).setVelocity(farVelocity);    //starts shooter
-            ((DcMotorEx) shooter2).setVelocity(farVelocity-200);
+            ((DcMotorEx) shooter2).setVelocity(farVelocity-150);
         }
         public void Shot3Power() {
             ((DcMotorEx) shooter1).setVelocity(farVelocity);    //starts shooter
-            ((DcMotorEx) shooter2).setVelocity(farVelocity-200);
+            ((DcMotorEx) shooter2).setVelocity(farVelocity-150);
         }
         public void ShooterOff() {
             shooter1.setPower(0); //turns shooter off

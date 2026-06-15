@@ -20,7 +20,7 @@ import org.firstinspires.ftc.teamcode.R;
 import pedroPathing.constants.FConstants30630;
 import pedroPathing.constants.LConstants30630;
 
-@Autonomous(name = "RedShort30630", group = "Auto")
+@Autonomous(name = "Red-SHORT", group = "Auto")
 public class RedShort30630 extends OpMode {
     private ElapsedTime shotTimer = new ElapsedTime();
     private ElapsedTime slowDownTimer = new ElapsedTime();
@@ -285,7 +285,7 @@ public class RedShort30630 extends OpMode {
             shooter1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             shooter2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             ballstopper.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            shooter1.setDirection(DcMotorSimple.Direction.REVERSE);
+            shooter1.setDirection(DcMotorSimple.Direction.FORWARD);
             ballstopper.setDirection(DcMotorSimple.Direction.REVERSE);
         }
 
@@ -300,9 +300,7 @@ public class RedShort30630 extends OpMode {
     public void ShotCheck1() {
         if ((!follower.isBusy())
                 && (((DcMotorEx) shooter1).getVelocity() >= firstBankVelocity -20)
-                && (((DcMotorEx) shooter1).getVelocity() <= firstBankVelocity +10)
-                && (((DcMotorEx) shooter2).getVelocity() >= firstBankVelocity -190)
-                && (((DcMotorEx) shooter2).getVelocity() <= firstBankVelocity -150))   {
+                && (((DcMotorEx) shooter2).getVelocity() >= firstBankVelocity -190))   {
             lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
             intake.setPower(1);
             ballstopper.setPower(1);
@@ -313,9 +311,7 @@ public class RedShort30630 extends OpMode {
     public void ShotCheck2() {
         if ((!follower.isBusy())
                 && (((DcMotorEx) shooter1).getVelocity() >= firstBankVelocity -15)
-                && (((DcMotorEx) shooter1).getVelocity() <= firstBankVelocity +5)
-                && (((DcMotorEx) shooter2).getVelocity() >= firstBankVelocity -285)
-                && (((DcMotorEx) shooter2).getVelocity() <= firstBankVelocity -150))  {
+                && (((DcMotorEx) shooter2).getVelocity() >= firstBankVelocity -285))  {
             lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
             intake.setPower(1);
             ballstopper.setPower(1);
@@ -326,9 +322,7 @@ public class RedShort30630 extends OpMode {
     public void ShotCheck3() {
         if ((!follower.isBusy())
                 && (((DcMotorEx) shooter1).getVelocity() >= firstBankVelocity -15)
-                && (((DcMotorEx) shooter1).getVelocity() <= firstBankVelocity +5)
-                && (((DcMotorEx) shooter2).getVelocity() >= firstBankVelocity -285)
-                && (((DcMotorEx) shooter2).getVelocity() <= firstBankVelocity -150)) {
+                && (((DcMotorEx) shooter2).getVelocity() >= firstBankVelocity -285)) {
             lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
             intake.setPower(1);
             ballstopper.setPower(1);
@@ -338,15 +332,15 @@ public class RedShort30630 extends OpMode {
     }
     public void Shot1Power() {
         ((DcMotorEx) shooter1).setVelocity(firstBankVelocity);    //starts shooter
-        ((DcMotorEx) shooter2).setVelocity(firstBankVelocity-200);
+        ((DcMotorEx) shooter2).setVelocity(firstBankVelocity-150);
     }
     public void Shot2Power() {
         ((DcMotorEx) shooter1).setVelocity(firstBankVelocity);    //starts shooter
-        ((DcMotorEx) shooter2).setVelocity(firstBankVelocity-250);
+        ((DcMotorEx) shooter2).setVelocity(firstBankVelocity-150);
     }
     public void Shot3Power() {
         ((DcMotorEx) shooter1).setVelocity(firstBankVelocity);    //starts shooter
-        ((DcMotorEx) shooter2).setVelocity(firstBankVelocity-250);
+        ((DcMotorEx) shooter2).setVelocity(firstBankVelocity-150);
     }
     public void ShooterOff() {
         shooter1.setPower(0); //turns shooter off

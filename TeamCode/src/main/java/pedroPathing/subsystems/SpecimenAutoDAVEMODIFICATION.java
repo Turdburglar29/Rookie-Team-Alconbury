@@ -9,6 +9,7 @@ import com.pedropathing.pathgen.Point;
 import com.pedropathing.util.Constants;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -16,7 +17,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import pedroPathing.constants.FConstants30630;
 import pedroPathing.constants.LConstants30630;
-
+@Disabled
 @Autonomous(name = "Specimen Auto DAVEMODICICATION", group = "Examples")
     public class SpecimenAutoDAVEMODIFICATION extends OpMode {
         private DcMotor RightLift;

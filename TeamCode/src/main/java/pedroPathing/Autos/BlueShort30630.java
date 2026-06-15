@@ -18,7 +18,7 @@ import pedroPathing.constants.FConstants30630;
 import pedroPathing.constants.LConstants30630;
 import com.qualcomm.robotcore.hardware.Servo;
 
-@Autonomous(name = "BlueShort", group = "Auto")
+@Autonomous(name = "Blue-SHORT", group = "Auto")
     public class BlueShort30630 extends OpMode {
     private ElapsedTime shotTimer = new ElapsedTime();
     private ElapsedTime slowDownTimer = new ElapsedTime();
@@ -52,21 +52,21 @@ import com.qualcomm.robotcore.hardware.Servo;
     //Start point-----------------------------------------------------------------------------------
         private final Pose startPose = new Pose(6, 70, Math.toRadians(135));
     //line 1 ScorePreload 1 ------------------------------------------------------------------------
-        private final Pose scorePose = new Pose(30, 56, Math.toRadians(135));
+        private final Pose scorePose = new Pose(28, 56, Math.toRadians(135));
     //Line 3 Pickup 1-------------------------------------------------------------------------------
         private final Pose pickup1Pose = new Pose(13, 32, Math.toRadians(180));
         private final Pose pickup1CP1 = new Pose(55, 32, Math.toRadians(180));
     //line 4 Score 1 -------------------------------------------------------------------------------
-        private final Pose score1Pose = new Pose(30, 56, Math.toRadians(135));
+        private final Pose score1Pose = new Pose(28, 56, Math.toRadians(135));
     //line 6 Pickup  2 -----------------------------------------------------------------------------
         private final Pose pickup2Pose = new Pose(0, 3, Math.toRadians(180));
         private final Pose pickup2CP1 = new Pose(50, 20, Math.toRadians(180));
-        private final Pose pickup2CP2 = new Pose(30, 3, Math.toRadians(180));
+        private final Pose pickup2CP2 = new Pose(40, 3, Math.toRadians(180));
     //line 7 Push Bar ------------------------------------------------------------------------------
         private final Pose pushBarPose = new Pose(29, 40, Math.toRadians(180));
         private final Pose pushBarCP1 = new Pose(31, 37, Math.toRadians(180));
     //line 8 Score  2 ------------------------------------------------------------------------------
-        private final Pose score2Pose = new Pose(30, 56, Math.toRadians(135));
+        private final Pose score2Pose = new Pose(28, 56, Math.toRadians(135));
         private final Pose score2CP1 = new Pose(40,8, Math.toRadians(180));
         private final Pose score2CP2 = new Pose(25, 51, Math.toRadians(140));
     //line 9 Pickup  3------------------------------------------------------------------------------
@@ -78,7 +78,7 @@ import com.qualcomm.robotcore.hardware.Servo;
         private final Pose score3CP1 = new Pose(35, 22, Math.toRadians(180));
         private final Pose score3CP2 = new Pose(30, 53, Math.toRadians(160));
     //line 10 Park----------------------------------------------------------------------------------
-        private final Pose park = new Pose(25, 7, Math.toRadians(180));
+        private final Pose park = new Pose(15, 35, Math.toRadians(180));
     //  private PathChain ;-------------------------------------------------------------------------
         private Path scorePreload,  Pickup1,Score1,Pickup2,PushBar,Score2,Pickup3,Score3,Park;
 //--------------------------------------------------------------------------------------------------
@@ -176,7 +176,7 @@ import com.qualcomm.robotcore.hardware.Servo;
                         setPathState(7);
                     break; // ---------------------------------Turns and intakes corner---------------------------------------
                 case 7:
-                    if(slowDownTimer.milliseconds() > 1600) {
+                    if(slowDownTimer.milliseconds() > 2000) {
                         ballholder.setPosition(0);
                         follower.setMaxPower(.35);
                         intake.setPower(1);
@@ -269,7 +269,7 @@ import com.qualcomm.robotcore.hardware.Servo;
         shooter1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         shooter2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         ballstopper.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        shooter1.setDirection(DcMotorSimple.Direction.REVERSE);
+        shooter1.setDirection(DcMotorSimple.Direction.FORWARD);
         ballstopper.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
@@ -284,9 +284,7 @@ import com.qualcomm.robotcore.hardware.Servo;
     public void ShotCheck1() {
         if ((!follower.isBusy())
                 && (((DcMotorEx) shooter1).getVelocity() >= firstBankVelocity -20)
-                && (((DcMotorEx) shooter1).getVelocity() <= firstBankVelocity +10)
-                && (((DcMotorEx) shooter2).getVelocity() >= firstBankVelocity -190)
-                && (((DcMotorEx) shooter2).getVelocity() <= firstBankVelocity -150))   {
+                && (((DcMotorEx) shooter2).getVelocity() >= firstBankVelocity -190))   {
             lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
             intake.setPower(1);
             ballstopper.setPower(1);
@@ -297,9 +295,7 @@ import com.qualcomm.robotcore.hardware.Servo;
     public void ShotCheck2() {
         if ((!follower.isBusy())
                 && (((DcMotorEx) shooter1).getVelocity() >= firstBankVelocity -15)
-                && (((DcMotorEx) shooter1).getVelocity() <= firstBankVelocity +5)
-                && (((DcMotorEx) shooter2).getVelocity() >= firstBankVelocity -285)
-                && (((DcMotorEx) shooter2).getVelocity() <= firstBankVelocity -150))  {
+                && (((DcMotorEx) shooter2).getVelocity() >= firstBankVelocity -285))  {
             lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
             intake.setPower(1);
             ballstopper.setPower(1);
@@ -310,9 +306,7 @@ import com.qualcomm.robotcore.hardware.Servo;
     public void ShotCheck3() {
         if ((!follower.isBusy())
                 && (((DcMotorEx) shooter1).getVelocity() >= firstBankVelocity -15)
-                && (((DcMotorEx) shooter1).getVelocity() <= firstBankVelocity +5)
-                && (((DcMotorEx) shooter2).getVelocity() >= firstBankVelocity -285)
-                && (((DcMotorEx) shooter2).getVelocity() <= firstBankVelocity -150)) {
+                && (((DcMotorEx) shooter2).getVelocity() >= firstBankVelocity -285)) {
             lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
             intake.setPower(1);
             ballstopper.setPower(1);
@@ -322,15 +316,15 @@ import com.qualcomm.robotcore.hardware.Servo;
     }
     public void Shot1Power() {
         ((DcMotorEx) shooter1).setVelocity(firstBankVelocity);    //starts shooter
-        ((DcMotorEx) shooter2).setVelocity(firstBankVelocity-200);
+        ((DcMotorEx) shooter2).setVelocity(firstBankVelocity-150);
     }
     public void Shot2Power() {
         ((DcMotorEx) shooter1).setVelocity(firstBankVelocity);    //starts shooter
-        ((DcMotorEx) shooter2).setVelocity(firstBankVelocity-250);
+        ((DcMotorEx) shooter2).setVelocity(firstBankVelocity-150);
     }
     public void Shot3Power() {
         ((DcMotorEx) shooter1).setVelocity(firstBankVelocity);    //starts shooter
-        ((DcMotorEx) shooter2).setVelocity(firstBankVelocity-250);
+        ((DcMotorEx) shooter2).setVelocity(firstBankVelocity-150);
     }
     public void ShooterOff() {
         shooter1.setPower(0); //turns shooter off

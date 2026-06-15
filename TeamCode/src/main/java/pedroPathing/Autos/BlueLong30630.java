@@ -24,17 +24,17 @@ import org.firstinspires.ftc.robotcore.external.JavaUtil;
 import pedroPathing.constants.FConstants30630;
 import pedroPathing.constants.LConstants30630;
 
-@Autonomous(name = "BlueLong30630", group = "Auto")
+@Autonomous(name = "Blue-LONG", group = "Auto")
 public class BlueLong30630 extends OpMode {
     private ElapsedTime shotTimer = new ElapsedTime();
     private ElapsedTime slowDownTimer = new ElapsedTime();
     private static final int bankVelocity = 1200;
     private static final int medVelocity = 1400;
-    private static final int farVelocity = 1350;
+    private static final int farVelocity = 1360;
     private static final int maxVelocity = 1900; // 1900 is fastest
     private static final int intakeVelocity = 1400;
-    public static DcMotor intake;
 
+    public static DcMotor intake;
     private DcMotor shooter1;
     private DcMotor shooter2;
     private DcMotor ballstopper;
@@ -53,23 +53,23 @@ public class BlueLong30630 extends OpMode {
         //Start point-----------------------------------------------------------------------------------
         private final Pose startPose = new Pose(45, 0, Math.toRadians(90));
         //line 1 ScorePreload 1 ------------------------------------------------------------------------
-        private final Pose scorePose = new Pose(47, 7, Math.toRadians(114));
+        private final Pose scorePose = new Pose(47, 7, Math.toRadians(116));
         //Line 3 Pickup 1-------------------------------------------------------------------------------
-        private final Pose pickup1Pose = new Pose(15, 25, Math.toRadians(180));
-        private final Pose pickup1CP1 = new Pose(20, 20, Math.toRadians(180));
+        private final Pose pickup1Pose = new Pose(11, 20, Math.toRadians(180));
+        private final Pose pickup1CP1 = new Pose(30, 20, Math.toRadians(180));
         //line 4 Score 1 -------------------------------------------------------------------------------
-        private final Pose score1Pose = new Pose(47, 10, Math.toRadians(114));
+        private final Pose score1Pose = new Pose(47, 10, Math.toRadians(117));
         //line 6 Pickup  2 -----------------------------------------------------------------------------
-        private final Pose pickup2Pose = new Pose(10, -4, Math.toRadians(180));
+        private final Pose pickup2Pose = new Pose(11.5, -7, Math.toRadians(180));
         private final Pose pickup2CP1 = new Pose(40, 3, Math.toRadians(180));
-        private final Pose pickup2CP2 = new Pose(20, -3, Math.toRadians(180));
+        private final Pose pickup2CP2 = new Pose(13, 10, Math.toRadians(180));
         //line 7 Push Bar ------------------------------------------------------------------------------
         private final Pose pushBarPose = new Pose(17, 4, Math.toRadians(180));
         private final Pose pushBarCP1 = new Pose(15, 8, Math.toRadians(180));
         //line 8 Score  2 ------------------------------------------------------------------------------
         private final Pose score2Pose = new Pose(47, 10, Math.toRadians(114));
         private final Pose score2CP1 = new Pose(20,8, Math.toRadians(113));
-        private final Pose score2CP2 = new Pose(30, 7, Math.toRadians(113));
+        private final Pose score2CP2 = new Pose(30, 7, Math.toRadians(119));
         //line 9 Pickup  3------------------------------------------------------------------------------
         private final Pose pickup3Pose = new Pose(25, 105, Math.toRadians(0));
         private final Pose pickup3CP1 = new Pose(45, 105, Math.toRadians(0));
@@ -79,7 +79,7 @@ public class BlueLong30630 extends OpMode {
         private final Pose score3CP1 = new Pose(65, 16, Math.toRadians(67));
         private final Pose score3CP2 = new Pose(65, 16, Math.toRadians(67));
         //line 10 Park----------------------------------------------------------------------------------
-        private final Pose park = new Pose(25, 25, Math.toRadians(180));
+        private final Pose park = new Pose(50, 10, Math.toRadians(180));
     //  private PathChain ;-------------------------------------------------------------------------
         private Path scorePreload,  Pickup1,Score1,Pickup2,PushBar,Score2,Pickup3,Score3,Park;
 //--------------------------------------------------------------------------------------------------
@@ -138,7 +138,7 @@ public class BlueLong30630 extends OpMode {
                     setPathState(3);
                     break; // -----------------------------------Slows Down to pickup-----------------------------------
                 case 3:
-                    if(slowDownTimer.milliseconds() > 1000) {
+                    if(slowDownTimer.milliseconds() > 800) {
                         ballholder.setPosition(0);
                         follower.setMaxPower(.29);
                         intake.setPower(1);
@@ -187,7 +187,7 @@ public class BlueLong30630 extends OpMode {
                 case 8:
                     if(slowDownTimer.milliseconds() > 800) {
                         ballholder.setPosition(0);
-                        follower.setMaxPower(.5);
+                        follower.setMaxPower(.7);
                         intake.setPower(1);
                     }
                     if (!follower.isBusy()) {
@@ -276,7 +276,7 @@ public class BlueLong30630 extends OpMode {
             shooter1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             shooter2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             ballstopper.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            shooter1.setDirection(DcMotorSimple.Direction.REVERSE);
+            shooter1.setDirection(DcMotorSimple.Direction.FORWARD);
             ballstopper.setDirection(DcMotorSimple.Direction.REVERSE);
         }
 
@@ -291,10 +291,8 @@ public class BlueLong30630 extends OpMode {
         }
     public void ShotCheck1() {
         if ((!follower.isBusy())
-                && (((DcMotorEx) shooter1).getVelocity() >= farVelocity - 50)
-                && (((DcMotorEx) shooter1).getVelocity() <= farVelocity )
-                && (((DcMotorEx) shooter2).getVelocity() >= farVelocity - 250)
-                && (((DcMotorEx) shooter2).getVelocity() <= farVelocity - 200))   {
+                && (((DcMotorEx) shooter1).getVelocity() >= farVelocity - 20)
+                && (((DcMotorEx) shooter2).getVelocity() >= farVelocity - 160))   {
             lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
             intake.setPower(1);
             ballstopper.setPower(1);
@@ -304,10 +302,8 @@ public class BlueLong30630 extends OpMode {
     }
     public void ShotCheck2() {
         if ((!follower.isBusy())
-                && (((DcMotorEx) shooter1).getVelocity() >= farVelocity - 50)
-                && (((DcMotorEx) shooter1).getVelocity() <= farVelocity )
-                && (((DcMotorEx) shooter2).getVelocity() >= farVelocity -250)
-                && (((DcMotorEx) shooter2).getVelocity() <= farVelocity -200))    {
+                && (((DcMotorEx) shooter1).getVelocity() >= farVelocity - 20)
+                && (((DcMotorEx) shooter2).getVelocity() >= farVelocity -160))    {
             lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
             intake.setPower(1);
             ballstopper.setPower(1);
@@ -317,10 +313,8 @@ public class BlueLong30630 extends OpMode {
     }
     public void ShotCheck3() {
         if ((!follower.isBusy())
-                && (((DcMotorEx) shooter1).getVelocity() >= farVelocity - 50)
-                && (((DcMotorEx) shooter1).getVelocity() <= farVelocity )
-                && (((DcMotorEx) shooter2).getVelocity() >= farVelocity -250)
-                && (((DcMotorEx) shooter2).getVelocity() <= farVelocity -200))   {
+                && (((DcMotorEx) shooter1).getVelocity() >= farVelocity - 20)
+                && (((DcMotorEx) shooter2).getVelocity() >= farVelocity -160))   {
             lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
             intake.setPower(1);
             ballstopper.setPower(1);
@@ -330,14 +324,14 @@ public class BlueLong30630 extends OpMode {
     }
     public void Shot1Power() {
         ((DcMotorEx) shooter1).setVelocity(farVelocity);    //starts shooter
-        ((DcMotorEx) shooter2).setVelocity(farVelocity-200);        }
+        ((DcMotorEx) shooter2).setVelocity(farVelocity-150);        }
     public void Shot2Power() {
         ((DcMotorEx) shooter1).setVelocity(farVelocity);    //starts shooter
-        ((DcMotorEx) shooter2).setVelocity(farVelocity-200);
+        ((DcMotorEx) shooter2).setVelocity(farVelocity-150);
     }
     public void Shot3Power() {
         ((DcMotorEx) shooter1).setVelocity(farVelocity);    //starts shooter
-        ((DcMotorEx) shooter2).setVelocity(farVelocity-200);
+        ((DcMotorEx) shooter2).setVelocity(farVelocity-150);
     }
     public void ShooterOff() {
         shooter1.setPower(0); //turns shooter off

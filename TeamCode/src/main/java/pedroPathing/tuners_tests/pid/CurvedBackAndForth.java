@@ -17,7 +17,7 @@ import com.pedropathing.pathgen.Point;
 import pedroPathing.constants.FConstants30630;
 import pedroPathing.constants.LConstants30630;
 
-
+@Disabled
 @Config
 @Autonomous (name = "Curved Back And Forth", group = "PIDF Testing")
 public class CurvedBackAndForth extends OpMode {

@@ -3,14 +3,14 @@ package pedroPathing.CompTeleops;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.localization.Pose;
 import com.pedropathing.util.Constants;
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,18 +18,18 @@ import org.slf4j.LoggerFactory;
 import pedroPathing.constants.FConstants30630;
 import pedroPathing.constants.LConstants30630;
 
-@TeleOp(name = "Demo1player", group = "Examples")
-public class Demo1Player extends OpMode {
+@TeleOp(name = "Red-LONG-T", group = "Examples")
+public class RedLONG extends OpMode {
 
-    private static final Logger log = LoggerFactory.getLogger(Demo1Player.class);
+    private static final Logger log = LoggerFactory.getLogger(RedLONG.class);
     private Follower follower;
     private final ElapsedTime parktimer = new ElapsedTime();
 
-    private static final double GOAL_X_Blue =0;
-    private static final double GOAL_Y_Blue = 145;
+    private static final double GOAL_X_RED =160;
+    private static final double GOAL_Y_RED = 160;
 
     // Robot starts facing 270° (upfield)
-    private final Pose startPose = new Pose(57, 80, Math.toRadians(0));
+    private final Pose startPose = new Pose(37, 10, Math.toRadians(0));
 
     public static DcMotor intake;
     private DcMotor shooter1;
@@ -43,7 +43,7 @@ public class Demo1Player extends OpMode {
     // =====================================================
     // 🔥 NEW: Heading offset system
     // =====================================================
-    private double headingOffsetDeg = -90;   // field alignment correction
+    private double headingOffsetDeg = -180;   // field alignment correction
     private boolean lastLeft = false;
     private boolean lastRight = false;
 
@@ -64,7 +64,7 @@ public class Demo1Player extends OpMode {
         shooter2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         ballstopper.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        shooter1.setDirection(DcMotorSimple.Direction.REVERSE);
+        shooter1.setDirection(DcMotorSimple.Direction.FORWARD);
         ballstopper.setDirection(DcMotorSimple.Direction.REVERSE);
 
         telemetry.update();
@@ -109,8 +109,9 @@ public class Demo1Player extends OpMode {
             // Apply heading offset to robot heading
             double robotHeading = pose.getHeading() + headingOffsetRad;
 
-            double deltaX = GOAL_X_Blue - robotX;
-            double deltaY = GOAL_Y_Blue - robotY;
+            double deltaX = GOAL_X_RED - robotX;
+
+            double deltaY = GOAL_Y_RED - robotY;
 
             double targetAngle = -Math.atan2(deltaY, deltaX);
 
@@ -126,7 +127,7 @@ public class Demo1Player extends OpMode {
             if (targetAngle < 0) targetAngle += 2 * Math.PI;
             if (targetAngle >= 2 * Math.PI) targetAngle -= 2 * Math.PI;
 
-            double headingError = targetAngle - robotHeading;
+            double headingError = (targetAngle + -.43) - robotHeading;
 
             headingError = Math.atan2(Math.sin(headingError), Math.cos(headingError));
 

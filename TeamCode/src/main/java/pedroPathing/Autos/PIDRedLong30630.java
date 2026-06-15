@@ -9,6 +9,7 @@ import com.pedropathing.util.Constants;
 import com.pedropathing.util.Timer;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -17,7 +18,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import pedroPathing.constants.FConstants30630;
 import pedroPathing.constants.LConstants30630;
-
+@Disabled
 @Autonomous(name = "PIDRedLong30630", group = "Auto")
     public class PIDRedLong30630 extends OpMode {
     private ElapsedTime shotTimer = new ElapsedTime();
