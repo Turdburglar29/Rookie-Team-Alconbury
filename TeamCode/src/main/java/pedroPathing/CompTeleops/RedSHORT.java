@@ -23,7 +23,7 @@ public class RedSHORT extends OpMode {
 
     private static final Logger log = LoggerFactory.getLogger(RedSHORT.class);
     private Follower follower;
-    private final ElapsedTime parktimer = new ElapsedTime();
+   // private final ElapsedTime parktimer = new ElapsedTime();
 
     private static final double GOAL_X_RED =160;
     private static final double GOAL_Y_RED = 160;
@@ -172,7 +172,7 @@ public class RedSHORT extends OpMode {
         // YOUR ORIGINAL SHOOTING LOGIC (UNCHANGED)
         // =====================================================
 
-        if (parktimer.milliseconds() >= 110000)
+       // if (parktimer.milliseconds() >= 110000)
             gamepad1.rumble(2000);
 
         if (gamepad1.cross) {

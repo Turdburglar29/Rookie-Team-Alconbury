@@ -23,7 +23,7 @@ public class BlueSHORT extends OpMode {
 
     private static final Logger log = LoggerFactory.getLogger(BlueSHORT.class);
     private Follower follower;
-    private final ElapsedTime parktimer = new ElapsedTime();
+    //private final ElapsedTime parktimer = new ElapsedTime();
 
     private static final double GOAL_X_Blue =0;
     private static final double GOAL_Y_Blue = 120;
@@ -171,7 +171,7 @@ public class BlueSHORT extends OpMode {
         // YOUR ORIGINAL SHOOTING LOGIC (UNCHANGED)
         // =====================================================
 
-        if (parktimer.milliseconds() >= 110000)
+        //if (parktimer.milliseconds() >= 110000)
             gamepad1.rumble(2000);
 
         if (gamepad1.cross) {
