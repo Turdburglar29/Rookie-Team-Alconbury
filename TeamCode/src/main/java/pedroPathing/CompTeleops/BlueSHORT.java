@@ -3,6 +3,7 @@ package pedroPathing.CompTeleops;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.localization.Pose;
 import com.pedropathing.util.Constants;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -17,7 +18,7 @@ import org.slf4j.LoggerFactory;
 
 import pedroPathing.constants.FConstants30630;
 import pedroPathing.constants.LConstants30630;
-
+@Disabled
 @TeleOp(name = "Blue-SHORT-T", group = "Examples")
 public class BlueSHORT extends OpMode {
 

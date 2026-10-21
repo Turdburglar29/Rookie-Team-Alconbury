@@ -35,7 +35,7 @@ public class BlueLONG extends OpMode {
     private DcMotor shooter1;
     private DcMotor shooter2;
     private DcMotor ballstopper;
-    private RevBlinkinLedDriver lights;
+
     private Servo ballholder;
 
     private final ElapsedTime runtime = new ElapsedTime();
@@ -57,7 +57,6 @@ public class BlueLONG extends OpMode {
         shooter1 = hardwareMap.get(DcMotor.class, "shooter1");
         shooter2 = hardwareMap.get(DcMotor.class, "shooter2");
         ballstopper = hardwareMap.get(DcMotor.class, "ballstopper");
-        lights = hardwareMap.get(RevBlinkinLedDriver.class, "lights");
         ballholder = hardwareMap.get(Servo.class, "ballholder");
 
         shooter1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -154,7 +153,6 @@ public class BlueLONG extends OpMode {
                 turnPower,
                 false
         );
-
         follower.update();
 
         telemetry.addData("X", follower.getPose().getX());
@@ -172,58 +170,58 @@ public class BlueLONG extends OpMode {
         // =====================================================
 
        // if (parktimer.milliseconds() >= 110000)
-            gamepad1.rumble(2000);
+           // gamepad1.rumble(2000);
 
         if (gamepad1.cross) {
-            ((DcMotorEx) shooter1).setVelocity(1150);
-            ((DcMotorEx) shooter2).setVelocity(1150 - 500);
+            ((DcMotorEx) shooter1).setVelocity(800);
+            ((DcMotorEx) shooter2).setVelocity(1250 - 250);
 
-            if (((DcMotorEx) shooter1).getVelocity() >= 1050) {
+            if (((DcMotorEx) shooter1).getVelocity() >= 780) {
                 intake.setPower(1);
                 ballstopper.setPower(1);
-                lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BREATH_RED);
+
             } else {
                 intake.setPower(0);
                 ballstopper.setPower(0);
-                lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.CONFETTI);
+
             }
         }
 
         else if (gamepad1.circle) {
             ((DcMotorEx) shooter1).setVelocity(1355);
-            ((DcMotorEx) shooter2).setVelocity(1355 - 640);
+            ((DcMotorEx) shooter2).setVelocity(1355 - 400);
 
             if (((DcMotorEx) shooter1).getVelocity() >= 1325) {
                 intake.setPower(1);
                 ballstopper.setPower(1);
-                lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.STROBE_WHITE);
+
             } else {
                 intake.setPower(0);
                 ballstopper.setPower(0);
-                lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.CONFETTI);
+
             }
         }
 
         else if (gamepad1.triangle) {
             ((DcMotorEx) shooter1).setVelocity(1400);
-            ((DcMotorEx) shooter2).setVelocity(1160);
+            ((DcMotorEx) shooter2).setVelocity(1200);
 
             if ((((DcMotorEx) shooter1).getVelocity() >= 1370)
                     && (((DcMotorEx) shooter2).getVelocity() >= 1140)) {
 
                 intake.setPower(1);
                 ballstopper.setPower(1);
-                lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.STROBE_RED);
+
             } else {
                 intake.setPower(0);
                 ballstopper.setPower(0);
-                lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.CONFETTI);
+
             }
         }
 
         else if (gamepad1.right_bumper) {
             ((DcMotorEx) intake).setVelocity(1400 - 2400);
-            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.CONFETTI);
+
 
             if (((DcMotorEx) intake).getVelocity() < 1400 - 2000) {
                 intake.setPower(0);
@@ -239,7 +237,7 @@ public class BlueLONG extends OpMode {
             ballstopper.setPower(0);
             intake.setPower(0);
 
-            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.CONFETTI);
+
 
             if (gamepad1.right_bumper) intake.setPower(1);
             else intake.setPower(0);
